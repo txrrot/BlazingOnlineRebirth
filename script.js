@@ -424,11 +424,36 @@ const supported = ["en", "ro", "fr", "es"];
 setLanguage(savedLang && supported.includes(savedLang) ? savedLang : "en");
 
 const reveals = document.querySelectorAll(".reveal");
-const revealObserver = new IntersectionObserver(
-  (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-  { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-);
-reveals.forEach((el) => revealObserver.observe(el));
+
+// Hero reveals: show immediately
+document.querySelectorAll(".hero .reveal").forEach((el) => el.classList.add("visible"));
+
+if ("IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          revealObserver.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.08, rootMargin: "0px 0px -20px 0px" }
+  );
+  reveals.forEach((el) => {
+    if (!el.closest(".hero")) revealObserver.observe(el);
+  });
+} else {
+  // Old browsers / broken IO: show everything
+  reveals.forEach((el) => el.classList.add("visible"));
+}
+
+// Safety net for iOS Safari: if still hidden after 1.5s, force show
+setTimeout(() => {
+  document.querySelectorAll(".reveal:not(.visible)").forEach((el) => {
+    el.classList.add("visible");
+  });
+}, 1500);
 
 document.querySelectorAll(".faq-q").forEach((btn) => {
   btn.addEventListener("click", () => {
