@@ -94,6 +94,7 @@ const translations = {
     footer_note: "Unofficial guide made by a community helper.<br />Not affiliated with the official project team.",
     footer_update: "Last update: October 2026",
     footer_free: "Fan-made project · Free",
+    footer_credit: "Site designed &amp; built by <a href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a>",
   },
 
   ro: {
@@ -190,6 +191,7 @@ const translations = {
     footer_note: "Ghid neoficial făcut de un helper din comunitate.<br />Nu este afiliat cu echipa oficială a proiectului.",
     footer_update: "Ultima actualizare: Octombrie 2026",
     footer_free: "Proiect fan-made · Gratuit",
+    footer_credit: "Site creat de <a href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a>",
   },
 
   fr: {
@@ -286,6 +288,7 @@ const translations = {
     footer_note: "Guide non officiel réalisé par un helper de la communauté.<br />Non affilié à l’équipe officielle du projet.",
     footer_update: "Dernière mise à jour : Octobre 2026",
     footer_free: "Projet fan-made · Gratuit",
+    footer_credit: "Site conçu et réalisé par <a href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a>",
   },
 
   es: {
@@ -382,6 +385,7 @@ const translations = {
     footer_note: "Guía no oficial hecha por un helper de la comunidad.<br />No afiliada al equipo oficial del proyecto.",
     footer_update: "Última actualización: Octubre 2026",
     footer_free: "Proyecto hecho por fans · Gratis",
+    footer_credit: "Sitio diseñado y construido por <a href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a>",
   },
 };
 
@@ -416,9 +420,8 @@ document.querySelectorAll(".lang-dropdown button").forEach((btn) => {
 document.addEventListener("click", () => langSwitcher?.classList.remove("open"));
 
 const savedLang = localStorage.getItem("blazing-lang");
-const browserLang = (navigator.language || "en").slice(0, 2).toLowerCase();
 const supported = ["en", "ro", "fr", "es"];
-setLanguage(savedLang || (supported.includes(browserLang) ? browserLang : "en"));
+setLanguage(savedLang && supported.includes(savedLang) ? savedLang : "en");
 
 const reveals = document.querySelectorAll(".reveal");
 const revealObserver = new IntersectionObserver(
@@ -446,3 +449,18 @@ window.addEventListener("scroll", () => {
     if (link.getAttribute("href") === `#${current}`) link.style.color = "var(--text)";
   });
 });
+
+/* ===== Parallax + nav shrink ===== */
+const heroGlow = document.querySelector(".hero-glow");
+const navEl = document.querySelector(".nav");
+
+window.addEventListener("scroll", () => {
+  const y = window.scrollY;
+  if (heroGlow) {
+    heroGlow.style.transform = "translateX(-50%) translateY(" + (y * 0.35) + "px)";
+    heroGlow.style.opacity = String(Math.max(0.15, 0.55 - y / 1200));
+  }
+  if (navEl) {
+    navEl.classList.toggle("scrolled", y > 40);
+  }
+}, { passive: true });
