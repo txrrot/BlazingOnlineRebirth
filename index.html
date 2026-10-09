@@ -1,198 +1,323 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Naruto Blazing Rebirth — Ghid Complet</title>
-  <meta name="description" content="Ghid complet de instalare, fix-uri și sfaturi pentru Naruto Blazing Rebirth / Blazing Online. Fan-made revival." />
+  <title>Naruto Blazing Rebirth — Guide</title>
+  <meta name="description" content="Complete installation guide, fixes and tips for Naruto Blazing Rebirth / Blazing Online. Fan-made revival." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Noise overlay -->
   <div class="noise"></div>
 
-  <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
       <a href="#hero" class="logo">BLAZING<span>REBIRTH</span></a>
       <div class="nav-links">
-        <a href="#install">Instalare</a>
-        <a href="#troubleshoot">Fix-uri</a>
-        <a href="#links">Link-uri</a>
+        <a href="#online" data-i18n="nav_online">Online</a>
+        <a href="#offline" data-i18n="nav_offline">Offline</a>
+        <a href="#troubleshoot" data-i18n="nav_fixes">Fixes</a>
+        <a href="#notes" data-i18n="nav_notes">Notes</a>
       </div>
-      <a href="https://discord.gg/blazingrebirth" target="_blank" rel="noopener" class="nav-cta">Discord</a>
+      <div class="nav-right">
+        <div class="lang-switcher">
+          <button class="lang-btn" id="langBtn" aria-label="Language">
+            <span id="langCurrent">EN</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button data-lang="en">English</button>
+            <button data-lang="ro">Română</button>
+            <button data-lang="fr">Français</button>
+            <button data-lang="es">Español</button>
+          </div>
+        </div>
+        <a href="https://discord.gg/blazingrebirth" target="_blank" rel="noopener" class="nav-cta">Discord</a>
+      </div>
     </div>
   </nav>
 
-  <!-- Hero -->
   <header id="hero" class="hero">
     <div class="hero-content">
-      <div class="hero-badge reveal">FAN-MADE REVIVAL · 2026</div>
+      <div class="hero-badge reveal" data-i18n="hero_badge">FAN-MADE REVIVAL · 2026</div>
       <h1 class="reveal">
         Naruto Blazing<br />
         <span class="gradient-text">Rebirth</span>
       </h1>
-      <p class="hero-sub reveal">
-        Ghidul complet de instalare, troubleshooting și sfaturi<br />
-        pentru serverul comunității. Fără bloat. Doar ce ai nevoie.
+      <p class="hero-sub reveal" data-i18n="hero_sub">
+        Complete installation, troubleshooting and tips guide<br />
+        for the community server. No bloat. Just what you need.
       </p>
       <div class="hero-actions reveal">
-        <a href="#install" class="btn btn-primary">Începe instalarea</a>
-        <a href="https://www.blazingonline.wiki/" target="_blank" rel="noopener" class="btn btn-ghost">Site oficial →</a>
+        <a href="#online" class="btn btn-primary" data-i18n="hero_cta_online">Online guide</a>
+        <a href="#offline" class="btn btn-ghost" data-i18n="hero_cta_offline">Offline guide</a>
       </div>
     </div>
     <div class="hero-glow"></div>
   </header>
 
-  <!-- Warning strip -->
   <div class="warning-strip reveal">
-    <p>
-      <strong>Atenție:</strong> Proiect fan-made, neoficial. Nu este afiliat cu Bandai Namco / GREE.
-      Totul este gratuit. Descarcă APK-ul <em>doar</em> de pe site-ul oficial.
+    <p data-i18n-html="warning">
+      <strong>Warning:</strong> Fan-made, unofficial project. Not affiliated with Bandai Namco / GREE.
+      Everything is free. Download the APK <em>only</em> from the official Discord / site.
     </p>
   </div>
 
-  <!-- Installation -->
-  <section id="install" class="section">
+  <!-- ONLINE -->
+  <section id="online" class="section">
     <div class="container">
       <div class="section-header reveal">
         <span class="section-label">01</span>
-        <h2>Instalare</h2>
-        <p>Android 8+ · 64-bit · ~5 minute</p>
+        <h2 data-i18n="online_title">Online Mode</h2>
+        <p data-i18n="online_sub">Live servers · Discord-linked account · Banners progress chronologically</p>
       </div>
 
       <div class="steps">
         <div class="step reveal">
           <div class="step-num">01</div>
           <div class="step-content">
-            <h3>Intră pe Discord</h3>
-            <p>Contul de joc este legat de Discord. Alătură-te serverului oficial și verifică-te.</p>
+            <h3 data-i18n="on_s1_title">Join the Discord</h3>
+            <p data-i18n="on_s1_desc">Your game account is linked to Discord. Join the official server and verify.</p>
             <a href="https://discord.gg/blazingrebirth" target="_blank" rel="noopener" class="link-arrow">discord.gg/blazingrebirth</a>
           </div>
         </div>
-
         <div class="step reveal">
           <div class="step-num">02</div>
           <div class="step-content">
-            <h3>Descarcă APK-ul</h3>
-            <p>Doar de pe site-ul oficial. Browser-ul va avertiza – e normal pentru orice APK din afara Play Store.</p>
+            <h3 data-i18n="on_s2_title">Download the APK</h3>
+            <p data-i18n="on_s2_desc">From the official site or #downloads channel. If the download does not finish 100%, switch browser (Chrome to Firefox or vice versa) and try again.</p>
             <a href="https://www.blazingonline.wiki/download" target="_blank" rel="noopener" class="link-arrow">blazingonline.wiki/download</a>
           </div>
         </div>
-
         <div class="step reveal">
           <div class="step-num">03</div>
           <div class="step-content">
-            <h3>Permite instalarea</h3>
-            <p>Deschide fișierul → Settings → activează „Allow from this source”. Pe telefoane vechi: Settings → Security → Unknown sources.</p>
+            <h3 data-i18n="on_s3_title">Install</h3>
+            <p data-i18n-html="on_s3_desc">Open the APK. <strong>Play Protect will appear</strong> → tap <em>More info</em> / <em>Show more</em> → then <em>Install anyway</em>. Do not skip this step.</p>
           </div>
         </div>
-
         <div class="step reveal">
           <div class="step-num">04</div>
           <div class="step-content">
-            <h3>Instalează & lansează</h3>
-            <p>Apasă Install. Dacă apare Play Protect → „Install anyway”. Deschide jocul.</p>
-          </div>
-        </div>
-
-        <div class="step reveal">
-          <div class="step-num">05</div>
-          <div class="step-content">
-            <h3>Sign in with Discord</h3>
-            <p>Pe ecranul de start apasă „Sign in with Discord”. Contul se creează automat. Apoi lasă jocul să descarce ~220 MB de date (Wi-Fi, ecran aprins).</p>
+            <h3 data-i18n="on_s4_title">Sign in with Discord</h3>
+            <p data-i18n="on_s4_desc">Open the game → Sign in with Discord. Account is created automatically. Let it download the ~220 MB game data (Wi-Fi, keep screen on).</p>
           </div>
         </div>
       </div>
 
-      <div class="info-cards reveal">
-        <div class="info-card">
-          <h4>Actualizare</h4>
-          <p>Builds noi se instalează peste. Dacă ești pe build ≤15 → dezinstalează mai întâi (cheia de semnare s-a schimbat).</p>
+      <div class="info-cards">
+        <div class="info-card reveal">
+          <h4 data-i18n="on_card1_title">Link Discord later</h4>
+          <p data-i18n="on_card1_desc">Others → Account. DATA TRANSFER is not valid for Online — you must link from inside the game menu.</p>
         </div>
-        <div class="info-card">
-          <h4>Schimbare telefon</h4>
-          <p>Instalează pe noul telefon + Sign in with Discord. Contul vine automat. Alternativ: Data Transfer din meniul Other.</p>
+        <div class="info-card reveal">
+          <h4 data-i18n="on_card2_title">Banners</h4>
+          <p data-i18n="on_card2_desc">Starts with the 2016 One Tail Naruto banner. Banners change chronologically as the server progresses.</p>
         </div>
-        <div class="info-card">
-          <h4>Emulator (PC)</h4>
-          <p>Funcționează pe BlueStacks, MuMu, LDPlayer etc. Echipa testează oficial doar pe telefoane reale.</p>
+        <div class="info-card reveal">
+          <h4 data-i18n="on_card3_title">Separate accounts</h4>
+          <p data-i18n="on_card3_desc">Online and Offline are completely separate apps with separate accounts. Progress does not transfer between them.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Troubleshooting -->
-  <section id="troubleshoot" class="section section-alt">
+  <!-- OFFLINE -->
+  <section id="offline" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
         <span class="section-label">02</span>
-        <h2>Fix-uri & Troubleshooting</h2>
-        <p>Problemele cele mai frecvente și soluțiile</p>
+        <h2 data-i18n="offline_title">Offline Mode</h2>
+        <p data-i18n="offline_sub">Launcher + game · Local save only · All banners available</p>
       </div>
 
+      <div class="note-box reveal">
+        <p data-i18n-html="offline_warning"><strong>Important:</strong> Offline data is saved only on your device. Deleting the game = permanent loss of progress. There are 2 separate offline modes with separate local accounts.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3 data-i18n="off_s1_title">Download the correct APK</h3>
+            <p data-i18n-html="off_s1_desc">From the <strong>#downloads</strong> channel on Discord:<br />• <strong>ARM</strong> → real Android phone<br />• <strong>x86_x64</strong> → emulator</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3 data-i18n="off_s2_title">Install the Launcher</h3>
+            <p data-i18n-html="off_s2_desc"><strong>Play Protect will appear</strong> → <em>More info</em> → <em>Install anyway</em>. Open the app (Naruto Sage Mode icon).</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h3 data-i18n="off_s3_title">Update pop-up → Later</h3>
+            <p data-i18n="off_s3_desc">An update pop-up appears. Tap <strong>Later</strong> (it is an older version).</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <h3 data-i18n="off_s4_title">Switch to Beta channel</h3>
+            <p data-i18n-html="off_s4_desc">Open the left-side menu → <strong>Updates</strong>. Change first setting from <em>Stable</em> to <em>Beta</em>. Then press <strong>Check for updates</strong>.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">05</div>
+          <div class="step-content">
+            <h3 data-i18n="off_s5_title">Update to latest (v0.28+)</h3>
+            <p data-i18n="off_s5_desc">Press <strong>Update now</strong>. Wait until it reinstalls the app (white UI like first install) → press Install when prompted.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">06</div>
+          <div class="step-content">
+            <h3 data-i18n="off_s6_title">Fix + download game data</h3>
+            <p data-i18n-html="off_s6_desc">Reopen the launcher → press <strong>Fix</strong>. The game (original icon) will download. <strong>Play Protect may appear again</strong> (sometimes twice) → always <em>More info</em> → <em>Install anyway</em> until the <strong>Play</strong> button appears.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">07</div>
+          <div class="step-content">
+            <h3 data-i18n="off_s7_title">Play</h3>
+            <p data-i18n="off_s7_desc">When the Play button is visible, tap it to launch the game.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-cards">
+        <div class="info-card reveal">
+          <h4 data-i18n="off_card1_title">Vanilla mode</h4>
+          <p data-i18n="off_card1_desc">Starts at level 1 with 1000 pearls. All banners available from the start (unlike Online which starts in 2016 and progresses).</p>
+        </div>
+        <div class="info-card reveal">
+          <h4 data-i18n="off_card2_title">Rewards / Gameplay</h4>
+          <p data-i18n="off_card2_desc">You can change rewards and gameplay options from the Launcher → GAMEPLAY settings.</p>
+        </div>
+        <div class="info-card reveal">
+          <h4 data-i18n="off_card3_title">Local save only</h4>
+          <p data-i18n="off_card3_desc">Progress is stored on the device. Uninstalling the game deletes everything. No cloud backup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TROUBLESHOOTING -->
+  <section id="troubleshoot" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">03</span>
+        <h2 data-i18n="fix_title">Fixes &amp; Troubleshooting</h2>
+        <p data-i18n="fix_sub">Most common issues and real solutions from helpers</p>
+      </div>
+
+      <h3 class="sub-title reveal" data-i18n="fix_online_h">Online — Communication / Connection error</h3>
       <div class="faq">
         <div class="faq-item reveal">
           <button class="faq-q">
-            <span>„Failed to communicate with the server”</span>
+            <span data-i18n="faq_on1_q">1. Play Protect blocked the install</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
-          <div class="faq-a">
-            <p>Serverul e în mentenanță sau overloaded. Verifică statusul pe site-ul oficial sau în Discord (anouncements). Încearcă din nou peste câteva minute. Verifică și conexiunea la internet.</p>
-          </div>
+          <div class="faq-a"><p data-i18n="faq_on1_a">During installation you must press More info / Show more → Install anyway. If you skipped this, uninstall and reinstall correctly.</p></div>
         </div>
-
         <div class="faq-item reveal">
           <button class="faq-q">
-            <span>Download-ul de date se blochează / reîncepe</span>
+            <span data-i18n="faq_on2_q">2. Antivirus / Firewall / Private DNS</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
-          <div class="faq-a">
-            <p>Ține aplicația deschisă și ecranul aprins. Folosește Wi-Fi stabil. Asigură-te că ai minim 500 MB spațiu liber. Dacă rămâne blocat câteva minute → închide forțat aplicația și redeschide. Reia de unde a rămas.</p>
-          </div>
+          <div class="faq-a"><p data-i18n="faq_on2_a">Turn off antivirus, firewall and Private DNS temporarily. These often block the connection to the private server.</p></div>
         </div>
-
         <div class="faq-item reveal">
           <button class="faq-q">
-            <span>„App not installed”</span>
+            <span data-i18n="faq_on3_q">3. VPN needed (Europe recommended)</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
-          <div class="faq-a">
-            <p>Download-ul APK-ului nu s-a terminat corect → descarcă din nou. Dacă ai o versiune veche de Blazing instalată din altă parte, dezinstaleaz-o mai întâi.</p>
-          </div>
+          <div class="faq-a"><p data-i18n="faq_on3_a">Some regions need a VPN. European servers are recommended. Connect to an EU location and try again.</p></div>
         </div>
+      </div>
 
+      <h3 class="sub-title reveal" style="margin-top:2.5rem" data-i18n="fix_offline_h">Offline — Communication / Connection error</h3>
+      <div class="faq">
         <div class="faq-item reveal">
           <button class="faq-q">
-            <span>Jocul se închide imediat la start</span>
+            <span data-i18n="faq_off1_q">1. Outdated Launcher</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
-          <div class="faq-a">
-            <p>Actualizează la cel mai nou build. Unele telefoane noi (ex. anumite modele Honor) au probleme cunoscute la skip animații. Raportează pe Discord cu modelul telefonului + versiunea Android.</p>
-          </div>
+          <div class="faq-a"><p data-i18n="faq_off1_a">You must switch to Beta channel and update to the latest version (see Offline installation steps 4–5). Old launcher causes connection errors.</p></div>
         </div>
-
         <div class="faq-item reveal">
           <button class="faq-q">
-            <span>Contul nu apare după reinstalare</span>
+            <span data-i18n="faq_off2_q">2. Play Protect blocked during install</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
-          <div class="faq-a">
-            <p>Loghează-te din nou cu același Discord. Contul este legat de Discord, nu de dispozitiv. Nu-ți va cere nimeni parola sau transfer code pe Discord – doar pe site-ul oficial și în joc.</p>
-          </div>
+          <div class="faq-a"><p data-i18n="faq_off2_a">Same as Online: More info → Install anyway. If you continued without this, reinstall both launcher and game properly.</p></div>
         </div>
-
         <div class="faq-item reveal">
           <button class="faq-q">
-            <span>iOS / iPhone</span>
+            <span data-i18n="faq_off3_q">3. Corrupted file</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
-          <div class="faq-a">
-            <p>Momentan <strong>nu există</strong> versiune iOS. Se lucrează. Nu există sideload oficial momentan.</p>
-          </div>
+          <div class="faq-a"><p data-i18n="faq_off3_a">Delete the APK and redownload from #downloads. Incomplete downloads are common.</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">
+            <span data-i18n="faq_off4_q">4. Restart game / phone</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-a"><p data-i18n="faq_off4_a">Force close the game completely and reopen, or restart the phone. Simple but often works.</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">
+            <span data-i18n="faq_off5_q">5. Antivirus / Private DNS</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-a"><p data-i18n="faq_off5_a">Disable antivirus and Private DNS. Same issue as Online.</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">
+            <span data-i18n="faq_off6_q">6. VPN (EU recommended)</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-a"><p data-i18n="faq_off6_a">Some regions need a European VPN even for Offline mode.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section id="notes" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">04</span>
+        <h2 data-i18n="notes_title">Important notes</h2>
+        <p data-i18n="notes_sub">Emulator, accounts and common mistakes</p>
+      </div>
+
+      <div class="notes-grid">
+        <div class="note-card reveal">
+          <div class="note-card-label" data-i18n="note1_label">EMULATOR</div>
+          <h3 data-i18n="note1_title">Use Pie64 image</h3>
+          <p data-i18n="note1_desc">Many users from USA and Asia automatically get the Nougat image. Offline update then crashes. Always choose the Pie64 (Android 9 64-bit) system image when creating the emulator instance.</p>
+        </div>
+        <div class="note-card reveal">
+          <div class="note-card-label" data-i18n="note2_label">ACCOUNTS</div>
+          <h3 data-i18n="note2_title">Online ≠ Offline</h3>
+          <p data-i18n="note2_desc">They are completely separate applications with separate accounts. Progress never transfers. Online links via Discord (Others → Account). Offline is local only.</p>
+        </div>
+        <div class="note-card reveal">
+          <div class="note-card-label" data-i18n="note3_label">ONLINE</div>
+          <h3 data-i18n="note3_title">No Data Transfer</h3>
+          <p data-i18n="note3_desc">The old Data Transfer code does not work for Online. You must link the account from inside the game: Others → Account → Discord.</p>
+        </div>
+        <div class="note-card reveal">
+          <div class="note-card-label" data-i18n="note4_label">OFFLINE</div>
+          <h3 data-i18n="note4_title">Local data only</h3>
+          <p data-i18n="note4_desc">Everything is stored on the phone/emulator. Uninstalling the game or clearing data = permanent loss. There is no cloud backup.</p>
         </div>
       </div>
     </div>
@@ -202,16 +327,15 @@
   <section id="links" class="section">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-label">03</span>
-        <h2>Link-uri oficiale</h2>
-        <p>Doar sursele verificate</p>
+        <span class="section-label">05</span>
+        <h2 data-i18n="links_title">Official links</h2>
+        <p data-i18n="links_sub">Verified sources only</p>
       </div>
-
       <div class="links-grid">
         <a href="https://www.blazingonline.wiki/" target="_blank" rel="noopener" class="link-card reveal">
           <div class="link-card-icon">🌐</div>
           <div>
-            <h3>Site oficial</h3>
+            <h3 data-i18n="link_site">Official site</h3>
             <p>blazingonline.wiki</p>
           </div>
           <span class="link-card-arrow">→</span>
@@ -219,8 +343,8 @@
         <a href="https://www.blazingonline.wiki/download" target="_blank" rel="noopener" class="link-card reveal">
           <div class="link-card-icon">⬇️</div>
           <div>
-            <h3>Download APK</h3>
-            <p>Doar de aici</p>
+            <h3 data-i18n="link_apk">Download APK (Online)</h3>
+            <p data-i18n="link_apk_sub">Only from here</p>
           </div>
           <span class="link-card-arrow">→</span>
         </a>
@@ -228,7 +352,7 @@
           <div class="link-card-icon">💬</div>
           <div>
             <h3>Discord</h3>
-            <p>discord.gg/blazingrebirth</p>
+            <p data-i18n="link_discord_sub">#downloads channel for Offline</p>
           </div>
           <span class="link-card-arrow">→</span>
         </a>
@@ -236,17 +360,16 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-inner">
         <div>
           <div class="logo">BLAZING<span>REBIRTH</span></div>
-          <p class="footer-note">Ghid neoficial făcut de un helper din comunitate.<br />Nu este afiliat cu echipa oficială a proiectului.</p>
+          <p class="footer-note" data-i18n-html="footer_note">Unofficial guide made by a community helper.<br />Not affiliated with the official project team.</p>
         </div>
         <div class="footer-meta">
-          <p>Ultima actualizare: Octombrie 2026</p>
-          <p>Proiect fan-made · Gratuit</p>
+          <p data-i18n="footer_update">Last update: October 2026</p>
+          <p data-i18n="footer_free">Fan-made project · Free</p>
         </div>
       </div>
     </div>
