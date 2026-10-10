@@ -663,7 +663,7 @@ img { max-width: 100%; display: block; }
   transition: max-height 0.45s var(--ease-out), padding 0.3s var(--ease);
 }
 
-.faq-item.active .faq-a { max-height: 320px; }
+.faq-item.active .faq-a { max-height: 800px; }
 
 .faq-a p {
   padding: 0 1.55rem 1.4rem;
@@ -818,8 +818,6 @@ img { max-width: 100%; display: block; }
 .footer-meta p + p { margin-top: 0.3rem; }
 
 /* ===== REVEAL ANIMATIONS ===== */
-/* Progressive enhancement: content is visible by default.
-   Only hide when JS is active (html.js). Prevents blank page on iOS if JS fails. */
 .reveal {
   opacity: 1;
   transform: none;
@@ -836,7 +834,6 @@ html.js .reveal.visible {
   transform: translateY(0);
 }
 
-/* Hero content is always visible */
 .hero .reveal {
   opacity: 1 !important;
   transform: none !important;
@@ -878,7 +875,29 @@ html.js .reveal.visible {
 @media (max-width: 768px) {
   html { font-size: 16px; }
 
-  .nav-links { display: none; }
+  .nav-inner {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .nav-links {
+    order: 3;
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 999px;
+  }
 
   .hero {
     padding: 7.5rem 1.35rem 4.5rem;
