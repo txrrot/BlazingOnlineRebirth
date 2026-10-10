@@ -932,3 +932,8 @@ html.js .reveal.visible {
   }
   .btn { width: 100%; }
 }
+
+/* Anchor offset under fixed nav */
+#ios-nopc, #ios-pairing, #ios-pc, #ios-install-ss, #ios, #online, #offline, #troubleshoot, #notes, #links {
+  scroll-margin-top: 5.5rem;
+}

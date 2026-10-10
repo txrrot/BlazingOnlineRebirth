@@ -223,8 +223,16 @@
         <p data-i18n-html="ios_warning"><strong>Important:</strong> Use only official sources. The site <em>sideinstaller.com</em> is <strong>fake / malware</strong>. Official: <a href="https://sideinstaller.net" target="_blank" rel="noopener" class="link-arrow">sideinstaller.net</a> and <a href="https://frizzlem.github.io/SideInstaller/" target="_blank" rel="noopener" class="link-arrow">frizzlem.github.io/SideInstaller</a></p>
       </div>
 
-      <h3 class="sub-title reveal" data-i18n="ios_nopc_h">Method 1 — No PC (iOS 27 recommended)</h3>
-      <p class="reveal" style="color:var(--text-muted);margin-bottom:2rem;font-size:1.05rem" data-i18n="ios_nopc_intro">Uses SideInstaller. Fully on-device on iOS 27. On iOS 18–26 you still need a pairing file generated once on a PC. Keep LocalDevVPN connected for the entire process.</p>
+      <!-- PATH CHOICE -->
+      <div class="note-box reveal">
+        <p data-i18n-html="ios_path_choice"><strong>Choose your path:</strong><br />
+• <strong>iOS 27</strong> → <a class="inline-link" href="#ios-nopc">Method 1 — No PC</a> (recommended)<br />
+• <strong>iOS 18–26</strong> → first generate a <a class="inline-link" href="#ios-pairing">pairing file on a PC</a> (once), then continue with SideInstaller<br />
+• Or use <a class="inline-link" href="#ios-pc">Method 2 — With PC (iloader)</a> for the full install from a computer</p>
+      </div>
+
+      <h3 id="ios-nopc" class="sub-title reveal" data-i18n="ios_nopc_h">Method 1 — No PC (iOS 27)</h3>
+      <p class="reveal" style="color:var(--text-muted);margin-bottom:2rem;font-size:1.05rem" data-i18n="ios_nopc_intro">Fully on-device on <strong>iOS 27</strong>. Keep LocalDevVPN connected the whole time. On iOS 18–26 this method needs a pairing file first — <a class="inline-link" href="#ios-pairing">see how to generate it</a>.</p>
 
       <div class="steps">
         <div class="step reveal">
@@ -242,15 +250,15 @@
             <p data-i18n-html="ios_s2_cert" style="margin-top:0.6rem;color:var(--text-muted);font-size:0.975rem"><strong>Certificate that worked (as of Oct 2026):</strong><br /><code style="color:var(--accent);font-size:0.9rem">China-Telecom-Corporation-Limited-XC-com-ctq-qmc-yiban-p</code><br />Expires ~2029 · long validity. If it is gone, pick any other available one on the page.</p>
           </div>
         </div>
-        <div class="step reveal">
+        <div class="step reveal" id="ios-install-ss">
           <div class="step-num">03</div>
           <div class="step-content">
             <h3 data-i18n="ios_s3_title">Install SideStore + LiveContainer</h3>
             <p data-i18n-html="ios_s3_desc">Open SideInstaller → make sure you see <strong>Tunnel connected</strong> (green) → sign in with an Apple ID (preferably a secondary / burner account) → select <strong>LiveContainer + SideStore</strong> → choose <strong>Nightly</strong> (recommended) → tap <strong>Install SS + LiveContainer</strong>. Wait until it finishes.</p>
-            <p data-i18n-html="ios_s3_pairing" style="margin-top:0.75rem;color:var(--text-muted);font-size:0.975rem"><strong>Pairing file — do you need one?</strong><br />
-• <strong>iOS 27:</strong> usually <em>not needed</em>. Leave “Import pairing file” empty and install directly.<br />
-• <strong>iOS 18–26:</strong> yes, required. Generate it once on a PC (see below), then Import pairing file in SideInstaller before installing.<br />
-If the install fails with a pairing error, you need the file even on newer iOS.</p>
+            <p data-i18n-html="ios_s3_pairing" style="margin-top:0.75rem;color:var(--text-muted);font-size:0.975rem"><strong>Pairing file:</strong><br />
+• <strong>iOS 27:</strong> leave “Import pairing file” <em>empty</em> and install directly.<br />
+• <strong>iOS 18–26:</strong> you must import a pairing file first, then come back here to Install.</p>
+            <p class="reveal" style="margin-top:0.85rem"><a class="link-arrow" href="#ios-pairing" data-i18n="ios_nav_to_pair">iOS 18–26? Generate pairing file first →</a></p>
           </div>
         </div>
         <div class="step reveal">
@@ -269,18 +277,57 @@ If the install fails with a pairing error, you need the file even on newer iOS.<
         </div>
       </div>
 
-      <div class="note-box reveal" style="margin-top:2rem">
-        <p data-i18n-html="ios_pairing_how"><strong>How to make a pairing file (if needed — iOS 18–26):</strong><br />
-1. On a computer, download <strong>iDevicePair</strong> from the official SideStore docs:<br />
-<a class="inline-link" href="https://docs.sidestore.io/docs/advanced/pairing-file" target="_blank" rel="noopener">docs.sidestore.io — Pairing File</a><br />
-(Or tap <em>How do I make one?</em> inside SideInstaller — it opens the same guide.)<br />
-2. Connect iPhone via USB → Trust the computer → open iDevicePair → select your device → <strong>Generate</strong>. Trust again on the phone if asked.<br />
-3. You get a <code>.mobiledevicepairing</code> file. Transfer it to iPhone (AirDrop / Files / email).<br />
-4. In SideInstaller → <strong>Import pairing file</strong> → select that file → then <strong>Install SS + LiveContainer</strong>.<br />
-You only need this once (unless you reset/update iOS). On <strong>iOS 27</strong> you normally skip this entirely.</p>
+      <!-- PAIRING FILE SECTION -->
+      <h3 id="ios-pairing" class="sub-title reveal" style="margin-top:3.5rem" data-i18n="ios_pair_h">Generate pairing file (iOS 18–26 · once on PC)</h3>
+      <p class="reveal" style="margin-bottom:0.75rem"><a class="inline-link" href="#ios-nopc" data-i18n="ios_nav_back_nopc">← Back to Method 1 (No PC)</a></p>
+      <p class="reveal" style="color:var(--text-muted);margin-bottom:1.5rem;font-size:1.05rem" data-i18n="ios_pair_intro">Required only on <strong>iOS 18–26</strong> if you use SideInstaller without a full PC install. On <strong>iOS 27</strong> skip this. You only need a computer once; after that everything is on-device with LocalDevVPN.</p>
+
+      <div class="note-box reveal">
+        <p data-i18n-html="ios_pair_dl"><strong>Download iDevicePair (official):</strong><br />
+<a class="inline-link" href="https://github.com/jkcoxson/idevice_pair/releases/latest/download/idevice_pair--windows-x86_64.exe" target="_blank" rel="noopener">Windows (64-bit)</a> ·
+<a class="inline-link" href="https://github.com/jkcoxson/idevice_pair/releases/latest/download/idevice_pair--macos-universal.dmg" target="_blank" rel="noopener">macOS</a> ·
+<a class="inline-link" href="https://github.com/jkcoxson/idevice_pair/releases/latest/download/idevice_pair--linux-x86_64.AppImage" target="_blank" rel="noopener">Linux x86_64</a><br />
+Docs: <a class="inline-link" href="https://docs.sidestore.io/docs/advanced/pairing-file" target="_blank" rel="noopener">SideStore — Pairing File</a></p>
       </div>
 
-      <h3 class="sub-title reveal" style="margin-top:3.5rem" data-i18n="ios_pc_h">Method 2 — With PC (iloader)</h3>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3 data-i18n="ios_pair1_title">Windows only — install iTunes</h3>
+            <p data-i18n-html="ios_pair1_desc">Install <a class="inline-link" href="https://www.apple.com/itunes/download/win64" target="_blank" rel="noopener">iTunes 64-bit from Apple</a> (needed for USB drivers). Mac and Linux do not need this.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3 data-i18n="ios_pair2_title">Connect iPhone + Trust</h3>
+            <p data-i18n="ios_pair2_desc">Unlock the phone → plug in via USB → tap Trust on the phone and enter your passcode. Keep the phone unlocked on the Home Screen.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h3 data-i18n="ios_pair3_title">Generate with iDevicePair</h3>
+            <p data-i18n-html="ios_pair3_desc">Open <strong>iDevicePair</strong> → select your device → Generate (use RPPairing / remote pairing if the option appears — for iOS 17.4+). Tap Trust again on the phone if asked. You get a <code>.mobiledevicepairing</code> file.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <h3 data-i18n="ios_pair4_title">Transfer to iPhone + import</h3>
+            <p data-i18n-html="ios_pair4_desc">Send the file to the phone (AirDrop, email, USB Files). Open SideInstaller → <strong>Import pairing file</strong> → select it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box reveal" style="margin-top:1.5rem">
+        <p data-i18n-html="ios_nav_back_install"><strong>Pairing file imported?</strong> Continue installation:<br />
+        <a class="link-arrow" href="#ios-install-ss">→ Go to Install SideStore + LiveContainer</a><br />
+        <a class="inline-link" href="#ios-nopc" style="margin-top:0.4rem;display:inline-block">or back to Method 1 overview</a></p>
+      </div>
+
+      <h3 id="ios-pc" class="sub-title reveal" style="margin-top:3.5rem" data-i18n="ios_pc_h">Method 2 — With PC (iloader)</h3>
       <p class="reveal" style="color:var(--text-muted);margin-bottom:2rem;font-size:1.05rem" data-i18n="ios_pc_intro">Works on most iOS versions. You only need the computer for the first install. After that everything is on-device.</p>
 
       <div class="steps">
