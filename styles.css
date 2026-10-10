@@ -818,6 +818,8 @@ img { max-width: 100%; display: block; }
 .footer-meta p + p { margin-top: 0.3rem; }
 
 /* ===== REVEAL ANIMATIONS ===== */
+/* Progressive enhancement: content is visible by default.
+   Only hide when JS is active (html.js). Prevents blank page on iOS if JS fails. */
 .reveal {
   opacity: 1;
   transform: none;
@@ -834,6 +836,7 @@ html.js .reveal.visible {
   transform: translateY(0);
 }
 
+/* Hero content is always visible */
 .hero .reveal {
   opacity: 1 !important;
   transform: none !important;
