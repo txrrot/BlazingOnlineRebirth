@@ -34,6 +34,7 @@
             <button data-lang="ro">Română</button>
             <button data-lang="fr">Français</button>
             <button data-lang="es">Español</button>
+            <button data-lang="ko">한국어</button>
           </div>
         </div>
         <a href="https://discord.gg/blazingrebirth" target="_blank" rel="noopener" class="nav-cta">Discord</a>
@@ -223,7 +224,7 @@
       </div>
 
       <h3 class="sub-title reveal" data-i18n="ios_nopc_h">Method 1 — No PC (iOS 27 recommended)</h3>
-      <p class="reveal" style="color:var(--text-muted);margin-bottom:2rem;font-size:1.05rem" data-i18n="ios_nopc_intro">Uses SideInstaller. Fully on-device on iOS 27. On iOS 18–26 you still need a pairing file generated once on a PC.</p>
+      <p class="reveal" style="color:var(--text-muted);margin-bottom:2rem;font-size:1.05rem" data-i18n="ios_nopc_intro">Uses SideInstaller. Fully on-device on iOS 27. On iOS 18–26 you still need a pairing file generated once on a PC. Keep LocalDevVPN connected for the entire process.</p>
 
       <div class="steps">
         <div class="step reveal">
@@ -237,7 +238,8 @@
           <div class="step-num">02</div>
           <div class="step-content">
             <h3 data-i18n="ios_s2_title">Install SideInstaller (official only)</h3>
-            <p data-i18n-html="ios_s2_desc">Open Safari → go to <a class="inline-link" href="https://frizzlem.github.io/SideInstaller/" target="_blank" rel="noopener">frizzlem.github.io/SideInstaller</a>. Follow the on-page steps (DNS profile + choose an available certificate → Install). Then go to Settings → General → VPN & Device Management → Trust the developer profile.</p>
+            <p data-i18n-html="ios_s2_desc">Open <strong>Safari</strong> → go to <a class="inline-link" href="https://frizzlem.github.io/SideInstaller/" target="_blank" rel="noopener">frizzlem.github.io/SideInstaller</a>. Install the DNS profile first, then pick a certificate and tap <strong>Install</strong>. Certificates get revoked often — try another if one fails.</p>
+            <p data-i18n-html="ios_s2_cert" style="margin-top:0.6rem;color:var(--text-muted);font-size:0.975rem"><strong>Certificate that worked (as of Oct 2026):</strong><br /><code style="color:var(--accent);font-size:0.9rem">China-Telecom-Corporation-Limited-XC-com-ctq-qmc-yiban-p</code><br />Expires ~2029 · long validity. If it is gone, pick any other available one on the page.</p>
           </div>
         </div>
         <div class="step reveal">
@@ -251,7 +253,7 @@
           <div class="step-num">04</div>
           <div class="step-content">
             <h3 data-i18n="ios_s4_title">Trust + Developer Mode</h3>
-            <p data-i18n-html="ios_s4_desc">Settings → General → VPN & Device Management → Trust the Apple ID profile. Then Settings → Privacy & Security → Developer Mode → On (phone will restart). Open LiveContainer → open the built-in SideStore → sign in with the same Apple ID → do a manual Refresh.</p>
+            <p data-i18n-html="ios_s4_desc"><strong>1. Trust the certificate profile</strong><br />Settings → General → VPN & Device Management. The profile may appear under a <strong>short company name</strong> (not the full long certificate name). Tap it → Trust → Trust again to confirm.<br /><br /><strong>2. Trust the Apple ID</strong> (after SideStore installs)<br />Same place → find your Apple ID enterprise profile → Trust.<br /><br /><strong>3. Developer Mode</strong><br />Settings → Privacy & Security → Developer Mode → On (phone restarts).<br /><br /><strong>4. Refresh</strong><br />Open LiveContainer → open SideStore inside it → sign in with the same Apple ID → connect LocalDevVPN → manual Refresh.</p>
           </div>
         </div>
         <div class="step reveal">
@@ -290,7 +292,6 @@
         </div>
       </div>
 
-
       <h3 class="sub-title reveal" style="margin-top:3.5rem" data-i18n="ios_game_h">Install the game (.ipa)</h3>
       <p class="reveal" style="color:var(--text-muted);margin-bottom:2rem;font-size:1.05rem" data-i18n="ios_game_intro">After SideStore + LiveContainer are working, install Naruto Blazing Rebirth as an IPA. Prefer installing it <strong>inside LiveContainer</strong> so it does not use one of the 3 free app slots.</p>
 
@@ -320,15 +321,15 @@
           <div class="step-num">04</div>
           <div class="step-content">
             <h3 data-i18n="ios_g4_title">Refresh when needed</h3>
-            <p data-i18n="ios_g4_desc">Every ~7 days the signature expires. Connect LocalDevVPN → open SideStore → tap the 7 DAYS timer on LiveContainer (and on the game if it was installed outside). Then relaunch from LiveContainer.</p>
+            <p data-i18n-html="ios_g4_desc">Every ~7 days the signature expires. Connect LocalDevVPN → open SideStore → tap the 7 DAYS timer on LiveContainer (and on the game if it was installed outside). Then relaunch from LiveContainer.</p>
           </div>
         </div>
       </div>
 
-      <div class="info-cards" style="margin-top:3rem">
+      <div class="info-cards">
         <div class="info-card reveal">
           <h4 data-i18n="ios_card1_title">Why LiveContainer?</h4>
-          <p data-i18n="ios_card1_desc">Free Apple ID allows only 3 sideloaded apps. LiveContainer runs other apps inside itself so they don’t count toward the limit.</p>
+          <p data-i18n="ios_card1_desc">Free Apple ID allows only 3 sideloaded apps. LiveContainer runs other apps inside itself so they don't count toward the limit.</p>
         </div>
         <div class="info-card reveal">
           <h4 data-i18n="ios_card2_title">7-day refresh</h4>
@@ -336,42 +337,33 @@
         </div>
         <div class="info-card reveal">
           <h4 data-i18n="ios_card3_title">Burner Apple ID</h4>
-          <p data-i18n="ios_card3_desc">Strongly recommended. If Apple locks the account you don’t lose your main one.</p>
+          <p data-i18n="ios_card3_desc">Strongly recommended. If Apple locks the account you don't lose your main one.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TROUBLESHOOTING -->
+  <!-- FIXES -->
   <section id="troubleshoot" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
         <span class="section-label">04</span>
-        <h2 data-i18n="fix_title">Fixes &amp; Troubleshooting</h2>
+        <h2 data-i18n="fix_title">Fixes & Troubleshooting</h2>
         <p data-i18n="fix_sub">Most common issues and real solutions from helpers</p>
       </div>
 
       <h3 class="sub-title reveal" data-i18n="fix_online_h">Online — Communication / Connection error</h3>
       <div class="faq">
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_on1_q">1. Play Protect blocked the install</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_on1_q">1. Play Protect blocked the install</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_on1_a">During installation you must press More info / Show more → Install anyway. If you skipped this, uninstall and reinstall correctly.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_on2_q">2. Antivirus / Firewall / Private DNS</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_on2_q">2. Antivirus / Firewall / Private DNS</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_on2_a">Turn off antivirus, firewall and Private DNS temporarily. These often block the connection to the private server.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_on3_q">3. VPN needed (Europe recommended)</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_on3_q">3. VPN needed (Europe recommended)</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_on3_a">Some regions need a VPN. European servers are recommended. Connect to an EU location and try again.</p></div>
         </div>
       </div>
@@ -379,45 +371,27 @@
       <h3 class="sub-title reveal" style="margin-top:2.5rem" data-i18n="fix_offline_h">Offline — Communication / Connection error</h3>
       <div class="faq">
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_off1_q">1. Outdated Launcher</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_off1_q">1. Outdated Launcher</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_off1_a">You must switch to Beta channel and update to the latest version (see Offline installation steps 4–5). Old launcher causes connection errors.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_off2_q">2. Play Protect blocked during install</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_off2_q">2. Play Protect blocked during install</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_off2_a">Same as Online: More info → Install anyway. If you continued without this, reinstall both launcher and game properly.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_off3_q">3. Corrupted file</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_off3_q">3. Corrupted file</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_off3_a">Delete the APK and redownload from #downloads. Incomplete downloads are common.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_off4_q">4. Restart game / phone</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_off4_q">4. Restart game / phone</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_off4_a">Force close the game completely and reopen, or restart the phone. Simple but often works.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_off5_q">5. Antivirus / Private DNS</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_off5_q">5. Antivirus / Private DNS</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_off5_a">Disable antivirus and Private DNS. Same issue as Online.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_off6_q">6. VPN (EU recommended)</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_off6_q">6. VPN (EU recommended)</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_off6_a">Some regions need a European VPN even for Offline mode.</p></div>
         </div>
       </div>
@@ -425,31 +399,19 @@
       <h3 class="sub-title reveal" style="margin-top:2.5rem" data-i18n="fix_ios_h">iOS — Common problems</h3>
       <div class="faq">
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_ios1_q">1. SideInstaller won’t open / certificate revoked</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_ios1_q">1. SideInstaller won't open / certificate revoked</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_ios1_a">Go back to the official install page and try another available certificate. Certificates get revoked frequently.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_ios2_q">2. “Unable to verify app”</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_ios2_q">2. Unable to verify app</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_ios2_a">Settings → General → VPN & Device Management → tap the developer profile → Trust.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_ios3_q">3. Refresh fails / apps expire</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_ios3_q">3. Refresh fails / apps expire</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_ios3_a">Make sure LocalDevVPN is connected. Open SideStore → My Apps → tap the 7 DAYS timer to force a refresh.</p></div>
         </div>
         <div class="faq-item reveal">
-          <button class="faq-q">
-            <span data-i18n="faq_ios4_q">4. Apple ID too new / rate limited</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+          <button class="faq-q" type="button"><span data-i18n="faq_ios4_q">4. Apple ID too new / rate limited</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="faq-a"><p data-i18n="faq_ios4_a">Wait 15–30 minutes or use a different (older) Apple ID. Very new accounts are often restricted by Apple.</p></div>
         </div>
       </div>
@@ -464,7 +426,6 @@
         <h2 data-i18n="notes_title">Important notes</h2>
         <p data-i18n="notes_sub">Emulator, accounts and common mistakes</p>
       </div>
-
       <div class="notes-grid">
         <div class="note-card reveal">
           <div class="note-card-label" data-i18n="note1_label">EMULATOR</div>
@@ -490,7 +451,7 @@
     </div>
   </section>
 
-  <!-- Links -->
+  <!-- LINKS -->
   <section id="links" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
@@ -499,7 +460,7 @@
         <p data-i18n="links_sub">Verified sources only</p>
       </div>
       <div class="links-grid">
-        <a href="https://www.blazingonline.wiki/" target="_blank" rel="noopener" class="link-card reveal">
+        <a href="https://www.blazingonline.wiki" target="_blank" rel="noopener" class="link-card reveal">
           <div class="link-card-icon">🌐</div>
           <div>
             <h3 data-i18n="link_site">Official site</h3>
@@ -508,7 +469,7 @@
           <span class="link-card-arrow">→</span>
         </a>
         <a href="https://www.blazingonline.wiki/download" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-card-icon">⬇️</div>
+          <div class="link-card-icon">📦</div>
           <div>
             <h3 data-i18n="link_apk">Download APK (Online)</h3>
             <p data-i18n="link_apk_sub">Only from here</p>
@@ -523,11 +484,11 @@
           </div>
           <span class="link-card-arrow">→</span>
         </a>
-        <a href="https://sideinstaller.net/" target="_blank" rel="noopener" class="link-card reveal">
+        <a href="https://frizzlem.github.io/SideInstaller/" target="_blank" rel="noopener" class="link-card reveal">
           <div class="link-card-icon">📱</div>
           <div>
             <h3 data-i18n="link_sideinstaller">SideInstaller (official)</h3>
-            <p>iOS 27 — No PC</p>
+            <p>frizzlem.github.io/SideInstaller</p>
           </div>
           <span class="link-card-arrow">→</span>
         </a>
@@ -541,7 +502,7 @@
         <div>
           <a href="#hero" class="logo">BLAZING<span>REBIRTH</span></a>
           <p class="footer-note" data-i18n-html="footer_note">Unofficial guide made by a community helper.<br />Not affiliated with the official project team.</p>
-          <p class="footer-credit" data-i18n-html="footer_credit">Site designed & built by <a class="inline-link" href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a></p>
+          <p class="footer-credit" data-i18n-html="footer_credit">Site designed & built by <a href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a></p>
         </div>
         <div class="footer-meta">
           <p data-i18n="footer_update">Last update: October 2026</p>
