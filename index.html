@@ -270,12 +270,14 @@ If the install fails with a pairing error, you need the file even on newer iOS.<
       </div>
 
       <div class="note-box reveal" style="margin-top:2rem">
-        <p data-i18n-html="ios_pairing_how"><strong>How to make a pairing file (if needed):</strong><br />
-1. On a computer, download <a class="inline-link" href="https://github.com/jkcoxson/JitStreamer" target="_blank" rel="noopener">JitStreamer</a> / use AltStore / SideStore docs method, or follow the “How do I make one?” link inside SideInstaller.<br />
-2. Connect iPhone via USB → trust the computer → generate the <code>.mobiledevicepairing</code> (or similar) file.<br />
-3. AirDrop / transfer the file to iPhone → in SideInstaller tap <strong>Import pairing file</strong> → select it.<br />
-4. Then tap Install SS + LiveContainer.<br />
-You only need to do this once. After that, refreshes work on-device with LocalDevVPN.</p>
+        <p data-i18n-html="ios_pairing_how"><strong>How to make a pairing file (if needed — iOS 18–26):</strong><br />
+1. On a computer, download <strong>iDevicePair</strong> from the official SideStore docs:<br />
+<a class="inline-link" href="https://docs.sidestore.io/docs/advanced/pairing-file" target="_blank" rel="noopener">docs.sidestore.io — Pairing File</a><br />
+(Or tap <em>How do I make one?</em> inside SideInstaller — it opens the same guide.)<br />
+2. Connect iPhone via USB → Trust the computer → open iDevicePair → select your device → <strong>Generate</strong>. Trust again on the phone if asked.<br />
+3. You get a <code>.mobiledevicepairing</code> file. Transfer it to iPhone (AirDrop / Files / email).<br />
+4. In SideInstaller → <strong>Import pairing file</strong> → select that file → then <strong>Install SS + LiveContainer</strong>.<br />
+You only need this once (unless you reset/update iOS). On <strong>iOS 27</strong> you normally skip this entirely.</p>
       </div>
 
       <h3 class="sub-title reveal" style="margin-top:3.5rem" data-i18n="ios_pc_h">Method 2 — With PC (iloader)</h3>
