@@ -696,26 +696,29 @@ export default function App() {
           <X size={24} />
         </button>
         <div className="mobile-nav-links">
+          <a href="#notes" onClick={() => scrollTo('#notes')}>
+            01. {t.nav_notes || 'Notes'}
+          </a>
           <a href="#online" onClick={() => scrollTo('#online')}>
-            01. {t.nav_online || 'Online'}
+            02. {t.nav_online || 'Online'}
           </a>
           <a href="#offline" onClick={() => scrollTo('#offline')}>
-            02. {t.nav_offline || 'Offline'}
+            03. {t.nav_offline || 'Offline'}
           </a>
           <a href="#ios" onClick={() => scrollTo('#ios')}>
-            03. {t.nav_ios || 'iOS'}
+            04. {t.nav_ios || 'iOS'}
+          </a>
+          <a href="#emulator" onClick={() => scrollTo('#emulator')}>
+            05. Emulator
           </a>
           <a href="#fixes" onClick={() => scrollTo('#fixes')}>
-            04. {t.nav_fixes || 'Fixes'}
-          </a>
-          <a href="#notes" onClick={() => scrollTo('#notes')}>
-            05. {t.nav_notes || 'Notes'}
+            06. {t.nav_fixes || 'Fixes'}
           </a>
           <a href="#links" onClick={() => scrollTo('#links')}>
-            06. Links
+            07. Links
           </a>
           <a href="#updates" onClick={() => scrollTo('#updates')}>
-            07. {t.upd_title || 'Updates'}
+            08. {t.upd_title || 'Updates'}
           </a>
         </div>
         <div className="mobile-lang-row">
@@ -1383,7 +1386,7 @@ export default function App() {
               onClick={() => scrollTo('#offline')}
               style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
             >
-              <span>{t.nav_continue_offline || 'Continue to Chapter 02: Offline Mode →'}</span>
+              <span>{t.nav_continue_offline || 'Continue to Chapter 03: Offline Mode →'}</span>
               <ArrowRight size={14} />
             </button>
             <button
@@ -1392,7 +1395,7 @@ export default function App() {
               onClick={() => scrollTo('#updates')}
               style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
             >
-              <span>{t.nav_continue_updates || 'See Chapter 07: How to Update →'}</span>
+              <span>{t.nav_continue_updates || 'See Chapter 08: How to Update →'}</span>
               <RefreshCw size={14} />
             </button>
           </div>
@@ -1656,7 +1659,7 @@ export default function App() {
               onClick={() => scrollTo('#ios')}
               style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
             >
-              <span>{t.nav_continue_ios || 'Continue to Chapter 03: iOS Sideloading →'}</span>
+              <span>{t.nav_continue_ios || 'Continue to Chapter 04: iOS Sideloading →'}</span>
               <ArrowRight size={14} />
             </button>
             <button
@@ -1665,7 +1668,7 @@ export default function App() {
               onClick={() => scrollTo('#updates')}
               style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
             >
-              <span>{t.nav_continue_updates || 'See Chapter 07: How to Update →'}</span>
+              <span>{t.nav_continue_updates || 'See Chapter 08: How to Update →'}</span>
               <RefreshCw size={14} />
             </button>
           </div>
@@ -1848,7 +1851,7 @@ export default function App() {
             <button
               type="button"
               className={`ios-tab-btn ${iosTab === 'game' ? 'active' : ''}`}
-              onClick={() => setIosTab('game')}
+              onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
             >
               <Download size={15} />
               <span>{t.ios_game_h || 'Install Game (.ipa)'}</span>
@@ -2115,7 +2118,7 @@ export default function App() {
                       <button
                         type="button"
                         className="cta-button-primary"
-                        onClick={() => setIosTab('game')}
+                        onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
                         style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                       >
                         <span>Next: Install Naruto Blazing Game IPA →</span>
@@ -2363,7 +2366,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-primary"
-                  onClick={() => setIosTab('game')}
+                  onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
                   style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                 >
                   <span>{t.ios_game_h || 'Install Game (.ipa)'} →</span>
@@ -2500,7 +2503,28 @@ export default function App() {
               />
             </div>
 
+          </div>
 
+          {/* Chapter 04 Navigation Jump Cluster */}
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="cta-button-primary"
+              onClick={() => scrollTo('#emulator')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <span>{t.nav_continue_emu || 'Continue to Chapter 05: PC Emulator Guide →'}</span>
+              <ArrowRight size={14} />
+            </button>
+            <button
+              type="button"
+              className="cta-button-glass"
+              onClick={() => scrollTo('#updates')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <span>{t.nav_continue_updates || 'See Chapter 08: How to Update →'}</span>
+              <RefreshCw size={14} />
+            </button>
           </div>
         </div>
       </section>
@@ -2928,10 +2952,15 @@ export default function App() {
               as="p"
               className="section-subhead"
             />
+            <div className="platform-compat-badges">
+              <span className="compat-badge android"><Smartphone size={12} /> Online: Android Only</span>
+              <span className="compat-badge android"><HardDrive size={12} /> Offline: Android First</span>
+              <span className="compat-badge ios"><Apple size={12} /> Offline: iOS</span>
+            </div>
           </div>
 
           {/* Warning Note */}
-          <div className="warning-strip-card" style={{ marginBottom: '2.5rem' }}>
+          <div className="warning-strip-card" style={{ marginBottom: '2rem' }}>
             <div className="warning-icon-wrapper" style={{ color: 'var(--accent-amber)' }}>
               <AlertTriangle size={22} />
             </div>
@@ -2941,12 +2970,50 @@ export default function App() {
             />
           </div>
 
-          {/* Online Update Section */}
-          <div style={{ marginBottom: '3rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <Wifi size={18} style={{ color: 'var(--accent-blue)' }} />
-              {t.upd_online_h || 'Online Mode — How to Update'}
-            </h3>
+          {/* Quick Jump Bar */}
+          <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="cta-button-glass"
+              onClick={() => scrollTo('#upd-online')}
+              style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              <Wifi size={13} style={{ color: 'var(--accent-blue)' }} />
+              <span>Online (Android Only)</span>
+            </button>
+            <button
+              type="button"
+              className="cta-button-glass"
+              onClick={() => scrollTo('#upd-offline-android')}
+              style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              <HardDrive size={13} style={{ color: 'var(--accent-amber)' }} />
+              <span>Offline (Android First)</span>
+            </button>
+            <button
+              type="button"
+              className="cta-button-glass"
+              onClick={() => scrollTo('#upd-offline-ios')}
+              style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              <Apple size={13} style={{ color: 'var(--accent-purple, #a78bfa)' }} />
+              <span>Offline (iOS)</span>
+            </button>
+          </div>
+
+          {/* Online Update Section (Android Only) */}
+          <div id="upd-online" style={{ marginBottom: '3rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <Wifi size={18} style={{ color: 'var(--accent-blue)' }} />
+                {t.upd_online_h || 'Online Mode (Android Only) — How to Update'}
+              </h3>
+              <div className="platform-compat-badges" style={{ margin: 0 }}>
+                <span className="compat-badge android"><Smartphone size={12} /> Android Only</span>
+                <span className="compat-badge emulator"><Monitor size={12} /> PC Emulators</span>
+                <span className="compat-badge no-ios">✕ No iOS Support</span>
+              </div>
+            </div>
             <div className="steps-timeline-stack">
               <div className="step-card">
                 <div className="step-card-num"><div className="step-num-badge">01</div></div>
@@ -3005,11 +3072,17 @@ export default function App() {
           </div>
 
           {/* Android Offline Update Section */}
-          <div style={{ marginBottom: '3rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <HardDrive size={18} style={{ color: 'var(--accent-amber)' }} />
-              {t.upd_offline_h || 'Android Offline Mode — How to Update (with Save Backup)'}
-            </h3>
+          <div id="upd-offline-android" style={{ marginBottom: '3rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <HardDrive size={18} style={{ color: 'var(--accent-amber)' }} />
+                {t.upd_offline_h || 'Offline Mode (Android) — How to Update (with Save Backup)'}
+              </h3>
+              <div className="platform-compat-badges" style={{ margin: 0 }}>
+                <span className="compat-badge android"><Smartphone size={12} /> Android</span>
+                <span className="compat-badge emulator"><Monitor size={12} /> PC Emulators</span>
+              </div>
+            </div>
             <div className="steps-timeline-stack">
               <div className="step-card">
                 <div className="step-card-num"><div className="step-num-badge">01</div></div>
@@ -3059,11 +3132,16 @@ export default function App() {
           </div>
 
           {/* iOS Offline Update Section */}
-          <div style={{ marginBottom: '3rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <Apple size={18} style={{ color: 'var(--accent-purple, #a78bfa)' }} />
-              {t.upd_ios_h || 'iOS Offline Mode — How to Update (with Save Backup)'}
-            </h3>
+          <div id="upd-offline-ios" style={{ marginBottom: '3rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <Apple size={18} style={{ color: 'var(--accent-purple, #a78bfa)' }} />
+                {t.upd_ios_h || 'iOS Offline Mode — How to Update (with Save Backup)'}
+              </h3>
+              <div className="platform-compat-badges" style={{ margin: 0 }}>
+                <span className="compat-badge ios"><Apple size={12} /> iOS</span>
+              </div>
+            </div>
             <div className="steps-timeline-stack">
               <div className="step-card">
                 <div className="step-card-num"><div className="step-num-badge">01</div></div>
