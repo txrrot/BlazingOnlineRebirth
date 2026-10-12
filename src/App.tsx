@@ -461,7 +461,7 @@ export default function App() {
       cat: 'offline',
       tag: 'APK Corrupt',
       q: t.faq_off3_q || '3. Corrupted APK download',
-      a: t.faq_off3_a || 'Delete the APK and redownload from #downloads. Incomplete downloads are common on mobile browsers.',
+      a: t.faq_off3_a || 'Delete the APK and redownload using the direct download link. Incomplete downloads are common on mobile browsers.',
       tip: 'If Chrome pauses at 99%, use Firefox Mobile or download via the Discord app.',
     },
     {
@@ -1185,7 +1185,7 @@ export default function App() {
                 <FormattedText
                   text={
                     t.on_s2_desc ||
-                    'From the official site or #downloads channel. If the download does not finish 100%, switch browser (Chrome to Firefox or vice versa) and try again.'
+                    'From the direct download button below (Google Drive). If the download does not finish 100%, switch browser (Chrome to Firefox or vice versa) and try again.'
                   }
                   as="p"
                 />
@@ -1363,7 +1363,7 @@ export default function App() {
                 <FormattedText
                   text={
                     t.off_s1_desc ||
-                    'From the <strong>#downloads</strong> channel on Discord:<br />• <strong>ARM</strong> → real Android phone<br />• <strong>x86_x64</strong> → emulator'
+                    'Download using the direct buttons below (Google Drive):<br />• <strong>ARM</strong> → real Android phone<br />• <strong>x86_x64</strong> → emulator'
                   }
                   as="p"
                 />
@@ -2178,7 +2178,7 @@ export default function App() {
                     <FormattedText
                       text={
                         t.ios_g1_desc ||
-                        'Download the official <strong>.ipa</strong> from the Discord <strong>#downloads</strong> channel (or the link shared by helpers). Save it to the Files app (On My iPhone / iCloud Drive).'
+                        'Download the official <strong>.ipa</strong> from the direct download button below (Google Drive). Save it to the Files app (On My iPhone / iCloud Drive).'
                       }
                       as="p"
                     />
@@ -2527,7 +2527,7 @@ export default function App() {
             <div className="link-access-card">
               <div className="link-card-meta">
                 <h4>Discord Server</h4>
-                <p>{t.link_discord_sub || '#downloads channel for Offline'}</p>
+                <p>{t.link_discord_sub || 'Official server for co-op & announcements'}</p>
               </div>
               <div className="link-actions-cluster">
                 <a
@@ -2609,18 +2609,29 @@ export default function App() {
                 <div className="step-card-body">
                   <h3>{t.upd_on_s1_title || 'Download the new APK'}</h3>
                   <FormattedText
-                    text={t.upd_on_s1_desc || 'When a new version is released, the announcement will be posted on the official Discord server → #downloads channel. Download the latest APK.'}
+                    text={t.upd_on_s1_desc || 'When a new version is released, download the latest APK directly using the button below or check announcements on the official Discord server.'}
                     as="p"
                   />
-                  <div style={{ marginTop: '1rem' }}>
+                  <div style={{ marginTop: '1rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                     <a
-                      href="https://discord.gg/blazingrebirth"
+                      href={downloads.onlineApkUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="cta-button-primary"
-                      style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex' }}
+                      style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
                     >
-                      <span>Go to Discord #downloads</span>
+                      <Download size={14} />
+                      <span>{t.dl_online_apk || 'Download Online APK'}</span>
+                      <ArrowUpRight size={14} />
+                    </a>
+                    <a
+                      href={downloads.discordServerUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cta-button-glass"
+                      style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                    >
+                      <span>Discord Server</span>
                       <ArrowUpRight size={14} />
                     </a>
                   </div>
