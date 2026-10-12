@@ -373,7 +373,7 @@ export default function App() {
           >
             <span className="brand-pulse-dot" />
             <span>NARUTO BLAZING REBIRTH</span>
-            <span className="brand-tag">2026</span>
+            <span className="brand-tag">COMPLETE GUIDE by TXRROT</span>
           </a>
 
           {/* Navigation Links */}
@@ -539,10 +539,13 @@ export default function App() {
           >
             <div className="hero-badge-pill">
               <span className="badge-beacon" />
-              <span>{t.hero_badge || 'FAN-MADE REVIVAL · 2026'}</span>
+              <span>{t.hero_badge || 'COMPLETE GUIDE by TXRROT · FAN-MADE REVIVAL 2026'}</span>
             </div>
           </motion.div>
 
+          <div style={{ fontSize: '0.825rem', color: 'var(--accent-amber)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+            {t.hero_author_sub || 'Unofficial Complete Guide & Documentation by TXRROT · Not the official game website'}
+          </div>
           <motion.h1
             className="hero-main-title"
             initial={{ opacity: 0, y: 24 }}
@@ -821,130 +824,245 @@ export default function App() {
             </div>
 
             {/* Step 03 */}
-            <div className="step-card" id="ios-s3">
-                  <div className="step-card-num">
-                    <div className="step-num-badge">03</div>
-                  </div>
-                  <div className="step-card-body">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-                      <h3 style={{ margin: 0 }}>{t.ios_s3_title || 'Download & Import SideStore.ipa'}</h3>
-                      <span style={{ fontSize: '0.7rem', padding: '0.2rem 0.55rem', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239,68,68,0.4)', color: '#f87171', borderRadius: '4px', fontWeight: 600 }}>
-                        {t.ios_s3_404_badge || '404 Error Fix'}
-                      </span>
-                    </div>
-
-                    <div className="step-callout-note danger" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
-                      <FormattedText
-                        text={
-                          t.ios_s3_404_note ||
-                          '<strong>Why 404 occurs:</strong> The automated download in SideInstaller fails because the LiveContainer repository is offline. Downloading standalone SideStore.ipa manually completely bypasses the 404 error!'
-                        }
-                        as="div"
-                      />
-                    </div>
-
-                    <FormattedText
-                      text={
-                        t.ios_s3_steps ||
-                        '1. Tap either download link below in Safari and save SideStore.ipa to the <strong>Files</strong> app.<br />2. Open <strong>SideInstaller</strong> (ensure <strong>Tunnel connected</strong> is green).<br />3. Sign in with an Apple ID (a secondary / burner account is recommended).<br />4. Tap <strong>Import IPA</strong> (or "Install from file") and select the SideStore.ipa you downloaded.<br />5. <em>iOS 27:</em> leave pairing file empty → tap Install.<br />• <em>iOS 18–26:</em> tap Import Pairing File first → select your pairing file → tap Install.<br />6. Wait until the installation finishes.'
-                      }
-                      as="p"
-                    />
-
-                    {/* Prominent Direct Download Buttons */}
-                    <div style={{ marginTop: '1.25rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                      <a
-                        href="https://drive.google.com/file/d/14AbuUR1d8WdwdvJkuLTROsYySsOteYdz/view?usp=sharing"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cta-button-primary"
-                        style={{ padding: '0.6rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
-                      >
-                        <Download size={14} />
-                        <span>{t.ios_s3_btn_gdrive || 'Download SideStore.ipa (Google Drive)'}</span>
-                        <ArrowUpRight size={14} />
-                      </a>
-                      <a
-                        href="https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cta-button-glass"
-                        style={{ padding: '0.6rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
-                      >
-                        <Download size={14} />
-                        <span>{t.ios_s3_btn_github || 'Download SideStore.ipa (GitHub Nightly)'}</span>
-                        <ArrowUpRight size={14} />
-                      </a>
-                    </div>
-
-                    {/* iOS 18-26 Pairing Link Note */}
-                    <div className="step-callout-note" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-                      <div>
-                        <strong>Pairing file (iOS 18–26):</strong> If you are not on iOS 27, you must import a pairing file before tapping Install.
-                      </div>
-                      <button
-                        type="button"
-                        className="action-tag-btn"
-                        onClick={() => setIosTab('pair')}
-                        style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}
-                      >
-                        <span>{t.nav_jump_pairing || 'Generate Pairing File on PC →'}</span>
-                      </button>
-                    </div>
-                  </div>
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">03</div>
+              </div>
+              <div className="step-card-body">
+                <h3>{t.on_s3_title || 'Install'}</h3>
+                <FormattedText
+                  text={
+                    t.on_s3_desc ||
+                    'Open the APK. <strong>Play Protect will appear</strong> → tap <em>More info</em> / <em>Show more</em> → then <em>Install anyway</em>. Do not skip this step.'
+                  }
+                  as="p"
+                />
+                <div className="step-callout-note danger">
+                  <strong>Play Protect Warning:</strong> Unsigned fan revivals trigger a red warning: ALWAYS tap <strong>More info</strong> → <strong>Install anyway</strong>.
                 </div>
+              </div>
+            </div>
 
-                <div className="step-card">
-                  <div className="step-card-num">
-                    <div className="step-num-badge">04</div>
-                  </div>
-                  <div className="step-card-body">
-                    <h3>{t.ios_s4_title || 'Trust Certificate & Developer Mode'}</h3>
-                    <FormattedText
-                      text={
-                        t.ios_s4_desc ||
-                        '1. Open <strong>Settings → General → VPN & Device Management</strong>.<br />2. Scroll down under Enterprise / Developer App, tap the profile name and tap <strong>Trust</strong>.<br />3. Enable <strong>Developer Mode</strong> in <em>Settings → Privacy & Security → Developer Mode</em> → tap Turn On → restart iPhone → confirm with passcode.'
-                      }
-                      as="p"
-                    />
-                    <div className="step-callout-note" style={{ marginTop: '0.75rem', borderColor: 'rgba(59, 130, 246, 0.4)' }}>
-                      <FormattedText
-                        text={
-                          t.ios_s4_reassurance ||
-                          '<strong>Security Dialog Note:</strong> Apple displays scary red warning buttons and "Untrusted Developer" alerts by default for all sideloaded apps. This is standard iOS security behavior and 100% safe for SideStore.'
-                        }
-                        as="div"
-                      />
-                    </div>
-                  </div>
-                </div>
+            {/* Step 04 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">04</div>
+              </div>
+              <div className="step-card-body">
+                <h3>{t.on_s4_title || 'Sign in with Discord'}</h3>
+                <FormattedText
+                  text={
+                    t.on_s4_desc ||
+                    'Open the game → Sign in with Discord. Account is created automatically. Let it download the ~220 MB game data (Wi-Fi, keep screen on).'
+                  }
+                  as="p"
+                />
+              </div>
+            </div>
+          </div>
 
-                <div className="step-card">
-                  <div className="step-card-num">
-                    <div className="step-num-badge">05</div>
-                  </div>
-                  <div className="step-card-body">
-                    <h3>{t.ios_s5_title || 'Clean up & WireGuard Refresh'}</h3>
-                    <FormattedText
-                      text={
-                        t.ios_s5_desc ||
-                        'After everything works, go to Settings → General → VPN & Device Management and remove the SideInstaller DNS profile. Keep LocalDevVPN installed — you need it for weekly refreshes.'
-                      }
-                      as="p"
-                    />
-                    <div style={{ marginTop: '1rem' }}>
-                      <button
-                        type="button"
-                        className="cta-button-primary"
-                        onClick={() => setIosTab('game')}
-                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
-                      >
-                        <span>Next: Install Naruto Blazing Game IPA →</span>
-                        <ArrowRight size={14} />
-                      </button>
-                    </div>
-                  </div>
+          {/* Feature 3-Cards */}
+          <div className="feature-cards-grid">
+            <div className="feature-info-card">
+              <div className="feature-icon-box">
+                <Key size={20} />
+              </div>
+              <h4>{t.on_card1_title || 'Link Discord later'}</h4>
+              <FormattedText
+                text={
+                  t.on_card1_desc ||
+                  'Others → Account. DATA TRANSFER is not valid for Online — you must link from inside the game menu.'
+                }
+                as="p"
+              />
+            </div>
+
+            <div className="feature-info-card">
+              <div className="feature-icon-box">
+                <Flame size={20} />
+              </div>
+              <h4>{t.on_card2_title || 'Banners'}</h4>
+              <FormattedText
+                text={
+                  t.on_card2_desc ||
+                  'Starts with the 2016 One Tail Naruto banner. Banners change chronologically as the server progresses.'
+                }
+                as="p"
+              />
+            </div>
+
+            <div className="feature-info-card">
+              <div className="feature-icon-box">
+                <ShieldAlert size={20} />
+              </div>
+              <h4>{t.on_card3_title || 'Separate accounts'}</h4>
+              <FormattedText
+                text={
+                  t.on_card3_desc ||
+                  'Online and Offline are completely separate apps with separate accounts. Progress does not transfer between them.'
+                }
+                as="p"
+              />
+            </div>
+          </div>
+
+          {/* Chapter 01 Navigation Jump Cluster */}
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="cta-button-primary"
+              onClick={() => scrollTo('#offline')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <span>{t.nav_continue_offline || 'Continue to Chapter 02: Offline Mode →'}</span>
+              <ArrowRight size={14} />
+            </button>
+            <button
+              type="button"
+              className="cta-button-glass"
+              onClick={() => scrollTo('#updates')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <span>{t.nav_continue_updates || 'See Chapter 07: How to Update →'}</span>
+              <RefreshCw size={14} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          CHAPTER 02: OFFLINE MODE (Solar Sage / Kyuubi Flame Amber Atmosphere)
+          ========================================================================= */}
+      <section id="offline" className="story-section section-offline">
+        <div className="section-atmosphere-glow" />
+        <div className="story-section-container">
+          <div className="section-header-block">
+            <div className="chapter-meta-tag">
+              <Flame size={14} />
+              <span>CHAPTER 02 // SAGE ARCHIVE</span>
+            </div>
+            <h2 className="section-headline">{t.offline_title || 'Offline Mode'}</h2>
+            <FormattedText
+              text={
+                t.offline_sub ||
+                'Launcher + game · Local save only · All banners available from the start'
+              }
+              as="p"
+              className="section-subhead"
+            />
+          </div>
+
+          {/* Storage Warning Note */}
+          <div className="warning-strip-card" style={{ marginBottom: '2.5rem' }}>
+            <div className="warning-icon-wrapper" style={{ color: 'var(--accent-amber)' }}>
+              <AlertTriangle size={22} />
+            </div>
+            <FormattedText
+              text={
+                t.offline_warning ||
+                '<strong>Important:</strong> Offline data is saved only on your device. Deleting the game = permanent loss of progress. There are 2 separate offline modes with separate local accounts.'
+              }
+              as="p"
+            />
+          </div>
+
+          {/* Timeline Steps Stack */}
+          <div className="steps-timeline-stack">
+            {/* Step 01 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">01</div>
+              </div>
+              <div className="step-card-body">
+                <h3>{t.off_s1_title || 'Download the correct APK'}</h3>
+                <FormattedText
+                  text={
+                    t.off_s1_desc ||
+                    'From the <strong>#downloads</strong> channel on Discord:<br />• <strong>ARM</strong> → real Android phone<br />• <strong>x86_x64</strong> → emulator'
+                  }
+                  as="p"
+                />
+                <div style={{ marginTop: '0.75rem' }}>
+                  <button
+                    type="button"
+                    className="action-tag-btn"
+                    onClick={() => scrollTo('#notes')}
+                    style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}
+                  >
+                    <Monitor size={12} />
+                    <span>Using PC Emulator (Pie64)? Check Chapter 05 Notes →</span>
+                  </button>
                 </div>
+              </div>
+            </div>
+
+            {/* Step 02 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">02</div>
+              </div>
+              <div className="step-card-body">
+                <h3>{t.off_s2_title || 'Install the Launcher'}</h3>
+                <FormattedText
+                  text={
+                    t.off_s2_desc ||
+                    '<strong>Play Protect will appear</strong> → <em>More info</em> → <em>Install anyway</em>. Open the app (Naruto Sage Mode icon).'
+                  }
+                  as="p"
+                />
+              </div>
+            </div>
+
+            {/* Step 03 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">03</div>
+              </div>
+              <div className="step-card-body">
+                <h3>{t.off_s3_title || 'Update pop-up → Later'}</h3>
+                <FormattedText
+                  text={
+                    t.off_s3_desc ||
+                    'An update pop-up appears. Tap <strong>Later</strong> (it is an older version).'
+                  }
+                  as="p"
+                />
+              </div>
+            </div>
+
+            {/* Step 04 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">04</div>
+              </div>
+              <div className="step-card-body">
+                <h3>{t.off_s4_title || 'Switch to Beta channel'}</h3>
+                <FormattedText
+                  text={
+                    t.off_s4_desc ||
+                    'Open the left-side menu → <strong>Updates</strong>. Change first setting from <em>Stable</em> to <em>Beta</em>. Then press <strong>Check for updates</strong>.'
+                  }
+                  as="p"
+                />
+              </div>
+            </div>
+
+            {/* Step 05 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">05</div>
+              </div>
+              <div className="step-card-body">
+                <h3>{t.off_s5_title || 'Update to latest (v0.28+)'}</h3>
+                <FormattedText
+                  text={
+                    t.off_s5_desc ||
+                    'Press <strong>Update now</strong>. Wait until it reinstalls the app (white UI like first install) → press Install when prompted.'
+                  }
+                  as="p"
+                />
+              </div>
+            </div>
 
             {/* Step 06 */}
             <div className="step-card">
@@ -1022,6 +1140,37 @@ export default function App() {
               />
             </div>
           </div>
+
+          {/* Chapter 02 Navigation Jump Cluster */}
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="cta-button-glass"
+              onClick={() => scrollTo('#online')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <ArrowRight size={14} style={{ transform: 'rotate(180deg)' }} />
+              <span>{t.nav_back_online || '← Back to Online Guide'}</span>
+            </button>
+            <button
+              type="button"
+              className="cta-button-primary"
+              onClick={() => scrollTo('#ios')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <span>{t.nav_continue_ios || 'Continue to Chapter 03: iOS Sideloading →'}</span>
+              <ArrowRight size={14} />
+            </button>
+            <button
+              type="button"
+              className="cta-button-glass"
+              onClick={() => scrollTo('#updates')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <span>{t.nav_continue_updates || 'See Chapter 07: How to Update →'}</span>
+              <RefreshCw size={14} />
+            </button>
+          </div>
         </div>
       </section>
 
@@ -1061,7 +1210,6 @@ export default function App() {
             />
           </div>
 
-          {/* Interactive Method Tabs */}
           {/* Critical iOS Version Warning Banner */}
           <div className="warning-strip-card" style={{ marginBottom: '2rem', borderColor: 'rgba(239, 68, 68, 0.4)', background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(20, 20, 25, 0.8) 100%)' }}>
             <div className="warning-icon-wrapper" style={{ color: '#ef4444' }}>
@@ -1109,6 +1257,7 @@ export default function App() {
             </div>
           </div>
 
+          {/* Interactive Method Tabs */}
           <div className="ios-tab-selector">
             <button
               type="button"
@@ -1186,13 +1335,13 @@ export default function App() {
                     <FormattedText
                       text={
                         t.ios_s2_desc ||
-                        'Open <strong>Safari</strong> → go to frizzlem.github.io/SideInstaller. Install the DNS profile first, then pick a certificate and tap <strong>Install</strong>. Certificates get revoked often — try another if one fails.'
+                        'Open <strong>Safari</strong> → go to frizzlem.github.io/SideInstaller. Install the DNS profile first.<br />• <strong>Test ONE certificate at a time:</strong> Tap Install on one certificate and check your Home Screen.<br />• <strong>Blue icon with download arrow / full app:</strong> Works! That certificate is valid on your phone.<br />• <strong>White cloud icon / greyed out:</strong> That certificate is revoked / incompatible on your phone — it will NOT work. Try the next certificate on the page.<br />• <strong>MANDATORY CLEANUP:</strong> Once you find a working one, immediately delete all failed / white-cloud icons from your Home Screen so they don\'t block installation!'
                       }
                       as="p"
                     />
 
                     {/* Copyable Verified Certificate */}
-                    <div className="certificate-display-box">
+                    <div className="certificate-display-box" style={{ marginTop: '1rem' }}>
                       <FormattedText
                         text={
                           t.ios_s2_cert ||
@@ -1221,27 +1370,75 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="step-card">
+                <div className="step-card" id="ios-s3">
                   <div className="step-card-num">
                     <div className="step-num-badge">03</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_s3_title || 'Install SideStore + LiveContainer'}</h3>
-                    <FormattedText
-                      text={
-                        t.ios_s3_desc ||
-                        'Open SideInstaller → make sure you see <strong>Tunnel connected</strong> (green) → sign in with an Apple ID (preferably a secondary / burner account) → select <strong>LiveContainer + SideStore</strong> → choose <strong>Nightly</strong> (recommended) → tap <strong>Install SS + LiveContainer</strong>. Wait until it finishes.'
-                      }
-                      as="p"
-                    />
-                    <div className="step-callout-note">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                      <h3 style={{ margin: 0 }}>{t.ios_s3_title || 'Download & Import SideStore.ipa'}</h3>
+                      <span style={{ fontSize: '0.7rem', padding: '0.2rem 0.55rem', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239,68,68,0.4)', color: '#f87171', borderRadius: '4px', fontWeight: 600 }}>
+                        {t.ios_s3_404_badge || '404 Error Fix'}
+                      </span>
+                    </div>
+
+                    <div className="step-callout-note danger" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
                       <FormattedText
                         text={
-                          t.ios_s3_pairing ||
-                          '<strong>Pairing file:</strong><br />• <strong>iOS 27:</strong> leave “Import pairing file” <em>empty</em> and install directly.<br />• <strong>iOS 18–26:</strong> you must import a pairing file first — generate it on a PC (once), then Import in SideInstaller, then Install.'
+                          t.ios_s3_404_note ||
+                          '<strong>Why 404 occurs:</strong> The automated download in SideInstaller fails because the LiveContainer repository is offline. Downloading standalone SideStore.ipa manually completely bypasses the 404 error!'
                         }
                         as="div"
                       />
+                    </div>
+
+                    <FormattedText
+                      text={
+                        t.ios_s3_steps ||
+                        '1. Tap either download link below in Safari and save SideStore.ipa to the <strong>Files</strong> app.<br />2. Open <strong>SideInstaller</strong> (ensure <strong>Tunnel connected</strong> is green).<br />3. Sign in with an Apple ID (a secondary / burner account is recommended).<br />4. Tap <strong>Import IPA</strong> (or "Install from file") and select the SideStore.ipa you downloaded.<br />5. <em>iOS 27:</em> leave pairing file empty → tap Install.<br />• <em>iOS 18–26:</em> tap Import Pairing File first → select your pairing file → tap Install.<br />6. Wait until the installation finishes.'
+                      }
+                      as="p"
+                    />
+
+                    {/* Direct Download Buttons for SideStore.ipa */}
+                    <div style={{ marginTop: '1.25rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <a
+                        href="https://drive.google.com/file/d/14AbuUR1d8WdwdvJkuLTROsYySsOteYdz/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-primary"
+                        style={{ padding: '0.6rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                      >
+                        <Download size={14} />
+                        <span>{t.ios_s3_btn_gdrive || 'Download SideStore.ipa (Google Drive)'}</span>
+                        <ArrowUpRight size={14} />
+                      </a>
+                      <a
+                        href="https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-glass"
+                        style={{ padding: '0.6rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                      >
+                        <Download size={14} />
+                        <span>{t.ios_s3_btn_github || 'Download SideStore.ipa (GitHub Nightly)'}</span>
+                        <ArrowUpRight size={14} />
+                      </a>
+                    </div>
+
+                    {/* iOS 18-26 Pairing Link Note */}
+                    <div className="step-callout-note" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+                      <div>
+                        <strong>Pairing file (iOS 18–26):</strong> If you are not on iOS 27, you must import a pairing file before tapping Install.
+                      </div>
+                      <button
+                        type="button"
+                        className="action-tag-btn"
+                        onClick={() => setIosTab('pair')}
+                        style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}
+                      >
+                        <span>{t.nav_jump_pairing || 'Generate Pairing File on PC →'}</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1251,14 +1448,23 @@ export default function App() {
                     <div className="step-num-badge">04</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_s4_title || 'Trust + Developer Mode'}</h3>
+                    <h3>{t.ios_s4_title || 'Trust Certificate & Developer Mode'}</h3>
                     <FormattedText
                       text={
                         t.ios_s4_desc ||
-                        '1. Trust the certificate profile in Settings → General → VPN & Device Management.<br />2. Trust the Apple ID profile.<br />3. Enable Developer Mode in Settings → Privacy & Security → Developer Mode.<br />4. Open SideStore inside LiveContainer with LocalDevVPN connected and tap Refresh.'
+                        '1. Open <strong>Settings → General → VPN & Device Management</strong>.<br />2. Scroll to the very bottom under Enterprise / Developer App, tap the company name from the working certificate, tap <strong>Trust</strong>, then tap <strong>Allow & Restart</strong>.<br />3. <em>Developer Mode:</em> Note that Developer Mode only appears in Settings <em>after</em> an app is installed from SideInstaller. Go to <strong>Settings → Privacy & Security → Developer Mode</strong> → turn ON → restart iPhone → confirm with passcode.'
                       }
                       as="p"
                     />
+                    <div className="step-callout-note" style={{ marginTop: '0.75rem', borderColor: 'rgba(59, 130, 246, 0.4)' }}>
+                      <FormattedText
+                        text={
+                          t.ios_s4_reassurance ||
+                          '<strong>Security Dialog Note:</strong> Apple displays scary red warning buttons and "Untrusted Developer" alerts by default for all sideloaded apps. This is standard iOS security behavior and 100% safe for SideStore.'
+                        }
+                        as="div"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1267,7 +1473,7 @@ export default function App() {
                     <div className="step-num-badge">05</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_s5_title || 'Clean up'}</h3>
+                    <h3>{t.ios_s5_title || 'Clean up & WireGuard Refresh'}</h3>
                     <FormattedText
                       text={
                         t.ios_s5_desc ||
@@ -1275,6 +1481,17 @@ export default function App() {
                       }
                       as="p"
                     />
+                    <div style={{ marginTop: '1rem' }}>
+                      <button
+                        type="button"
+                        className="cta-button-primary"
+                        onClick={() => setIosTab('game')}
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+                      >
+                        <span>Next: Install Naruto Blazing Game IPA →</span>
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1348,7 +1565,7 @@ export default function App() {
                     <div className="step-num-badge">03</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_pair3_title || 'Generate with iDevicePair'}</h3>
+                    <h3>{t.ios_pair3_title || 'Generate with iDevicePair / SideServer'}</h3>
                     <FormattedText
                       text={
                         t.ios_pair3_desc ||
@@ -1435,11 +1652,11 @@ export default function App() {
                     <div className="step-num-badge">01</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_pc1_title || 'Install LocalDevVPN + iloader'}</h3>
+                    <h3>{t.ios_pc1_title || 'Install LocalDevVPN + Sideloadly'}</h3>
                     <FormattedText
                       text={
                         t.ios_pc1_desc ||
-                        'On iPhone: install LocalDevVPN from App Store and connect it. On computer: download iloader / Sideloadly from official sources.'
+                        'On iPhone: install LocalDevVPN from App Store and connect it. On computer: download Sideloadly from official sources.'
                       }
                       as="p"
                     />
@@ -1478,7 +1695,7 @@ export default function App() {
                     <FormattedText
                       text={
                         t.ios_pc2_desc ||
-                        'Connect iPhone via USB → trust the computer. Open iloader → sign in with Apple ID → select your device → choose LiveContainer + SideStore (or SideStore first). Install.'
+                        'Connect iPhone via USB → trust the computer. Open Sideloadly → sign in with Apple ID → select your device → choose SideStore IPA. Install.'
                       }
                       as="p"
                     />
@@ -1926,9 +2143,9 @@ export default function App() {
       </section>
 
       {/* =========================================================================
-          CHAPTER 07: HOW TO UPDATE (Amber Sage Fire Atmosphere)
+          CHAPTER 07: HOW TO UPDATE (Emerald Glow Atmosphere)
           ========================================================================= */}
-      <section id="updates" className="story-section section-offline">
+      <section id="updates" className="story-section section-updates">
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
@@ -1938,13 +2155,16 @@ export default function App() {
             </div>
             <h2 className="section-headline">{t.upd_title || 'How to Update'}</h2>
             <FormattedText
-              text={t.upd_sub || 'Online and Offline have different update processes · Back up saves before updating Offline'}
+              text={
+                t.upd_sub ||
+                'Online and Offline have different update processes · Back up saves before updating Offline'
+              }
               as="p"
               className="section-subhead"
             />
           </div>
 
-          {/* Update Warning */}
+          {/* Warning Note */}
           <div className="warning-strip-card" style={{ marginBottom: '2.5rem' }}>
             <div className="warning-icon-wrapper" style={{ color: 'var(--accent-amber)' }}>
               <AlertTriangle size={22} />
@@ -2007,19 +2227,19 @@ export default function App() {
             </div>
           </div>
 
-          {/* Offline Update Section */}
-          <div>
+          {/* Android Offline Update Section */}
+          <div style={{ marginBottom: '3rem' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <HardDrive size={18} style={{ color: 'var(--accent-amber)' }} />
-              {t.upd_offline_h || 'Offline Mode — How to Update (with Save Backup)'}
+              {t.upd_offline_h || 'Android Offline Mode — How to Update (with Save Backup)'}
             </h3>
             <div className="steps-timeline-stack">
               <div className="step-card">
                 <div className="step-card-num"><div className="step-num-badge">01</div></div>
                 <div className="step-card-body">
-                  <h3 style={{ color: 'var(--accent-amber)' }}>{t.upd_off_s1_title || 'FIRST: Back up your save slot'}</h3>
+                  <h3 style={{ color: 'var(--accent-amber)' }}>{t.upd_off_s1_title || 'STEP 1 (OPTIONAL): Back up your save slot'}</h3>
                   <FormattedText
-                    text={t.upd_off_s1_desc || '<strong>Do this before anything else or risk losing progress.</strong> In game tap the Floating Menu → Saves → select active slot (Slot 1) → Rename it → then Export. Save the file somewhere safe.'}
+                    text={t.upd_off_s1_desc || '<strong>Optional — only if you already played and have progress to keep:</strong> In game tap Floating Menu → Saves → active slot (Slot 1) → Rename → Export. Save the file in Files / Google Drive.<br /><em>If this is your first time playing or you want to start fresh, ignore this step and go directly to Step 2!</em>'}
                     as="p"
                   />
                   <div className="step-callout-note danger" style={{ marginTop: '0.75rem' }}>
@@ -2056,30 +2276,24 @@ export default function App() {
                     text={t.upd_off_s4_desc || 'If your progress is gone after the update: Floating Menu → Saves → tap Import → select your exported save file. Your progress will be fully restored.'}
                     as="p"
                   />
-                  <FormattedText
-                    text={t.upd_off_note || '<strong>Note:</strong> After a major update the game may show a new empty save slot. Your old slot should still be importable from the Saves menu.'}
-                    as="div"
-                    className="step-callout-note"
-                    style={{ marginTop: '0.75rem' }}
-                  />
                 </div>
               </div>
             </div>
           </div>
 
           {/* iOS Offline Update Section */}
-          <div style={{ marginTop: '3rem' }}>
+          <div style={{ marginBottom: '3rem' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Apple size={18} style={{ color: 'var(--accent-purple, #a78bfa)' }} />
-              {t.upd_ios_h || 'iOS Offline — How to Update (with Save Backup)'}
+              {t.upd_ios_h || 'iOS Offline Mode — How to Update (with Save Backup)'}
             </h3>
             <div className="steps-timeline-stack">
               <div className="step-card">
                 <div className="step-card-num"><div className="step-num-badge">01</div></div>
                 <div className="step-card-body">
-                  <h3 style={{ color: 'var(--accent-amber)' }}>{t.upd_ios_s1_title || 'FIRST: Back up your save slot in Files'}</h3>
+                  <h3 style={{ color: 'var(--accent-amber)' }}>{t.upd_ios_s1_title || 'STEP 1 (OPTIONAL): Back up your save slot in Files'}</h3>
                   <FormattedText
-                    text={t.upd_ios_s1_desc || '<strong>Prevent data loss!</strong> Open the game → tap the <strong>Floating Menu</strong> → <strong>Saves</strong> → select <strong>Slot 1</strong> → tap <strong>Rename</strong> → tap <strong>Export</strong> and save it safely in the iOS <strong>Files app</strong>.'}
+                    text={t.upd_ios_s1_desc || '<strong>Optional — only if you already played:</strong> In game tap Floating Menu → Saves → Slot 1 → Rename → Export and save it in the iOS Files app.<br /><em>If installing for the first time, ignore this step and proceed directly to Step 2!</em>'}
                     as="p"
                   />
                   <div className="step-callout-note danger" style={{ marginTop: '0.75rem' }}>
@@ -2121,7 +2335,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Nav buttons */}
+          {/* Chapter 07 Navigation Jump Cluster */}
           <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
             <button type="button" className="cta-button-glass" onClick={() => scrollTo('#online')} style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}>
               <ArrowRight size={14} style={{ transform: 'rotate(180deg)' }} />
