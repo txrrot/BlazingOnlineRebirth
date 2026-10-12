@@ -2254,11 +2254,11 @@ export default function App() {
             <div className="link-access-card">
               <div className="link-card-meta">
                 <h4>{t.link_site || 'Official site'}</h4>
-                <p>narutoblazing.online</p>
+                <p>blazingonline.wiki</p>
               </div>
               <div className="link-actions-cluster">
                 <a
-                  href="https://narutoblazing.online"
+                  href="https://blazingonline.wiki"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="open-link-pill"
@@ -2273,16 +2273,16 @@ export default function App() {
             <div className="link-access-card">
               <div className="link-card-meta">
                 <h4>{t.link_apk || 'Download APK (Online)'}</h4>
-                <p>{t.link_apk_sub || 'Only from here'}</p>
+                <p>{t.link_apk_sub || 'Only from Discord #downloads'}</p>
               </div>
               <div className="link-actions-cluster">
                 <a
-                  href="https://narutoblazing.online/download"
+                  href="https://discord.gg/blazingrebirth"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="open-link-pill"
                 >
-                  <span>Download</span>
+                  <span>Discord</span>
                   <Download size={14} />
                 </a>
               </div>
