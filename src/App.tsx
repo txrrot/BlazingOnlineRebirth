@@ -741,6 +741,167 @@ export default function App() {
       </div>
 
       {/* =========================================================================
+          REBIRTH vs REVIVAL NOTICE BANNER
+          ========================================================================= */}
+      <div className="revival-notice-banner">
+        <div className="revival-notice-inner">
+          <div className="revival-notice-icon">
+            <AlertTriangle size={20} />
+          </div>
+          <div className="revival-notice-content">
+            <strong className="revival-notice-title">
+              {t.revival_notice_title || 'Are you looking for Revival?'}
+            </strong>
+            <span className="revival-notice-text">
+              {t.revival_notice_text ||
+                'This guide is for Blazing REBIRTH only. Rebirth and Revival are completely separate communities, developers and apps — different servers, different teams. If you have issues with Revival, go to their server to find their APK files.'}
+            </span>
+          </div>
+          <a
+            href="https://discord.gg/blazingrebirth"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="revival-notice-cta"
+          >
+            {t.revival_notice_cta || 'Join Rebirth'}
+            <ArrowUpRight size={13} />
+          </a>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          REBIRTH vs REVIVAL + ONLINE vs OFFLINE COMPARISON
+          ========================================================================= */}
+      <div className="differences-section-wrapper">
+        <div className="differences-inner">
+          <div className="differences-header">
+            <div className="chapter-meta-tag" style={{marginBottom: '0.5rem'}}>
+              <ShieldAlert size={14} />
+              <span>REBIRTH vs REVIVAL — KEY DIFFERENCES</span>
+            </div>
+            <h2 className="differences-headline">
+              {t.diff_title || 'Rebirth ≠ Revival'}
+            </h2>
+            <p className="differences-sub">
+              {t.diff_sub || 'Two separate fan projects. Different servers, different dev teams, different game versions. If your game is broken and you are on Revival, this guide does NOT apply to you.'}
+            </p>
+          </div>
+          <div className="differences-grid">
+            <div className="diff-card diff-rebirth">
+              <div className="diff-card-header">
+                <Flame size={18} />
+                <span>{t.diff_rebirth_title || 'REBIRTH (This Guide)'}</span>
+              </div>
+              <ul className="diff-list">
+                {(t.diff_rebirth_points
+                  ? t.diff_rebirth_points.split('|')
+                  : [
+                      'Maintained by TXRROT & the Rebirth team',
+                      'Online mode with live Discord-linked servers',
+                      'Offline mode with vanilla/all-data saves',
+                      'iOS support via SideStore (No PC needed)',
+                      'Active development & updates',
+                    ]
+                ).map((pt: string, i: number) => (
+                  <li key={i}><Check size={13} /><span>{pt.trim()}</span></li>
+                ))}
+              </ul>
+            </div>
+            <div className="diff-divider">
+              <span className="diff-vs-label">VS</span>
+            </div>
+            <div className="diff-card diff-revival">
+              <div className="diff-card-header">
+                <Globe size={18} />
+                <span>{t.diff_revival_title || 'REVIVAL (Separate Project)'}</span>
+              </div>
+              <ul className="diff-list">
+                {(t.diff_revival_points
+                  ? t.diff_revival_points.split('|')
+                  : [
+                      'Completely separate dev team & community',
+                      'Different application, servers & infrastructure',
+                      'Different Discord server',
+                      'Problems with Revival? Go to their server',
+                      'Progress & accounts are NOT transferable',
+                    ]
+                ).map((pt: string, i: number) => (
+                  <li key={i}><X size={13} className="diff-x-icon" /><span>{pt.trim()}</span></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          ONLINE vs OFFLINE FEATURE COMPARISON
+          ========================================================================= */}
+      <div className="online-offline-comparison-wrapper">
+        <div className="differences-inner">
+          <div className="differences-header">
+            <div className="chapter-meta-tag" style={{marginBottom: '0.5rem'}}>
+              <Wifi size={14} />
+              <span>ONLINE vs OFFLINE — FEATURE COMPARISON</span>
+            </div>
+            <h2 className="differences-headline">
+              {t.oo_title || 'Which mode is right for you?'}
+            </h2>
+            <p className="differences-sub">
+              {t.oo_sub || 'Rebirth offers two completely different game experiences. Here is what sets them apart.'}
+            </p>
+          </div>
+          <div className="differences-grid">
+            <div className="diff-card diff-online">
+              <div className="diff-card-header">
+                <Zap size={18} />
+                <span>{t.oo_online_title || 'ONLINE Mode'}</span>
+              </div>
+              <ul className="diff-list">
+                {(t.oo_online_points
+                  ? t.oo_online_points.split('|')
+                  : [
+                      'Account linked to Discord',
+                      'Banners progress chronologically (PTS → Limited)',
+                      'PVP & CO-OP multiplayer supported',
+                      'Online leaderboards & global ranking',
+                      'Progress saved via Discord cloud',
+                      'Requires active internet connection',
+                    ]
+                ).map((pt: string, i: number) => (
+                  <li key={i}><Check size={13} /><span>{pt.trim()}</span></li>
+                ))}
+              </ul>
+            </div>
+            <div className="diff-divider">
+              <span className="diff-vs-label" style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>VS</span>
+            </div>
+            <div className="diff-card diff-offline">
+              <div className="diff-card-header">
+                <HardDrive size={18} />
+                <span>{t.oo_offline_title || 'OFFLINE Mode'}</span>
+              </div>
+              <ul className="diff-list">
+                {(t.oo_offline_points
+                  ? t.oo_offline_points.split('|')
+                  : [
+                      'No account or Discord required',
+                      'Choose Vanilla or All Data save mode',
+                      'Starts with 1000+ Pearls in All Data mode',
+                      'Fully playable without internet',
+                      'No PVP or CO-OP (local only)',
+                      'Manual save export/import management',
+                    ]
+                ).map((pt: string, i: number) => (
+                  <li key={i}><Check size={13} /><span>{pt.trim()}</span></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
           CHAPTER 01: ONLINE MODE (Neon Chakra Blue Luminescence Atmosphere)
           ========================================================================= */}
       <section id="online" className="story-section section-online">
@@ -2387,6 +2548,41 @@ export default function App() {
           />
         </div>
       </footer>
+
+      {/* FLOATING DM TXRROT WIDGET */}
+      <a
+        href="https://discord.com/users/txrrot"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="dm-txrrot-widget"
+        title="DM TXRROT on Discord"
+      >
+        <div className="dm-avatar-ring">
+          <img
+            src="https://cdn.discordapp.com/avatars/397816987040169984/a_placeholder.webp"
+            alt="TXRROT"
+            className="dm-avatar-img"
+            onError={(e) => {
+              const img = e.currentTarget
+              img.style.display = 'none'
+              const parent = img.parentElement
+              if (parent) {
+                const fallback = document.createElement('div')
+                fallback.className = 'dm-avatar-fallback'
+                fallback.textContent = 'T'
+                parent.appendChild(fallback)
+              }
+            }}
+          />
+        </div>
+        <div className="dm-widget-text">
+          <span className="dm-widget-label">Need help?</span>
+          <span className="dm-widget-name">DM TXRROT</span>
+        </div>
+        <div className="dm-widget-arrow">
+          <ArrowUpRight size={14} />
+        </div>
+      </a>
 
       {/* FLOATING TOAST NOTIFIER */}
       <AnimatePresence>
