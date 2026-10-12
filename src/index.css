@@ -1514,6 +1514,10 @@ html.lenis, html.lenis body {
   .mobile-menu-toggle {
     display: inline-flex;
   }
+  /* Hide Discord button on mobile so hamburger is never pushed off-screen */
+  .discord-nav-btn {
+    display: none;
+  }
   .header-nav {
     padding: 0.65rem 1rem;
   }

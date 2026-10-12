@@ -35,6 +35,7 @@ import {
 } from 'lucide-react'
 import { translations, type Lang } from './data/translations'
 import heroArt from './assets/blazing_hero_banner.jpg'
+import txrrotAvatar from './assets/txrrot_avatar.jpg'
 
 // --- HELPER COMPONENT FOR CLEAN, SAFE RICH TEXT RENDERING ---
 function FormattedText({
@@ -139,7 +140,7 @@ export default function App() {
     }))
   }
 
-  // Lenis smooth scroll trigger
+  // Lenis smooth scroll trigger + update URL hash for shareability
   const scrollTo = (target: string) => {
     setMobileMenuOpen(false)
     const el = document.querySelector(target)
@@ -148,7 +149,28 @@ export default function App() {
     } else if (el) {
       el.scrollIntoView({ behavior: 'smooth' })
     }
+    // Update URL hash without causing a page jump
+    if (target.startsWith('#')) {
+      history.replaceState(null, '', target)
+    }
   }
+
+  // On mount: if URL has a hash, scroll to that section after lenis is ready
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      // Small delay to let Lenis initialize
+      const timer = setTimeout(() => {
+        const el = document.querySelector(hash)
+        if (el && lenisRef.current) {
+          lenisRef.current.scrollTo(el as HTMLElement, { offset: -70, duration: 1.2 })
+        } else if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 600)
+      return () => clearTimeout(timer)
+    }
+  }, [])
 
   // Initialize Lenis with buttery 60/120fps parameters
   useEffect(() => {
@@ -174,13 +196,17 @@ export default function App() {
       const scrollPos = window.scrollY
       setIsScrolled(scrollPos > 40)
 
-      // Active Chapter Detector
+      // Active Chapter Detector + update URL hash for shareability
       for (const ch of CHAPTERS) {
         const el = document.getElementById(ch.id)
         if (el) {
           const rect = el.getBoundingClientRect()
           if (rect.top <= 250 && rect.bottom >= 250) {
             setActiveChapter(ch.id)
+            // Update URL hash silently (no scroll jump, no history stack pollution)
+            if (window.location.hash !== `#${ch.id}`) {
+              history.replaceState(null, '', `#${ch.id}`)
+            }
             break
           }
         }
@@ -2551,7 +2577,7 @@ export default function App() {
 
       {/* FLOATING DM TXRROT WIDGET */}
       <a
-        href="https://discord.com/users/txrrot"
+        href="https://discord.com/users/888013245313605683"
         target="_blank"
         rel="noopener noreferrer"
         className="dm-txrrot-widget"
@@ -2559,20 +2585,9 @@ export default function App() {
       >
         <div className="dm-avatar-ring">
           <img
-            src="https://cdn.discordapp.com/avatars/397816987040169984/a_placeholder.webp"
+            src={txrrotAvatar}
             alt="TXRROT"
             className="dm-avatar-img"
-            onError={(e) => {
-              const img = e.currentTarget
-              img.style.display = 'none'
-              const parent = img.parentElement
-              if (parent) {
-                const fallback = document.createElement('div')
-                fallback.className = 'dm-avatar-fallback'
-                fallback.textContent = 'T'
-                parent.appendChild(fallback)
-              }
-            }}
           />
         </div>
         <div className="dm-widget-text">
