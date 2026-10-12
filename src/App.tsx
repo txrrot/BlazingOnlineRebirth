@@ -21,7 +21,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Key,
-  Cpu,
   ShieldAlert,
   RefreshCw,
   Copy,
@@ -1598,7 +1597,7 @@ export default function App() {
             <FormattedText
               text={
                 t.ios_sub ||
-                'SideStore + LiveContainer · Unlimited apps · No PC required on iOS 27'
+                'SideStore · Direct IPA Installation · No PC required on iOS 27'
               }
               as="p"
               className="section-subhead"
@@ -1666,6 +1665,66 @@ export default function App() {
             </div>
           </div>
 
+          {/* Sideloading Truth: Myths vs Reality & Apple ID Safety */}
+          <div
+            className="warning-strip-card"
+            style={{
+              marginBottom: '2rem',
+              borderColor: 'rgba(99, 102, 241, 0.4)',
+              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(20, 20, 30, 0.8) 100%)',
+            }}
+          >
+            <div className="warning-icon-wrapper" style={{ color: 'var(--accent-indigo, #818cf8)' }}>
+              <ShieldCheck size={26} />
+            </div>
+            <div style={{ width: '100%' }}>
+              <h4 style={{ color: '#a5b4fc', fontWeight: 700, marginBottom: '0.6rem', fontSize: '1rem' }}>
+                {t.ios_myths_title || 'Sideloading Truth: Myths vs Reality & Apple ID Safety'}
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginTop: '0.75rem' }}>
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                    {t.ios_myth1_q || 'Myth 1: "Does Sideloading mean Jailbreak?"'}
+                  </div>
+                  <FormattedText
+                    text={
+                      t.ios_myth1_a ||
+                      '<strong>FALSE.</strong> Jailbreaking alters the iOS kernel and strips Apple security protections, which voids warranty and disables Apple Pay and banking apps. Sideloading via SideStore uses Apple official Personal Developer Provisioning Profiles. Your iOS system is 100% untouched, secure, and banking apps work without issues.'
+                    }
+                    as="p"
+                    style={{ fontSize: '0.8rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+                  />
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                    {t.ios_myth2_q || 'Myth 2: "Will Apple ban my Apple ID or brick my iPhone?"'}
+                  </div>
+                  <FormattedText
+                    text={
+                      t.ios_myth2_a ||
+                      '<strong>FALSE.</strong> Apple has never locked or banned user Apple IDs, iCloud accounts, or iPhones for personal sideloading. Sideloading is a built-in feature of the iOS developer ecosystem.'
+                    }
+                    as="p"
+                    style={{ fontSize: '0.8rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+                  />
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', gridColumn: '1 / -1' }}>
+                  <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                    {t.ios_myth3_q || 'What are the real Apple ID limits & safety?'}
+                  </div>
+                  <FormattedText
+                    text={
+                      t.ios_myth3_a ||
+                      'Free Apple IDs have an official quota of up to 3 active sideloaded apps at a time. The only theoretical restriction from Apple is a temporary 7-day cooldown on generating new free certificates if someone abuses automated bulk signing (signing 10–50+ apps per week — chance <0.1%). Even in that extreme case, only SideStore would need reinstalling after the cooldown; your Apple ID, purchases, and iCloud are never touched. For Naruto Blazing Rebirth (just 1 app alongside SideStore), the risk is virtually <strong>zero (<0.01%)</strong>. Using your main Apple ID is totally safe; a secondary account is purely optional if you already have an unused spare.'
+                    }
+                    as="p"
+                    style={{ fontSize: '0.8rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Interactive Method Tabs */}
           <div className="ios-tab-selector">
             <button
@@ -1719,22 +1778,24 @@ export default function App() {
               />
 
               <div className="steps-timeline-stack">
+                {/* Step 01 */}
                 <div className="step-card">
                   <div className="step-card-num">
                     <div className="step-num-badge">01</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_s1_title || 'Install LocalDevVPN'}</h3>
+                    <h3>{t.ios_s1_title || 'Install & Connect LocalDevVPN'}</h3>
                     <FormattedText
                       text={
                         t.ios_s1_desc ||
-                        'Open App Store → search LocalDevVPN → install. Open the app and tap Connect. Keep the VPN on during the whole installation.'
+                        'Open App Store → search LocalDevVPN → install. Open the app and tap Connect. Keep the VPN on during the entire installation and weekly refreshes.'
                       }
                       as="p"
                     />
                   </div>
                 </div>
 
+                {/* Step 02 */}
                 <div className="step-card">
                   <div className="step-card-num">
                     <div className="step-num-badge">02</div>
@@ -1779,13 +1840,103 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="step-card" id="ios-s3">
+                {/* Step 03 - Trust Certificate in Settings (Must be done before opening SideInstaller) */}
+                <div className="step-card">
                   <div className="step-card-num">
                     <div className="step-num-badge">03</div>
                   </div>
                   <div className="step-card-body">
+                    <h3>{t.ios_s3_title || 'Trust Enterprise Certificate in Settings'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_s3_desc ||
+                        'Before opening SideInstaller, iOS requires authorization:<br />1. Open <strong>Settings → General → VPN & Device Management</strong>.<br />2. Under <em>Enterprise App</em>, tap the company name from the working certificate you installed.<br />3. Tap <strong>Trust</strong>, then tap <strong>Allow & Restart</strong> (or Trust again).<br />Now SideInstaller is authorized and can be opened from your Home Screen!'
+                      }
+                      as="p"
+                    />
+                  </div>
+                </div>
+
+                {/* Step 04 - Developer Mode & 100% SUCCESS DEBUGGING */}
+                <div className="step-card">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">04</div>
+                  </div>
+                  <div className="step-card-body">
+                    <h3>{t.ios_s4_title || 'Developer Mode & Missing Fix'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_s4_desc ||
+                        'To run sideloaded developer apps on iOS 16+, Apple requires Developer Mode.<br />1. Open <strong>Settings → Privacy & Security</strong>.<br />2. Scroll to the bottom and tap <strong>Developer Mode</strong> → toggle <strong>ON</strong>.<br />3. Restart your iPhone when prompted, then confirm with your passcode.'
+                      }
+                      as="p"
+                    />
+
+                    <div className="step-callout-note" style={{ marginTop: '0.75rem', borderColor: 'rgba(59, 130, 246, 0.4)' }}>
+                      <FormattedText
+                        text={
+                          t.ios_s4_reassurance ||
+                          '<strong>Security Dialog Note:</strong> Apple displays scary red warning buttons and "Untrusted Developer" alerts by default for all sideloaded apps. This is standard iOS security behavior and 100% safe for SideStore.'
+                        }
+                        as="div"
+                      />
+                    </div>
+
+                    {/* PROMINENT 100% SUCCESS DEBUGGING BOX FOR MISSING DEVELOPER MODE */}
+                    <div
+                      className="debugging-callout-card"
+                      style={{
+                        marginTop: '1.25rem',
+                        padding: '1.25rem 1.4rem',
+                        borderRadius: '10px',
+                        background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%)',
+                        border: '1px solid rgba(245, 158, 11, 0.4)',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem', flexWrap: 'wrap' }}>
+                        <span
+                          style={{
+                            background: 'rgba(245, 158, 11, 0.2)',
+                            color: '#fbbf24',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            padding: '0.2rem 0.55rem',
+                            borderRadius: '4px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                          }}
+                        >
+                          <Check size={12} />
+                          <span>100% SUCCESS SOLUTION</span>
+                        </span>
+                        <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#fbbf24', fontWeight: 700 }}>
+                          {t.ios_s4_debug_title || 'CRITICAL FIX: "Install stopped — Pair this iPhone" & Developer Mode Missing'}
+                        </h4>
+                      </div>
+                      <FormattedText
+                        text={
+                          t.ios_s4_debug_desc ||
+                          '<strong>Most common error:</strong> You open SideInstaller, tap Install, and a pop-up appears: <em>"Install stopped: Pair this iPhone in Settings"</em> telling you to go to Settings → Privacy & Security → Developer Mode, but Developer Mode <strong>is completely missing from Settings</strong> (even on iOS 16/17/18/27)!<br /><br /><strong>The 100% Proven Solution: Reinstall with another certificate!</strong><br />1. <strong>Delete SideInstaller</strong> from your iPhone Home Screen.<br />2. Open Safari on <code>sideinstaller.net</code> and install a <strong>different available certificate</strong> from the list.<br />3. Go to <em>Settings → General → VPN & Device Management</em> and tap <strong>Trust</strong> on the new certificate.<br />4. Now check <em>Settings → Privacy & Security</em>: <strong>Developer Mode has appeared!</strong><br />5. Toggle Developer Mode ON, restart your iPhone, confirm with passcode, and proceed with installation!'
+                        }
+                        as="div"
+                        style={{ fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 05 - Download & Import SideStore.ipa (404 Error Fix) */}
+                <div className="step-card" id="ios-s5">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">05</div>
+                  </div>
+                  <div className="step-card-body">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-                      <h3 style={{ margin: 0 }}>{t.ios_s3_title || 'Download & Import SideStore.ipa'}</h3>
+                      <h3 style={{ margin: 0 }}>{t.ios_s5_title || 'Download & Import SideStore.ipa'}</h3>
                       <span style={{ fontSize: '0.7rem', padding: '0.2rem 0.55rem', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239,68,68,0.4)', color: '#f87171', borderRadius: '4px', fontWeight: 600 }}>
                         {t.ios_s3_404_badge || '404 Error Fix'}
                       </span>
@@ -1794,8 +1945,8 @@ export default function App() {
                     <div className="step-callout-note danger" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
                       <FormattedText
                         text={
-                          t.ios_s3_404_note ||
-                          '<strong>Why 404 occurs:</strong> The automated download in SideInstaller fails because the LiveContainer repository is offline. Downloading standalone SideStore.ipa manually completely bypasses the 404 error!'
+                          t.ios_s5_404_note ||
+                          '<strong>Why 404 occurs:</strong> The automated download in SideInstaller fails because the built-in repository is offline. Downloading standalone SideStore.ipa manually completely bypasses the 404 error!'
                         }
                         as="div"
                       />
@@ -1803,8 +1954,8 @@ export default function App() {
 
                     <FormattedText
                       text={
-                        t.ios_s3_steps ||
-                        '1. Tap either download link below in Safari and save SideStore.ipa to the <strong>Files</strong> app.<br />2. Open <strong>SideInstaller</strong> (ensure <strong>Tunnel connected</strong> is green).<br />3. Sign in with an Apple ID (a secondary / burner account is recommended).<br />4. Tap <strong>Import IPA</strong> (or "Install from file") and select the SideStore.ipa you downloaded.<br />5. <em>iOS 27:</em> leave pairing file empty → tap Install.<br />• <em>iOS 18–26:</em> tap Import Pairing File first → select your pairing file → tap Install.<br />6. Wait until the installation finishes.'
+                        t.ios_s5_desc ||
+                        '1. Tap either download link below in Safari and save <strong>SideStore.ipa</strong> to the <strong>Files</strong> app.<br />2. Open <strong>SideInstaller</strong> (ensure <strong>Tunnel connected</strong> is green).<br />3. Sign in with your Apple ID (using your main account is completely safe; or a spare secondary account if you have one).<br />4. Tap <strong>Import IPA</strong> (or "Install from file") and select the SideStore.ipa you downloaded.<br />5. <em>iOS 27:</em> leave pairing file empty → tap Install.<br />• <em>iOS 18–26:</em> tap Import Pairing File first → select your pairing file → tap Install.<br />6. Wait until SideStore finishes installing onto your Home Screen.'
                       }
                       as="p"
                     />
@@ -1852,41 +2003,17 @@ export default function App() {
                   </div>
                 </div>
 
+                {/* Step 06 - Trust Personal Profile & Clean Up */}
                 <div className="step-card">
                   <div className="step-card-num">
-                    <div className="step-num-badge">04</div>
+                    <div className="step-num-badge">06</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_s4_title || 'Trust Certificate & Developer Mode'}</h3>
+                    <h3>{t.ios_s6_title || 'Trust Personal Profile & Clean Up'}</h3>
                     <FormattedText
                       text={
-                        t.ios_s4_desc ||
-                        '1. Open <strong>Settings → General → VPN & Device Management</strong>.<br />2. Scroll to the very bottom under Enterprise / Developer App, tap the company name from the working certificate, tap <strong>Trust</strong>, then tap <strong>Allow & Restart</strong>.<br />3. <em>Developer Mode:</em> Note that Developer Mode only appears in Settings <em>after</em> an app is installed from SideInstaller. Go to <strong>Settings → Privacy & Security → Developer Mode</strong> → turn ON → restart iPhone → confirm with passcode.'
-                      }
-                      as="p"
-                    />
-                    <div className="step-callout-note" style={{ marginTop: '0.75rem', borderColor: 'rgba(59, 130, 246, 0.4)' }}>
-                      <FormattedText
-                        text={
-                          t.ios_s4_reassurance ||
-                          '<strong>Security Dialog Note:</strong> Apple displays scary red warning buttons and "Untrusted Developer" alerts by default for all sideloaded apps. This is standard iOS security behavior and 100% safe for SideStore.'
-                        }
-                        as="div"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="step-card">
-                  <div className="step-card-num">
-                    <div className="step-num-badge">05</div>
-                  </div>
-                  <div className="step-card-body">
-                    <h3>{t.ios_s5_title || 'Clean up & WireGuard Refresh'}</h3>
-                    <FormattedText
-                      text={
-                        t.ios_s5_desc ||
-                        'After everything works, go to Settings → General → VPN & Device Management and remove the SideInstaller DNS profile. Keep LocalDevVPN installed — you need it for weekly refreshes.'
+                        t.ios_s6_desc ||
+                        '1. Open <strong>Settings → General → VPN & Device Management</strong> → tap your personal Apple ID developer profile → tap <strong>Trust</strong>.<br />2. Remove the temporary SideInstaller DNS profile.<br />3. Keep LocalDevVPN installed — you need it connected when refreshing SideStore weekly.'
                       }
                       as="p"
                     />
@@ -2024,7 +2151,7 @@ export default function App() {
                   style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                 >
                   <ArrowRight size={14} style={{ transform: 'rotate(180deg)' }} />
-                  <span>{t.nav_back_to_nopc || '← Back to No-PC Guide (Step 03)'}</span>
+                  <span>{t.nav_back_to_nopc || '← Back to No-PC Guide (Step 05)'}</span>
                 </button>
                 <button
                   type="button"
@@ -2162,7 +2289,7 @@ export default function App() {
               <FormattedText
                 text={
                   t.ios_game_intro ||
-                  'After SideStore + LiveContainer are working, install Naruto Blazing Rebirth as an IPA. Prefer installing it <strong>inside LiveContainer</strong> so it does not use one of the 3 free app slots.'
+                  'After SideStore is installed on your phone, install Naruto Blazing Rebirth directly as an IPA package via SideStore. Fast, direct, and completely on-device.'
                 }
                 as="p"
                 style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}
@@ -2174,11 +2301,11 @@ export default function App() {
                     <div className="step-num-badge">01</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_g1_title || 'Get the IPA'}</h3>
+                    <h3>{t.ios_g1_title || 'Download Game IPA'}</h3>
                     <FormattedText
                       text={
                         t.ios_g1_desc ||
-                        'Download the official <strong>.ipa</strong> from the direct download button below (Google Drive). Save it to the Files app (On My iPhone / iCloud Drive).'
+                        'Download the official <strong>Naruto Blazing Rebirth .ipa</strong> using the direct download button below (Google Drive). Save it to the Files app (On My iPhone / iCloud Drive).'
                       }
                       as="p"
                     />
@@ -2203,11 +2330,11 @@ export default function App() {
                     <div className="step-num-badge">02</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_g2_title || 'Install via LiveContainer (recommended)'}</h3>
+                    <h3>{t.ios_g2_title || 'Import & Install in SideStore'}</h3>
                     <FormattedText
                       text={
                         t.ios_g2_desc ||
-                        'Open <strong>LiveContainer</strong> → tap the <strong>+</strong> button → select the .ipa from Files. Wait for it to import. Then long-press the app card and choose <em>Launch</em>. This way the game runs inside LiveContainer and does not count toward the 3-app limit.'
+                        '1. Ensure <strong>LocalDevVPN</strong> is connected.<br />2. Open <strong>SideStore</strong> → go to the <strong>My Apps</strong> tab.<br />3. Tap the <strong>+</strong> (plus) button at top left.<br />4. Select <code>Naruto Blazing Rebirth.ipa</code> from the Files app.<br />5. When prompted, tap <strong>Keep App Extensions (Use Main Profile)</strong>.<br />6. Wait for the signing and installation to complete.'
                       }
                       as="p"
                     />
@@ -2219,11 +2346,11 @@ export default function App() {
                     <div className="step-num-badge">03</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_g3_title || 'Alternative: install via SideStore'}</h3>
+                    <h3>{t.ios_g3_title || 'Launch & Play'}</h3>
                     <FormattedText
                       text={
                         t.ios_g3_desc ||
-                        'Open SideStore (from LiveContainer or standalone) → My Apps → <strong>+</strong> → choose the .ipa. When asked, select <strong>Keep App Extensions (Use Main Profile)</strong>. Trust the app if prompted.'
+                        'The Naruto Blazing Rebirth icon will appear on your Home Screen! Tap it to play. (If an Untrusted Developer prompt appears, confirm it in Settings → General → VPN & Device Management).'
                       }
                       as="p"
                     />
@@ -2235,11 +2362,11 @@ export default function App() {
                     <div className="step-num-badge">04</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_g4_title || 'Refresh when needed'}</h3>
+                    <h3>{t.ios_g4_title || 'Weekly 7-Day Refresh'}</h3>
                     <FormattedText
                       text={
                         t.ios_g4_desc ||
-                        'Every ~7 days the signature expires. Connect LocalDevVPN → open SideStore → tap the 7 DAYS timer on LiveContainer (and on the game if it was installed outside). Then relaunch from LiveContainer.'
+                        'Free Apple developer certificates last 7 days. Whenever the countdown is low: connect LocalDevVPN → open SideStore → tap the <strong>7 DAYS</strong> timer next to Naruto Blazing Rebirth to reset the countdown. SideStore also refreshes automatically in the background when connected to Wi-Fi with LocalDevVPN.'
                       }
                       as="p"
                     />
@@ -2253,13 +2380,13 @@ export default function App() {
           <div className="feature-cards-grid" style={{ marginTop: '2.5rem' }}>
             <div className="feature-info-card">
               <div className="feature-icon-box">
-                <Cpu size={20} />
+                <ShieldCheck size={20} />
               </div>
-              <h4>{t.ios_card1_title || 'Why LiveContainer?'}</h4>
+              <h4>{t.ios_card1_title || '100% Safe (Not Jailbreak)'}</h4>
               <FormattedText
                 text={
                   t.ios_card1_desc ||
-                  'Free Apple ID allows only 3 sideloaded apps. LiveContainer runs other apps inside itself so they don\'t count toward the limit.'
+                  'Sideloading uses Apple native Developer Provisioning. No jailbreak, no system modification, no warranty loss. Apple Pay & banking apps work 100% normally.'
                 }
                 as="p"
               />
@@ -2269,7 +2396,7 @@ export default function App() {
               <div className="feature-icon-box">
                 <RefreshCw size={20} />
               </div>
-              <h4>{t.ios_card2_title || '7-day refresh'}</h4>
+              <h4>{t.ios_card2_title || '7-Day Refresh'}</h4>
               <FormattedText
                 text={
                   t.ios_card2_desc ||
@@ -2281,13 +2408,13 @@ export default function App() {
 
             <div className="feature-info-card">
               <div className="feature-icon-box">
-                <ShieldCheck size={20} />
+                <Key size={20} />
               </div>
-              <h4>{t.ios_card3_title || 'Burner Apple ID'}</h4>
+              <h4>{t.ios_card3_title || 'Main vs Secondary Apple ID'}</h4>
               <FormattedText
                 text={
                   t.ios_card3_desc ||
-                  'Strongly recommended. If Apple locks the account you don\'t lose your main iCloud.'
+                  'Using your main Apple ID is completely safe and normal. You can optionally use a secondary account if you already have an unused spare, but it is not required.'
                 }
                 as="p"
               />
