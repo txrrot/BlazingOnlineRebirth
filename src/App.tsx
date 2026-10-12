@@ -118,7 +118,9 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('')
   const [openFaqs, setOpenFaqs] = useState<Record<string, boolean>>({
     on1: true,
+    on_stuck: true,
     off1: true,
+    off_stuck: true,
     ios1: true,
   })
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
@@ -426,6 +428,18 @@ export default function App() {
       tip: 'Google Play Protect flags custom fan builds by default. It is 100% safe to proceed.',
     },
     {
+      id: 'on_stuck',
+      cat: 'online',
+      tag: 'Loading / Conn Error',
+      q: t.faq_on_stuck_q || 'Stuck on Loading Screen or Connection Error (2 Guaranteed Solutions)',
+      a:
+        t.faq_on_stuck_a ||
+        'If one solution does not work, the other works 100%:<br /><br /><strong>Solution 1 (Change DNS):</strong> Set Primary DNS to <code>8.8.8.8</code> and Secondary DNS to <code>8.8.4.4</code> in your Wi-Fi network settings (Google Public DNS).<br /><br /><strong>Solution 2 (Free VPN — First Time Fix):</strong> Download a free VPN (e.g. ProtonVPN, Windscribe, TunnelBear) and connect to <strong>Netherlands</strong>, <strong>USA</strong>, or <strong>Japan</strong>.<br /><em>Crucial Note:</em> You only need the VPN the <strong>first time</strong> to get past this error! Once you enter the game with the VPN, you should be able to enter without VPN next times.',
+      tip:
+        t.faq_on_stuck_tip ||
+        'If DNS change does not resolve it on your provider, connecting to Netherlands, USA, or Japan VPN bypasses the block 100%. After reaching the game menu, you can play without VPN on future launches.',
+    },
+    {
       id: 'on2',
       cat: 'online',
       tag: 'Network / DNS',
@@ -488,6 +502,18 @@ export default function App() {
       q: t.faq_off6_q || '6. VPN (EU recommended)',
       a: t.faq_off6_a || 'Some regions require an EU VPN even for the offline data download stage.',
       tip: 'Once downloaded, the game can be played fully offline without internet.',
+    },
+    {
+      id: 'off_stuck',
+      cat: 'offline',
+      tag: 'Update Stuck / Freeze',
+      q: t.faq_off_stuck_q || 'Offline update stuck, fails to download, or freezes in Launcher',
+      a:
+        t.faq_off_stuck_a ||
+        'If the offline update refuses to download or gets stuck:<br />1. Open the <strong>Launcher</strong>.<br />2. Go to the <strong>Diagnostics</strong> menu (or look for the <strong>Stop Game Session</strong> button).<br />3. Tap <strong>Stop Game Session</strong>.<br />4. Completely close / force close the launcher from your recent apps.<br />5. Reopen the launcher and run the update again. It will now download and install smoothly!',
+      tip:
+        t.faq_off_stuck_tip ||
+        'An active background session lock prevents patch files from being written. Stopping the session and restarting the launcher clears the lock immediately.',
     },
     {
       id: 'ios1',
@@ -1329,6 +1355,15 @@ export default function App() {
                   }
                   as="p"
                 />
+                <div className="step-callout-note" style={{ marginTop: '0.85rem' }}>
+                  <Wifi size={14} style={{ display: 'inline', marginRight: '0.4rem', color: 'var(--accent-blue)' }} />
+                  <FormattedText
+                    text={
+                      t.upd_on_stuck_tip ||
+                      '<strong>Stuck on loading or Connection Error?</strong> Two 100% fixes: <strong>1)</strong> Set DNS to Primary <code>8.8.8.8</code> and Secondary <code>8.8.4.4</code>. <strong>2)</strong> Or use a free VPN connected to <em>Netherlands, USA, or Japan</em>. Once you enter the game with the VPN the first time, you will be able to launch without VPN in all future sessions!'
+                    }
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -3066,6 +3101,15 @@ export default function App() {
                     text={t.upd_on_s3_desc || 'Open the game. It will automatically download any missing patch data. Keep the screen on and use Wi-Fi.'}
                     as="p"
                   />
+                  <div className="step-callout-note" style={{ marginTop: '0.75rem' }}>
+                    <Wifi size={14} style={{ display: 'inline', marginRight: '0.4rem', color: 'var(--accent-blue)' }} />
+                    <FormattedText
+                      text={
+                        t.upd_on_stuck_tip ||
+                        '<strong>Stuck on loading or Connection Error?</strong> Two 100% fixes: <strong>1)</strong> Set DNS to Primary <code>8.8.8.8</code> and Secondary <code>8.8.4.4</code>. <strong>2)</strong> Or use a free VPN connected to <em>Netherlands, USA, or Japan</em> (only needed the first time to enter).'
+                      }
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -3116,6 +3160,15 @@ export default function App() {
                     text={t.upd_off_s3_desc || 'Tap Update now and wait. After the launcher reinstalls, reopen it and tap Fix to re-download/verify the game files. Play Protect may appear again — always More info → Install anyway.'}
                     as="p"
                   />
+                  <div className="step-callout-note warning" style={{ marginTop: '0.75rem' }}>
+                    <AlertTriangle size={14} style={{ display: 'inline', marginRight: '0.4rem', color: 'var(--accent-amber)' }} />
+                    <FormattedText
+                      text={
+                        t.upd_off_stuck_tip ||
+                        '<strong>Update stuck or failing?</strong> Open Launcher → Diagnostics menu (or look for <em>Stop Game Session</em>) → tap <strong>Stop Game Session</strong> → completely close the launcher → reopen and run the update again!'
+                      }
+                    />
+                  </div>
                 </div>
               </div>
               <div className="step-card">
