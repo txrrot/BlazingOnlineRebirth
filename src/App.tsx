@@ -518,7 +518,7 @@ export default function App() {
       cat: 'ios',
       tag: 'Apple ID Rate',
       q: t.faq_ios4_q || '4. Apple ID too new / rate limited',
-      a: t.faq_ios4_a || 'Wait 15–30 minutes or use a different (older) Apple ID. Very new burner accounts are often rate limited by Apple servers.',
+      a: t.faq_ios4_a || 'Wait 15–30 minutes or use a different, older Apple ID. Very new accounts are often rate limited by Apple servers.',
       tip: 'Creating an Apple ID on the web and waiting 1 hour before first sideload helps.',
     },
     {
@@ -2500,19 +2500,7 @@ export default function App() {
               />
             </div>
 
-            <div className="feature-info-card">
-              <div className="feature-icon-box">
-                <Key size={20} />
-              </div>
-              <h4>{t.ios_card3_title || 'Main vs Secondary Apple ID'}</h4>
-              <FormattedText
-                text={
-                  t.ios_card3_desc ||
-                  'Using your main Apple ID is completely safe and normal. You can optionally use a secondary account if you already have an unused spare, but it is not required.'
-                }
-                as="p"
-              />
-            </div>
+
           </div>
         </div>
       </section>

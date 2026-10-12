@@ -107,8 +107,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_card1_desc": "Sideloading uses Apple's native Developer Provisioning. No jailbreak, no system modification, no warranty loss. Apple Pay & banking apps work 100% normally.",
     "ios_card2_title": "7-Day Refresh",
     "ios_card2_desc": "Free Apple developer certificates last 7 days. Connect LocalDevVPN and tap refresh inside SideStore.",
-    "ios_card3_title": "Main vs Secondary Apple ID",
-    "ios_card3_desc": "Using your main Apple ID is completely safe and normal. You can optionally use a secondary account if you already have an unused spare, but it is not required.",
+
     "fix_title": "Fixes & Troubleshooting",
     "fix_sub": "Most common issues and real solutions from helpers",
     "fix_online_h": "Online — Communication / Connection error",
@@ -335,8 +334,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_card1_desc": "Sideloading-ul folosește profilul oficial Apple de Developer. Nu este jailbreak, nu modifică fișiere de sistem, nu pierzi garanția, iar Apple Pay și aplicațiile bancare merg impecabil.",
     "ios_card2_title": "Refresh la 7 zile",
     "ios_card2_desc": "Aplicațiile expiră la 7 zile pe contul gratuit. Conectează LocalDevVPN și apasă refresh în SideStore.",
-    "ios_card3_title": "Cont Apple Principal vs Secundar",
-    "ios_card3_desc": "Folosirea contului principal Apple ID este 100% sigură și fără probleme. Dacă ai deja un cont secundar nefolosit, îl poți folosi opțional pentru liniștea ta, dar nu este deloc obligatoriu.",
+
     "fix_title": "Fix-uri & Troubleshooting",
     "fix_sub": "Problemele cele mai frecvente și soluțiile reale de la helperi",
     "fix_online_h": "Online — Eroare de comunicare / conexiune",
@@ -563,8 +561,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_card1_desc": "Le sideloading utilise les profils officiels développeur Apple. Aucun jailbreak, aucune modification système ni perte de garantie. Apple Pay et vos banques fonctionnent 100% normalement.",
     "ios_card2_title": "Rafraîchissement 7 jours",
     "ios_card2_desc": "Les certificats gratuits durent 7 jours. Connectez LocalDevVPN et actualisez simplement dans SideStore.",
-    "ios_card3_title": "Compte Apple Principal vs Secondaire",
-    "ios_card3_desc": "Utiliser votre identifiant Apple principal est 100% sûr. Vous pouvez utiliser un compte secondaire si vous en possédez déjà un, mais ce n'est nullement obligatoire.",
+
     "fix_title": "Correctifs & Résolution de Problèmes",
     "fix_sub": "Incidents les plus récurrents et solutions certifiées par les helpers",
     "fix_online_h": "En Ligne — Erreurs de communication / connexion",
@@ -791,8 +788,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_card1_desc": "El sideloading emplea los perfiles de desarrollador nativos de Apple. Cero jailbreak, sin alterar el sistema ni la garantía. Apple Pay y las apps de bancos funcionan al 100%.",
     "ios_card2_title": "Refresco cada 7 días",
     "ios_card2_desc": "Las firmas gratuitas duran 7 días. Conecta LocalDevVPN y actualiza fácilmente en SideStore.",
-    "ios_card3_title": "Apple ID Principal vs Secundario",
-    "ios_card3_desc": "Usar tu cuenta principal de Apple ID es totalmente seguro. Puedes utilizar una cuenta secundaria si ya tienes una disponible, pero no es obligatorio.",
+
     "fix_title": "Soluciones y Errores Comunes",
     "fix_sub": "Problemas frecuentes resueltos por los colaboradores oficiales",
     "fix_online_h": "En Línea — Error de comunicación y conexión",
@@ -1019,8 +1015,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_card1_desc": "Apple의 순정 개발자 프로비저닝 프로필을 사용합니다. 탈옥이 아니며 시스템 변조나 보증 상실이 없습니다. Apple Pay 및 모든 금융 앱이 100% 정상 작동합니다.",
     "ios_card2_title": "7일 주기 갱신",
     "ios_card2_desc": "무료 개발자 인증서는 7일간 유지됩니다. LocalDevVPN을 켜고 SideStore에서 간편하게 갱신하세요.",
-    "ios_card3_title": "주 Apple ID vs 보조 계정",
-    "ios_card3_desc": "평소 사용하는 본인 주 Apple ID로 진행해도 100% 안전합니다. 이미 쓰지 않는 보조 계정이 있다면 마음 편하게 쓸 수 있으나 필수는 아닙니다.",
+
     "fix_title": "문제 해결 및 자주 묻는 질문",
     "fix_sub": "가장 빈번하게 발생하는 오류와 공식 헬퍼들의 검증된 해결 방법",
     "fix_online_h": "온라인 — 통신 및 연결 오류",
