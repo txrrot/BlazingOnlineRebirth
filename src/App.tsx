@@ -32,10 +32,45 @@ import {
   Search,
   SlidersHorizontal,
   Save,
+  Lock,
 } from 'lucide-react'
 import { translations, type Lang } from './data/translations'
 import heroArt from './assets/blazing_hero_banner.jpg'
-import txrrotAvatar from './assets/txrrot_avatar.jpg'
+import txrrotAvatar from './assets/txrrotdm.webp'
+
+// --- SHA-256 HASH FOR OWNER PIN (1741) ---
+const ADMIN_PIN_HASH = '1828526428f17576e6581a0b9c893ecf79c1fdc20f495f0bdc98b559b25b92a6'
+
+async function sha256Hex(str: string): Promise<string> {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+}
+
+export interface DownloadsConfig {
+  version: string
+  lastUpdated: string
+  onlineApkUrl: string
+  offlineLauncherArmUrl: string
+  offlineLauncherX86Url: string
+  iosGameIpaUrl: string
+  iosSideStoreIpaUrl: string
+  officialSiteUrl: string
+  discordServerUrl: string
+}
+
+const DEFAULT_DOWNLOADS: DownloadsConfig = {
+  version: '1.0.0',
+  lastUpdated: '2026-10-12',
+  onlineApkUrl: 'https://discord.gg/blazingrebirth',
+  offlineLauncherArmUrl: 'https://discord.gg/blazingrebirth',
+  offlineLauncherX86Url: 'https://discord.gg/blazingrebirth',
+  iosGameIpaUrl: 'https://drive.google.com/file/d/14AbuUR1d8WdwdvJkuLTROsYySsOteYdz/view?usp=sharing',
+  iosSideStoreIpaUrl: 'https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa',
+  officialSiteUrl: 'https://blazingonline.wiki',
+  discordServerUrl: 'https://discord.gg/blazingrebirth',
+}
 
 // --- HELPER COMPONENT FOR CLEAN, SAFE RICH TEXT RENDERING ---
 function FormattedText({
@@ -89,6 +124,156 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [activeChapter, setActiveChapter] = useState('online')
   const [isScrolled, setIsScrolled] = useState(false)
+
+  // Dynamic Downloads State
+  const [downloads, setDownloads] = useState<DownloadsConfig>(DEFAULT_DOWNLOADS)
+  const [isAdminOpen, setIsAdminOpen] = useState(false)
+  const [isAdminUnlocked, setIsAdminUnlocked] = useState(() => {
+    return sessionStorage.getItem('txrrot_auth') === '1'
+  })
+  const [pinInput, setPinInput] = useState('')
+  const [pinError, setPinError] = useState('')
+  const [ghToken, setGhToken] = useState(() => {
+    return localStorage.getItem('txrrot_gh_pat') || ''
+  })
+  const [adminForm, setAdminForm] = useState<DownloadsConfig>(DEFAULT_DOWNLOADS)
+  const [adminSaving, setAdminSaving] = useState(false)
+  const [adminStatus, setAdminStatus] = useState<{ type: 'success' | 'error' | 'info' | 'loading'; msg: string } | null>(null)
+
+  // Footer tap counter for 10 taps trigger
+  const footerTapCountRef = useRef(0)
+  const lastFooterTapTimeRef = useRef(0)
+
+  const handleFooterTap = () => {
+    const now = Date.now()
+    if (now - lastFooterTapTimeRef.current > 3000) {
+      footerTapCountRef.current = 1
+    } else {
+      footerTapCountRef.current += 1
+      if (footerTapCountRef.current >= 10) {
+        footerTapCountRef.current = 0
+        setIsAdminOpen(true)
+        if (navigator.vibrate) {
+          navigator.vibrate([60, 40, 100])
+        }
+      }
+    }
+    lastFooterTapTimeRef.current = now
+  }
+
+  // Fetch downloads.json dynamically on load
+  useEffect(() => {
+    fetch('./downloads.json?t=' + Date.now())
+      .then((res) => {
+        if (res.ok) return res.json()
+        throw new Error('Not found')
+      })
+      .then((data: Partial<DownloadsConfig>) => {
+        if (data && data.onlineApkUrl) {
+          setDownloads((prev) => {
+            const merged = { ...prev, ...data }
+            setAdminForm(merged)
+            return merged
+          })
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  // Listen for #admin in URL
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === '#admin') {
+        setIsAdminOpen(true)
+      }
+    }
+    checkHash()
+    window.addEventListener('hashchange', checkHash)
+    return () => window.removeEventListener('hashchange', checkHash)
+  }, [])
+
+  const handlePinSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setPinError('')
+    try {
+      const hash = await sha256Hex(pinInput.trim())
+      if (hash === ADMIN_PIN_HASH) {
+        setIsAdminUnlocked(true)
+        sessionStorage.setItem('txrrot_auth', '1')
+        setPinInput('')
+      } else {
+        setPinError('PIN incorect!')
+      }
+    } catch {
+      setPinError('Eroare de verificare')
+    }
+  }
+
+  const handleSaveToGitHub = async () => {
+    if (!ghToken.trim()) {
+      setAdminStatus({ type: 'error', msg: 'Introdu un GitHub Personal Access Token pentru a salva.' })
+      return
+    }
+    setAdminSaving(true)
+    setAdminStatus({ type: 'loading', msg: 'Se publică modificările pe GitHub...' })
+
+    try {
+      localStorage.setItem('txrrot_gh_pat', ghToken.trim())
+      const repo = 'txrrot/BlazingOnlineRebirth'
+      const filePath = 'public/downloads.json'
+      const url = `https://api.github.com/repos/${repo}/contents/${filePath}`
+
+      // 1. Get current SHA
+      let sha: string | undefined
+      const getRes = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${ghToken.trim()}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      })
+      if (getRes.ok) {
+        const getData = await getRes.json()
+        sha = getData.sha
+      }
+
+      // 2. Prepare payload
+      const updatedData: DownloadsConfig = {
+        ...adminForm,
+        lastUpdated: new Date().toISOString().split('T')[0],
+      }
+      const jsonContent = JSON.stringify(updatedData, null, 2)
+      const encoded = btoa(unescape(encodeURIComponent(jsonContent)))
+
+      // 3. Commit PUT
+      const putRes = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${ghToken.trim()}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `admin: update download links (${new Date().toLocaleDateString()})`,
+          content: encoded,
+          ...(sha ? { sha } : {}),
+        }),
+      })
+
+      if (!putRes.ok) {
+        const err = await putRes.json()
+        throw new Error(err.message || 'GitHub commit failed')
+      }
+
+      setDownloads(updatedData)
+      setAdminForm(updatedData)
+      setAdminStatus({ type: 'success', msg: '✅ Modificările au fost publicate cu succes pe GitHub!' })
+      showToast('Linkurile au fost actualizate!')
+    } catch (err: any) {
+      setAdminStatus({ type: 'error', msg: `Eroare: ${err.message || 'Nu s-a putut salva'}` })
+    } finally {
+      setAdminSaving(false)
+    }
+  }
 
   const lenisRef = useRef<Lenis | null>(null)
 
@@ -237,7 +422,7 @@ export default function App() {
       tag: 'Play Protect',
       q: t.faq_on1_q || '1. Play Protect blocked the install',
       a: t.faq_on1_a || 'During installation you must press More info / Show more → Install anyway. If you skipped this, uninstall and reinstall correctly.',
-      tip: 'Google Play Protect flags custom fan revivals by default. It is 100% safe to proceed.',
+      tip: 'Google Play Protect flags custom fan builds by default. It is 100% safe to proceed.',
     },
     {
       id: 'on2',
@@ -565,7 +750,7 @@ export default function App() {
           >
             <div className="hero-badge-pill">
               <span className="badge-beacon" />
-              <span>{t.hero_badge || 'COMPLETE GUIDE by TXRROT · FAN-MADE REVIVAL 2026'}</span>
+              <span>{t.hero_badge || 'COMPLETE GUIDE by TXRROT · FAN-MADE REBIRTH 2026'}</span>
             </div>
           </motion.div>
 
@@ -686,7 +871,7 @@ export default function App() {
             <div className="hero-art-gloss" />
             <div className="hero-art-badge-tag">
               <Flame size={13} />
-              <span>OFFICIAL 2026 REVIVAL ARCHIVE</span>
+              <span>OFFICIAL 2026 REBIRTH ARCHIVE</span>
             </div>
           </div>
 
@@ -1004,7 +1189,20 @@ export default function App() {
                   }
                   as="p"
                 />
-                <div className="step-callout-note">
+                <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <a
+                    href={downloads.onlineApkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta-button-primary"
+                    style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                  >
+                    <Download size={14} />
+                    <span>Download Online APK</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                </div>
+                <div className="step-callout-note" style={{ marginTop: '0.85rem' }}>
                   <strong>Browser Pro Tip:</strong> If Google Chrome pauses at 99%, use Firefox Mobile or download directly through the Discord client.
                 </div>
               </div>
@@ -1025,7 +1223,7 @@ export default function App() {
                   as="p"
                 />
                 <div className="step-callout-note danger">
-                  <strong>Play Protect Warning:</strong> Unsigned fan revivals trigger a red warning: ALWAYS tap <strong>More info</strong> → <strong>Install anyway</strong>.
+                  <strong>Play Protect Warning:</strong> Unsigned fan builds trigger a red warning: ALWAYS tap <strong>More info</strong> → <strong>Install anyway</strong>.
                 </div>
               </div>
             </div>
@@ -1169,6 +1367,30 @@ export default function App() {
                   }
                   as="p"
                 />
+                <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <a
+                    href={downloads.offlineLauncherArmUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta-button-primary"
+                    style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                  >
+                    <Smartphone size={14} />
+                    <span>Download ARM (Real Phone)</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                  <a
+                    href={downloads.offlineLauncherX86Url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta-button-glass"
+                    style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                  >
+                    <Monitor size={14} />
+                    <span>Download x86 (Emulator)</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                </div>
                 <div style={{ marginTop: '0.75rem' }}>
                   <button
                     type="button"
@@ -1960,6 +2182,19 @@ export default function App() {
                       }
                       as="p"
                     />
+                    <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <a
+                        href={downloads.iosGameIpaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-primary"
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                      >
+                        <Download size={14} />
+                        <span>Download Game (.ipa)</span>
+                        <ArrowUpRight size={14} />
+                      </a>
+                    </div>
                   </div>
                 </div>
 
@@ -2258,7 +2493,7 @@ export default function App() {
               </div>
               <div className="link-actions-cluster">
                 <a
-                  href="https://blazingonline.wiki"
+                  href={downloads.officialSiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="open-link-pill"
@@ -2273,16 +2508,16 @@ export default function App() {
             <div className="link-access-card">
               <div className="link-card-meta">
                 <h4>{t.link_apk || 'Download APK (Online)'}</h4>
-                <p>{t.link_apk_sub || 'Only from Discord #downloads'}</p>
+                <p>{t.link_apk_sub || 'Latest Game APK'}</p>
               </div>
               <div className="link-actions-cluster">
                 <a
-                  href="https://discord.gg/blazingrebirth"
+                  href={downloads.onlineApkUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="open-link-pill"
                 >
-                  <span>Discord</span>
+                  <span>Download</span>
                   <Download size={14} />
                 </a>
               </div>
@@ -2296,7 +2531,7 @@ export default function App() {
               </div>
               <div className="link-actions-cluster">
                 <a
-                  href="https://discord.gg/blazingrebirth"
+                  href={downloads.discordServerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="open-link-pill"
@@ -2564,14 +2799,20 @@ export default function App() {
               {t.footer_free || 'Fan-made project · Free'}
             </span>
           </div>
-          <FormattedText
-            text={
-              t.footer_credit ||
-              'Site designed & built by <a href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a>'
-            }
-            as="div"
-            className="footer-credit-line"
-          />
+          <div
+            onClick={handleFooterTap}
+            className="footer-credit-tap-area"
+            title="TXRROT"
+          >
+            <FormattedText
+              text={
+                t.footer_credit ||
+                'Site designed & built by <a href="https://github.com/txrrot" target="_blank" rel="noopener">TXRROT</a>'
+              }
+              as="div"
+              className="footer-credit-line"
+            />
+          </div>
         </div>
       </footer>
 
@@ -2598,6 +2839,202 @@ export default function App() {
           <ArrowUpRight size={14} />
         </div>
       </a>
+
+      {/* ADMIN TERMINAL MODAL */}
+      <AnimatePresence>
+        {isAdminOpen && (
+          <motion.div
+            className="admin-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsAdminOpen(false)}
+          >
+            <motion.div
+              className="admin-modal-card"
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="admin-header">
+                <div>
+                  <div className="admin-badge">
+                    <Lock size={12} />
+                    <span>OWNER TERMINAL</span>
+                  </div>
+                  <h3 className="admin-title">Manage Live Links</h3>
+                  <p className="admin-sub">Actualizează linkurile de descărcare direct de pe telefon</p>
+                </div>
+                <button
+                  type="button"
+                  className="admin-close-btn"
+                  onClick={() => setIsAdminOpen(false)}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {!isAdminUnlocked ? (
+                <form onSubmit={handlePinSubmit} className="admin-pin-box">
+                  <Key size={32} color="var(--accent-amber)" />
+                  <div>
+                    <h4 style={{ margin: '0 0 0.3rem', color: '#fff' }}>Introdu PIN-ul Owner</h4>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      Doar TXRROT poate modifica linkurile din ghid
+                    </p>
+                  </div>
+                  <input
+                    type="password"
+                    maxLength={8}
+                    autoFocus
+                    placeholder="••••"
+                    value={pinInput}
+                    onChange={(e) => setPinInput(e.target.value)}
+                    className="admin-pin-input"
+                  />
+                  {pinError && (
+                    <span style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: 600 }}>
+                      {pinError}
+                    </span>
+                  )}
+                  <button type="submit" className="admin-submit-btn" style={{ marginTop: '0.5rem' }}>
+                    Deblochează Panou
+                  </button>
+                </form>
+              ) : (
+                <div>
+                  {/* GitHub Token Config Box */}
+                  <div className="admin-token-box">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700, color: '#60a5fa', marginBottom: '0.35rem' }}>
+                      <Key size={14} />
+                      <span>GitHub Token (Salvat doar pe acest telefon)</span>
+                    </div>
+                    <p style={{ margin: '0 0 0.5rem', fontSize: '0.75rem' }}>
+                      Pentru a publica automat pe GitHub Pages de pe telefon, lipește un Personal Access Token (Fine-grained cu <strong>Contents: Read and write</strong>).
+                    </p>
+                    <input
+                      type="password"
+                      placeholder="github_pat_..."
+                      value={ghToken}
+                      onChange={(e) => {
+                        setGhToken(e.target.value)
+                        localStorage.setItem('txrrot_gh_pat', e.target.value)
+                      }}
+                      className="admin-field-input"
+                      style={{ fontSize: '0.78rem', padding: '0.45rem 0.65rem' }}
+                    />
+                  </div>
+
+                  {/* Form fields */}
+                  <div className="admin-field-group">
+                    <label className="admin-field-label">
+                      <Smartphone size={14} color="#3b82f6" />
+                      <span>Online APK URL (Android)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={adminForm.onlineApkUrl}
+                      onChange={(e) => setAdminForm({ ...adminForm, onlineApkUrl: e.target.value })}
+                      placeholder="https://drive.google.com/..."
+                      className="admin-field-input"
+                    />
+                  </div>
+
+                  <div className="admin-field-group">
+                    <label className="admin-field-label">
+                      <Smartphone size={14} color="#f59e0b" />
+                      <span>Offline Launcher ARM (Telefon)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={adminForm.offlineLauncherArmUrl}
+                      onChange={(e) => setAdminForm({ ...adminForm, offlineLauncherArmUrl: e.target.value })}
+                      placeholder="https://drive.google.com/..."
+                      className="admin-field-input"
+                    />
+                  </div>
+
+                  <div className="admin-field-group">
+                    <label className="admin-field-label">
+                      <Monitor size={14} color="#a855f7" />
+                      <span>Offline Launcher x86 (Emulator)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={adminForm.offlineLauncherX86Url}
+                      onChange={(e) => setAdminForm({ ...adminForm, offlineLauncherX86Url: e.target.value })}
+                      placeholder="https://drive.google.com/..."
+                      className="admin-field-input"
+                    />
+                  </div>
+
+                  <div className="admin-field-group">
+                    <label className="admin-field-label">
+                      <Apple size={14} color="#10b981" />
+                      <span>iOS Game .ipa URL</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={adminForm.iosGameIpaUrl}
+                      onChange={(e) => setAdminForm({ ...adminForm, iosGameIpaUrl: e.target.value })}
+                      placeholder="https://drive.google.com/..."
+                      className="admin-field-input"
+                    />
+                  </div>
+
+                  <div className="admin-field-group">
+                    <label className="admin-field-label">
+                      <Apple size={14} color="#38bdf8" />
+                      <span>SideStore .ipa URL</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={adminForm.iosSideStoreIpaUrl}
+                      onChange={(e) => setAdminForm({ ...adminForm, iosSideStoreIpaUrl: e.target.value })}
+                      placeholder="https://github.com/SideStore/..."
+                      className="admin-field-input"
+                    />
+                  </div>
+
+                  <div className="admin-field-group">
+                    <label className="admin-field-label">
+                      <Globe size={14} color="#6366f1" />
+                      <span>Site Oficial URL</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={adminForm.officialSiteUrl}
+                      onChange={(e) => setAdminForm({ ...adminForm, officialSiteUrl: e.target.value })}
+                      placeholder="https://blazingonline.wiki"
+                      className="admin-field-input"
+                    />
+                  </div>
+
+                  {adminStatus && (
+                    <div className={`admin-status-bar ${adminStatus.type}`}>
+                      {adminStatus.type === 'loading' && <RefreshCw size={14} className="spin" />}
+                      {adminStatus.type === 'success' && <CheckCircle2 size={14} />}
+                      {adminStatus.type === 'error' && <AlertTriangle size={14} />}
+                      <span>{adminStatus.msg}</span>
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    disabled={adminSaving}
+                    onClick={handleSaveToGitHub}
+                    className="admin-submit-btn"
+                  >
+                    <Save size={16} />
+                    <span>{adminSaving ? 'Se publică pe GitHub...' : '🚀 Salvează & Publică pe GitHub'}</span>
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* FLOATING TOAST NOTIFIER */}
       <AnimatePresence>
