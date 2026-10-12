@@ -32,6 +32,7 @@ import {
   SlidersHorizontal,
   Save,
   Lock,
+  Cpu,
 } from 'lucide-react'
 import { translations, type Lang } from './data/translations'
 import heroArt from './assets/blazing_hero_banner.jpg'
@@ -95,13 +96,14 @@ function FormattedText({
 
 // Chapter metadata for storytelling navigation
 const CHAPTERS = [
-  { id: 'online', num: '01', label: 'ONLINE', icon: Wifi },
-  { id: 'offline', num: '02', label: 'OFFLINE', icon: HardDrive },
-  { id: 'ios', num: '03', label: 'IOS', icon: Apple },
-  { id: 'fixes', num: '04', label: 'FIXES', icon: Wrench },
-  { id: 'notes', num: '05', label: 'NOTES', icon: BookOpen },
-  { id: 'links', num: '06', label: 'LINKS', icon: ExternalLink },
-  { id: 'updates', num: '07', label: 'UPDATE', icon: RefreshCw },
+  { id: 'notes', num: '01', label: 'NOTES', icon: BookOpen },
+  { id: 'online', num: '02', label: 'ONLINE', icon: Wifi },
+  { id: 'offline', num: '03', label: 'OFFLINE', icon: HardDrive },
+  { id: 'ios', num: '04', label: 'IOS', icon: Apple },
+  { id: 'emulator', num: '05', label: 'EMULATOR', icon: Monitor },
+  { id: 'fixes', num: '06', label: 'FIXES', icon: Wrench },
+  { id: 'links', num: '07', label: 'LINKS', icon: ExternalLink },
+  { id: 'updates', num: '08', label: 'UPDATE', icon: RefreshCw },
 ]
 
 export default function App() {
@@ -588,6 +590,9 @@ export default function App() {
 
           {/* Navigation Links */}
           <nav className="nav-menu-links">
+            <a href="#notes" className="nav-link-item" onClick={() => scrollTo('#notes')}>
+              {t.nav_notes || 'Notes'}
+            </a>
             <a href="#online" className="nav-link-item" onClick={() => scrollTo('#online')}>
               {t.nav_online || 'Online'}
             </a>
@@ -597,11 +602,11 @@ export default function App() {
             <a href="#ios" className="nav-link-item" onClick={() => scrollTo('#ios')}>
               {t.nav_ios || 'iOS'}
             </a>
+            <a href="#emulator" className="nav-link-item" onClick={() => scrollTo('#emulator')}>
+              Emulator
+            </a>
             <a href="#fixes" className="nav-link-item" onClick={() => scrollTo('#fixes')}>
               {t.nav_fixes || 'Fixes'}
-            </a>
-            <a href="#notes" className="nav-link-item" onClick={() => scrollTo('#notes')}>
-              {t.nav_notes || 'Notes'}
             </a>
             <a href="#links" className="nav-link-item" onClick={() => scrollTo('#links')}>
               Links
@@ -851,11 +856,11 @@ export default function App() {
               className={`platform-pill-btn ${activePlatform === 'pc' ? 'active' : ''}`}
               onClick={() => {
                 setActivePlatform('pc')
-                scrollTo('#notes')
+                scrollTo('#emulator')
               }}
             >
               <Monitor size={14} />
-              <span>PC Emulator (Pie64)</span>
+              <span>PC Emulator (BlueStacks)</span>
             </button>
           </div>
 
@@ -876,33 +881,37 @@ export default function App() {
 
           {/* Story Chapter Navigation Jump Strip */}
           <div className="story-chapter-strip">
+            <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#notes')}>
+              <BookOpen size={13} />
+              <span>01 Notes</span>
+            </button>
             <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#online')}>
               <Zap size={13} />
-              <span>01 Online Mode</span>
+              <span>02 Online</span>
             </button>
             <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#offline')}>
               <Flame size={13} />
-              <span>02 Offline Mode</span>
+              <span>03 Offline</span>
             </button>
             <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#ios')}>
               <Apple size={13} />
-              <span>03 iOS Sideload</span>
+              <span>04 iOS Sideload</span>
+            </button>
+            <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#emulator')}>
+              <Monitor size={13} />
+              <span>05 PC Emulator</span>
             </button>
             <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#fixes')}>
               <Wrench size={13} />
-              <span>04 Fixes & Debug</span>
-            </button>
-            <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#notes')}>
-              <BookOpen size={13} />
-              <span>05 Important Notes</span>
+              <span>06 Fixes &amp; Debug</span>
             </button>
             <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#links')}>
               <ExternalLink size={13} />
-              <span>06 Verified Links</span>
+              <span>07 Verified Links</span>
             </button>
             <button type="button" className="chapter-jump-btn" onClick={() => scrollTo('#updates')}>
               <RefreshCw size={13} />
-              <span>07 How to Update</span>
+              <span>08 How to Update</span>
             </button>
           </div>
 
@@ -1112,7 +1121,78 @@ export default function App() {
       </div>
 
       {/* =========================================================================
-          CHAPTER 01: ONLINE MODE (Neon Chakra Blue Luminescence Atmosphere)
+          CHAPTER 01: IMPORTANT NOTES (Stealth Kurogane Archival Atmosphere)
+          ========================================================================= */}
+      <section id="notes" className="story-section section-notes">
+        <div className="section-atmosphere-glow" />
+        <div className="story-section-container">
+          <div className="section-header-block">
+            <div className="chapter-meta-tag">
+              <BookOpen size={14} />
+              <span>CHAPTER 01 // ARCHIVE SCROLLS</span>
+            </div>
+            <h2 className="section-headline">{t.notes_title || 'Important Notes'}</h2>
+            <FormattedText
+              text={t.notes_sub || 'Read before you start · Emulator tips · Account rules · Common mistakes'}
+              as="p"
+              className="section-subhead"
+            />
+          </div>
+
+          <div className="notes-grid">
+            <div className="note-archival-card">
+              <span className="note-badge-label">{t.note1_label || 'EMULATOR'}</span>
+              <h3>{t.note1_title || 'Use Pie64 image'}</h3>
+              <FormattedText
+                text={
+                  t.note1_desc ||
+                  'Many users from USA and Asia automatically get the Nougat image. Offline update then crashes. Always choose the Pie64 (Android 9 64-bit) system image when creating the emulator instance.'
+                }
+                as="p"
+              />
+            </div>
+
+            <div className="note-archival-card">
+              <span className="note-badge-label">{t.note2_label || 'ACCOUNTS'}</span>
+              <h3>{t.note2_title || 'Online ≠ Offline'}</h3>
+              <FormattedText
+                text={
+                  t.note2_desc ||
+                  'They are completely separate applications with separate accounts. Progress never transfers. Online links via Discord (Others → Account). Offline is local only.'
+                }
+                as="p"
+              />
+            </div>
+
+            <div className="note-archival-card">
+              <span className="note-badge-label">{t.note3_label || 'ONLINE'}</span>
+              <h3>{t.note3_title || 'No Data Transfer'}</h3>
+              <FormattedText
+                text={
+                  t.note3_desc ||
+                  'The old Data Transfer code does not work for Online. You must link the account from inside the game: Others → Account → Discord.'
+                }
+                as="p"
+              />
+            </div>
+
+            <div className="note-archival-card">
+              <span className="note-badge-label">{t.note4_label || 'OFFLINE'}</span>
+              <h3>{t.note4_title || 'Local data only'}</h3>
+              <FormattedText
+                text={
+                  t.note4_desc ||
+                  'Everything is stored on the phone/emulator. Uninstalling the game or clearing data = permanent loss. There is no cloud backup.'
+                }
+                as="p"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          CHAPTER 02: ONLINE MODE (Neon Chakra Blue Luminescence Atmosphere)
           ========================================================================= */}
       <section id="online" className="story-section section-online">
         <div className="section-atmosphere-glow" />
@@ -1120,7 +1200,7 @@ export default function App() {
           <div className="section-header-block">
             <div className="chapter-meta-tag">
               <Zap size={14} />
-              <span>CHAPTER 01 // LIVE SERVERS</span>
+              <span>CHAPTER 02 // LIVE SERVERS</span>
             </div>
             <h2 className="section-headline">{t.online_title || 'Online Mode'}</h2>
             <FormattedText
@@ -1131,6 +1211,11 @@ export default function App() {
               as="p"
               className="section-subhead"
             />
+            <div className="platform-compat-badges">
+              <span className="compat-badge android"><Smartphone size={12} /> Android</span>
+              <span className="compat-badge emulator"><Monitor size={12} /> PC Emulator</span>
+              <span className="compat-badge no-ios">✕ iOS Not Supported</span>
+            </div>
           </div>
 
           {/* Timeline Steps Stack */}
@@ -1323,7 +1408,7 @@ export default function App() {
           <div className="section-header-block">
             <div className="chapter-meta-tag">
               <Flame size={14} />
-              <span>CHAPTER 02 // SAGE ARCHIVE</span>
+              <span>CHAPTER 03 // SAGE ARCHIVE</span>
             </div>
             <h2 className="section-headline">{t.offline_title || 'Offline Mode'}</h2>
             <FormattedText
@@ -1334,6 +1419,11 @@ export default function App() {
               as="p"
               className="section-subhead"
             />
+            <div className="platform-compat-badges">
+              <span className="compat-badge android"><Smartphone size={12} /> Android</span>
+              <span className="compat-badge ios"><Apple size={12} /> iOS (Sideload)</span>
+              <span className="compat-badge emulator"><Monitor size={12} /> PC Emulator</span>
+            </div>
           </div>
 
           {/* Storage Warning Note */}
@@ -1591,7 +1681,7 @@ export default function App() {
           <div className="section-header-block">
             <div className="chapter-meta-tag">
               <Apple size={14} />
-              <span>CHAPTER 03 // THE IOS GATE</span>
+              <span>CHAPTER 04 // THE IOS GATE</span>
             </div>
             <h2 className="section-headline">{t.ios_title || 'iOS Sideloading'}</h2>
             <FormattedText
@@ -1602,6 +1692,10 @@ export default function App() {
               as="p"
               className="section-subhead"
             />
+            <div className="platform-compat-badges">
+              <span className="compat-badge ios"><Apple size={12} /> iOS Only</span>
+              <span className="compat-badge no-android">✕ Android / Emulator: use Ch. 02–03</span>
+            </div>
           </div>
 
           {/* Malware Warning Note */}
@@ -2424,7 +2518,212 @@ export default function App() {
       </section>
 
       {/* =========================================================================
-          CHAPTER 04: FIXES & TROUBLESHOOTING (Tactical Terminal Crimson Atmosphere)
+          CHAPTER 05: PC EMULATOR GUIDE — BlueStacks / LDPlayer / MuMu
+          ========================================================================= */}
+      <section id="emulator" className="story-section section-emulator">
+        <div className="section-atmosphere-glow" />
+        <div className="story-section-container">
+          <div className="section-header-block">
+            <div className="chapter-meta-tag">
+              <Monitor size={14} />
+              <span>CHAPTER 05 // DIGITAL ARENA</span>
+            </div>
+            <h2 className="section-headline">PC Emulator Guide</h2>
+            <FormattedText
+              text="Play Blazing Rebirth on PC using Android emulators · BlueStacks recommended · Pie64 (Android 9) required"
+              as="p"
+              className="section-subhead"
+            />
+            <div className="platform-compat-badges">
+              <span className="compat-badge emulator"><Monitor size={12} /> Online (x86)</span>
+              <span className="compat-badge android"><HardDrive size={12} /> Offline (x86)</span>
+              <span className="compat-badge no-ios">✕ iOS Not Applicable</span>
+            </div>
+          </div>
+
+          {/* Critical Pie64 Warning */}
+          <div className="warning-strip-card" style={{ marginBottom: '2.5rem', borderColor: 'rgba(251,191,36,0.4)', background: 'linear-gradient(135deg, rgba(251,191,36,0.1) 0%, rgba(20,20,25,0.8) 100%)' }}>
+            <div className="warning-icon-wrapper" style={{ color: 'var(--accent-amber)' }}>
+              <AlertTriangle size={22} />
+            </div>
+            <FormattedText
+              text="<strong>Mandatory:</strong> You MUST create a <strong>Pie64 (Android 9, 64-bit)</strong> instance. Nougat (Android 7) 32-bit instances will crash during the offline update. USA &amp; Asia regions default to Nougat — always manually select Pie64."
+              as="p"
+            />
+          </div>
+
+          {/* Emulator Step Cards */}
+          <div className="steps-timeline-stack">
+            {/* Step 01 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">01</div>
+              </div>
+              <div className="step-card-body">
+                <h3>Download BlueStacks 5</h3>
+                <FormattedText
+                  text="Download the installer from the official BlueStacks website. BlueStacks 5 is the recommended version — it supports Pie64 (Android 9) instances which are required for the game."
+                  as="p"
+                />
+                <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <a
+                    href="https://www.bluestacks.com/download.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta-button-primary"
+                    style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+                  >
+                    <Download size={14} />
+                    <span>Download BlueStacks 5</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                </div>
+                <div className="step-callout-note" style={{ marginTop: '0.85rem' }}>
+                  <strong>Alternatives:</strong> LDPlayer 9 and MuMu Player 12 also work — just ensure you select the Android 9 (Pie64) image when creating your instance.
+                </div>
+              </div>
+            </div>
+
+            {/* Step 02 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">02</div>
+              </div>
+              <div className="step-card-body">
+                <h3>Create a Pie64 Instance</h3>
+                <FormattedText
+                  text="Open BlueStacks → click the <strong>Multi-Instance Manager</strong> (top toolbar or tray icon) → click <strong>New Instance</strong> → select <strong>Pie64 (Android 9, 64-bit)</strong>. Do NOT use the default Nougat 32-bit instance."
+                  as="p"
+                />
+                <div className="step-callout-note danger" style={{ marginTop: '0.85rem' }}>
+                  <strong>Critical:</strong> If you skip this step and use the default instance, the Offline game will crash immediately after the update download. There is no workaround — you must use Pie64.
+                </div>
+              </div>
+            </div>
+
+            {/* Step 03 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">03</div>
+              </div>
+              <div className="step-card-body">
+                <h3>Download the APK to your PC</h3>
+                <FormattedText
+                  text="Download the <strong>x86_x64</strong> APK (for emulators) using the button below. The ARM APK is for real Android phones — it will NOT work on emulators."
+                  as="p"
+                />
+                <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <a
+                    href={downloads.onlineApkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta-button-primary"
+                    style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+                  >
+                    <Download size={14} />
+                    <span>Online APK (x86 · Emulator)</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                  <a
+                    href={downloads.offlineLauncherX86Url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta-button-glass"
+                    style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+                  >
+                    <Download size={14} />
+                    <span>Offline Launcher x86 (Emulator)</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 04 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">04</div>
+              </div>
+              <div className="step-card-body">
+                <h3>Install the APK via Drag &amp; Drop</h3>
+                <FormattedText
+                  text="Open your Pie64 BlueStacks instance. Drag the downloaded <strong>.apk</strong> file directly onto the BlueStacks window. The installer will launch automatically. Tap <strong>Install</strong> when prompted."
+                  as="p"
+                />
+                <div className="step-callout-note" style={{ marginTop: '0.85rem' }}>
+                  <strong>Alternative method:</strong> You can also go to <em>My Games → Install APK</em> in the BlueStacks sidebar and browse to the APK file.
+                </div>
+              </div>
+            </div>
+
+            {/* Step 05 */}
+            <div className="step-card">
+              <div className="step-card-num">
+                <div className="step-num-badge">05</div>
+              </div>
+              <div className="step-card-body">
+                <h3>Launch &amp; Play</h3>
+                <FormattedText
+                  text="Open the game from BlueStacks. For <strong>Online</strong>: sign in with Discord and let the ~220 MB game data download on Wi-Fi. For <strong>Offline</strong>: follow Chapter 03 steps — download launcher + game data through the in-app updater."
+                  as="p"
+                />
+                <div className="step-callout-note" style={{ marginTop: '0.85rem' }}>
+                  <strong>Performance tip:</strong> In BlueStacks Settings → Performance, set CPU to 4 cores and RAM to at least 3 GB for the best experience.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Emulator Feature Cards */}
+          <div className="feature-cards-grid" style={{ marginTop: '2.5rem' }}>
+            <div className="feature-info-card">
+              <div className="feature-icon-box">
+                <Monitor size={20} />
+              </div>
+              <h4>BlueStacks Recommended</h4>
+              <FormattedText
+                text="BlueStacks 5 is the most tested emulator for this game. Free, no registration required, and supports keyboard/mouse mapping."
+                as="p"
+              />
+            </div>
+            <div className="feature-info-card">
+              <div className="feature-icon-box">
+                <Cpu size={20} />
+              </div>
+              <h4>Pie64 is Mandatory</h4>
+              <FormattedText
+                text="Android 9 (Pie), 64-bit. The offline game crashes on Nougat 32-bit. Always create a new Pie64 instance — don't use the default."
+                as="p"
+              />
+            </div>
+            <div className="feature-info-card">
+              <div className="feature-icon-box">
+                <HardDrive size={20} />
+              </div>
+              <h4>x86 APK for Emulators</h4>
+              <FormattedText
+                text="Always download the x86_x64 build. ARM APKs are for real phones. Installing the wrong architecture will cause the game to immediately crash on launch."
+                as="p"
+              />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="cta-button-primary"
+              onClick={() => scrollTo('#fixes')}
+              style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
+            >
+              <span>Continue to Chapter 06: Fixes &amp; Debug →</span>
+              <ArrowRight size={14} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          CHAPTER 06: FIXES & TROUBLESHOOTING (Tactical Terminal Crimson Atmosphere)
           ========================================================================= */}
       <section id="fixes" className="story-section section-fixes">
         <div className="section-atmosphere-glow" />
@@ -2432,7 +2731,7 @@ export default function App() {
           <div className="section-header-block">
             <div className="chapter-meta-tag">
               <Wrench size={14} />
-              <span>CHAPTER 04 // SHINOBI CODEX</span>
+              <span>CHAPTER 06 // SHINOBI CODEX</span>
             </div>
             <h2 className="section-headline">{t.fix_title || 'Fixes & Troubleshooting'}</h2>
             <FormattedText
@@ -2521,79 +2820,9 @@ export default function App() {
         </div>
       </section>
 
-      {/* =========================================================================
-          CHAPTER 05: IMPORTANT NOTES (Stealth Kurogane Archival Atmosphere)
-          ========================================================================= */}
-      <section id="notes" className="story-section section-notes">
-        <div className="section-atmosphere-glow" />
-        <div className="story-section-container">
-          <div className="section-header-block">
-            <div className="chapter-meta-tag">
-              <BookOpen size={14} />
-              <span>CHAPTER 05 // ARCHIVE SCROLLS</span>
-            </div>
-            <h2 className="section-headline">{t.notes_title || 'Important notes'}</h2>
-            <FormattedText
-              text={t.notes_sub || 'Emulator, accounts and common mistakes'}
-              as="p"
-              className="section-subhead"
-            />
-          </div>
-
-          <div className="notes-grid">
-            <div className="note-archival-card">
-              <span className="note-badge-label">{t.note1_label || 'EMULATOR'}</span>
-              <h3>{t.note1_title || 'Use Pie64 image'}</h3>
-              <FormattedText
-                text={
-                  t.note1_desc ||
-                  'Many users from USA and Asia automatically get the Nougat image. Offline update then crashes. Always choose the Pie64 (Android 9 64-bit) system image when creating the emulator instance.'
-                }
-                as="p"
-              />
-            </div>
-
-            <div className="note-archival-card">
-              <span className="note-badge-label">{t.note2_label || 'ACCOUNTS'}</span>
-              <h3>{t.note2_title || 'Online ≠ Offline'}</h3>
-              <FormattedText
-                text={
-                  t.note2_desc ||
-                  'They are completely separate applications with separate accounts. Progress never transfers. Online links via Discord (Others → Account). Offline is local only.'
-                }
-                as="p"
-              />
-            </div>
-
-            <div className="note-archival-card">
-              <span className="note-badge-label">{t.note3_label || 'ONLINE'}</span>
-              <h3>{t.note3_title || 'No Data Transfer'}</h3>
-              <FormattedText
-                text={
-                  t.note3_desc ||
-                  'The old Data Transfer code does not work for Online. You must link the account from inside the game: Others → Account → Discord.'
-                }
-                as="p"
-              />
-            </div>
-
-            <div className="note-archival-card">
-              <span className="note-badge-label">{t.note4_label || 'OFFLINE'}</span>
-              <h3>{t.note4_title || 'Local data only'}</h3>
-              <FormattedText
-                text={
-                  t.note4_desc ||
-                  'Everything is stored on the phone/emulator. Uninstalling the game or clearing data = permanent loss. There is no cloud backup.'
-                }
-                as="p"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* =========================================================================
-          CHAPTER 06: OFFICIAL VERIFIED LINKS (Emerald Trust Atmosphere)
+          CHAPTER 07: OFFICIAL VERIFIED LINKS (Emerald Trust Atmosphere)
           ========================================================================= */}
       <section id="links" className="story-section section-links">
         <div className="section-atmosphere-glow" />
@@ -2601,7 +2830,7 @@ export default function App() {
           <div className="section-header-block">
             <div className="chapter-meta-tag">
               <ShieldCheck size={14} />
-              <span>CHAPTER 06 // VERIFIED CHANNELS</span>
+              <span>CHAPTER 07 // VERIFIED CHANNELS</span>
             </div>
             <h2 className="section-headline">{t.links_title || 'Official links'}</h2>
             <FormattedText
@@ -2700,7 +2929,7 @@ export default function App() {
           <div className="section-header-block">
             <div className="chapter-meta-tag">
               <RefreshCw size={14} />
-              <span>CHAPTER 07 // PATCH PROTOCOL</span>
+              <span>CHAPTER 08 // PATCH PROTOCOL</span>
             </div>
             <h2 className="section-headline">{t.upd_title || 'How to Update'}</h2>
             <FormattedText
