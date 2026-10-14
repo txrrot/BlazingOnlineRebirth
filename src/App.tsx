@@ -55,6 +55,7 @@ export interface DownloadsConfig {
   offlineLauncherArmUrl: string
   offlineLauncherX86Url: string
   iosGameIpaUrl: string
+  iosOnlineIpaUrl: string
   iosSideStoreIpaUrl: string
   officialSiteUrl: string
   discordServerUrl: string
@@ -62,11 +63,12 @@ export interface DownloadsConfig {
 
 const DEFAULT_DOWNLOADS: DownloadsConfig = {
   version: '1.0.0',
-  lastUpdated: '2026-10-12',
+  lastUpdated: '2026-10-14',
   onlineApkUrl: 'https://discord.gg/blazingrebirth',
   offlineLauncherArmUrl: 'https://discord.gg/blazingrebirth',
   offlineLauncherX86Url: 'https://discord.gg/blazingrebirth',
   iosGameIpaUrl: 'https://drive.google.com/file/d/14AbuUR1d8WdwdvJkuLTROsYySsOteYdz/view?usp=sharing',
+  iosOnlineIpaUrl: '',
   iosSideStoreIpaUrl: 'https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa',
   officialSiteUrl: 'https://blazingonline.wiki',
   discordServerUrl: 'https://discord.gg/blazingrebirth',
@@ -119,9 +121,12 @@ export default function App() {
   const [openFaqs, setOpenFaqs] = useState<Record<string, boolean>>({
     on1: true,
     on_stuck: true,
+    on_vpn_first_time: true,
     off1: true,
     off_stuck: true,
+    off_android12_crash: true,
     ios1: true,
+    ios_err80045: true,
   })
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -546,6 +551,46 @@ export default function App() {
       q: t.faq_ios4_q || '4. Apple ID too new / rate limited',
       a: t.faq_ios4_a || 'Wait 15–30 minutes or use a different, older Apple ID. Very new accounts are often rate limited by Apple servers.',
       tip: 'Creating an Apple ID on the web and waiting 1 hour before first sideload helps.',
+    },
+    {
+      id: 'ios_err80045',
+      cat: 'ios',
+      tag: 'Apple Error 80045 / 37%',
+      q: t.faq_ios_err80045_q || 'Error 80045 on Sign-in or SideInstaller stuck at 37% loading',
+      a:
+        t.faq_ios_err80045_a ||
+        'Apple developer authentication servers frequently experience login outages. SideInstaller hangs at 37% loading or SideStore throws instant Error 80045 when signing in.<br /><br /><strong>Alternative Workaround (Method 2 — PC Sideloadly):</strong> If you have a computer, install SideStore or the game directly from PC with Sideloadly! It bypasses SideInstaller completely and succeeds even when Apple mobile servers fail.<br /><em>Key Difference:</em> PC installs require connecting to the PC to refresh every 6–7 days, whereas on-device SideStore refreshes in 1 second with a single tap.',
+      tip: t.faq_ios_err80045_tip || 'If you do not have a PC, try again later when Apple resolves server-side authentication.',
+    },
+    {
+      id: 'ios_pwd_change',
+      cat: 'ios',
+      tag: 'Wrong Password / Account',
+      q: t.faq_ios_pwd_q || "SideInstaller says 'Account is invalid' / Wrong password error",
+      a:
+        t.faq_ios_pwd_a ||
+        'If SideInstaller reports that your account is invalid, your Apple ID password was typed incorrectly or requires refreshing:<br />1. On iPhone: Go to Settings → [Apple ID Name] → Sign-In & Security → Change Password.<br />2. Open SideInstaller → tap the Settings (gear) icon at top-right.<br />3. At the very top, tap Add Apple ID.<br />4. Enter the same account with the new password.<br />5. Return to the main screen and proceed with installation!',
+      tip: t.faq_ios_pwd_tip || 'Changing the password directly in iPhone settings refreshes your Apple developer token.',
+    },
+    {
+      id: 'off_android12_crash',
+      cat: 'offline',
+      tag: 'Android 12+ Crash',
+      q: t.faq_off_android12_q || "Offline Launcher crashes at 100% on Beta Update or 'Fix' button (Android 12, 13, 14+)",
+      a:
+        t.faq_off_android12_a ||
+        'On Android 12+ (Android 12, 13, 14, 15), elevated system security blocks the legacy launcher from invoking the native APK package installer, causing an immediate crash after downloading the Beta update or game data.<br /><br /><strong>The 100% Proven Fix: Virtual Master + Shizuku (Android 9 VM)</strong><br />1. Install Shizuku from Google Play Store.<br />2. Follow Shizuku instructions (Wireless Debugging in Developer Options) until it shows \'Shizuku is running\'.<br />3. Install Virtual Master.<br />4. Inside Virtual Master, download the Android 9 environment.<br />5. Boot the Android 9 VM. (After first startup, you can even stop Shizuku!)<br />6. Inside the Android 9 VM, install the Sage Launcher ARM APK.<br />7. Now, when you switch to Beta and tap Check for updates → Update now, the system install dialog appears instantly without crashing! The same applies to tapping Fix to install game data.',
+      tip: t.faq_off_android12_tip || 'Virtual Master creates the exact Android 9 (Pie) runtime required by the Sage Launcher.',
+    },
+    {
+      id: 'on_vpn_first_time',
+      cat: 'online',
+      tag: 'Connection Error (VPN)',
+      q: t.faq_on_vpn_first_q || 'Connection Error on Online launch or after game update (Android & iOS)',
+      a:
+        t.faq_on_vpn_first_a ||
+        'After updating the game or on first launch, a Connection Error may pop up due to carrier routing blocks to the private server.<br /><br /><strong>100% Guaranteed Fix with Free VPN (e.g. Proton VPN):</strong><br />1. Download a free VPN such as Proton VPN (Play Store / App Store).<br />2. Connect to servers in this order: Europe / Netherlands (EU) → USA → Japan.<br />3. Launch the game with the VPN on until you reach the main menu.<br />4. Exit the game, disconnect the VPN, and reopen the game. It will now work completely WITHOUT VPN on future sessions! The VPN is only needed for the initial post-update handshake.',
+      tip: t.faq_on_vpn_first_tip || 'Only the initial handshake requires the VPN; future launches run on your normal internet.',
     },
     {
       id: 'emu1',
@@ -1243,7 +1288,24 @@ export default function App() {
             <div className="platform-compat-badges">
               <span className="compat-badge android"><Smartphone size={12} /> Android</span>
               <span className="compat-badge emulator"><Monitor size={12} /> PC Emulator</span>
-              <span className="compat-badge no-ios">✕ iOS Not Supported</span>
+              <button
+                type="button"
+                className="compat-badge ios"
+                onClick={() => scrollTo('#ios')}
+                style={{
+                  cursor: 'pointer',
+                  border: '1px solid rgba(56, 189, 248, 0.4)',
+                  background: 'rgba(56, 189, 248, 0.15)',
+                  color: '#38bdf8',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                <Apple size={12} />
+                <span>{t.on_badge_ios || 'iOS (IPA Sideload Supported) ↓'}</span>
+              </button>
             </div>
           </div>
 
@@ -1311,9 +1373,32 @@ export default function App() {
                     style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
                   >
                     <Download size={14} />
-                    <span>Download Online APK</span>
+                    <span>Download Online APK (Android)</span>
                     <ArrowUpRight size={14} />
                   </a>
+                  {downloads.iosOnlineIpaUrl ? (
+                    <a
+                      href={downloads.iosOnlineIpaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cta-button-glass"
+                      style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
+                    >
+                      <Apple size={14} />
+                      <span>Download Online IPA (iOS)</span>
+                      <ArrowUpRight size={14} />
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      className="cta-button-glass"
+                      onClick={() => scrollTo('#ios')}
+                      style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(56, 189, 248, 0.3)', color: '#38bdf8' }}
+                    >
+                      <Apple size={14} />
+                      <span>{t.on_ios_avail_badge || 'iOS Online IPA (Available via Sideload Ch. 04) →'}</span>
+                    </button>
+                  )}
                 </div>
                 <div className="step-callout-note" style={{ marginTop: '0.85rem' }}>
                   <strong>Browser Pro Tip:</strong> If Google Chrome pauses at 99%, use Firefox Mobile or download directly through the Discord client.
@@ -1711,6 +1796,75 @@ export default function App() {
                 />
               </div>
             </div>
+
+            {/* Android 12+ Crash Alert & Solution Link */}
+            <div
+              className="warning-strip-card"
+              style={{
+                marginTop: '1.25rem',
+                borderColor: 'rgba(239, 68, 68, 0.45)',
+                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(20, 20, 30, 0.85) 100%)',
+              }}
+            >
+              <div className="warning-icon-wrapper" style={{ color: '#ef4444' }}>
+                <AlertTriangle size={24} />
+              </div>
+              <div style={{ width: '100%' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                  <h4 style={{ color: '#fca5a5', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>
+                    {t.off_android12_warn_title || 'Crash on Update or "Fix" on Android 12, 13, or 14+?'}
+                  </h4>
+                  <span
+                    style={{
+                      fontSize: '0.7rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      color: '#ef4444',
+                      background: 'rgba(239, 68, 68, 0.2)',
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      padding: '0.15rem 0.5rem',
+                      borderRadius: '4px',
+                      fontWeight: 700,
+                    }}
+                  >
+                    Android 12+ Security
+                  </span>
+                </div>
+                <FormattedText
+                  text={
+                    t.off_android12_warn_desc ||
+                    'If the launcher force-closes immediately after downloading the Beta update instead of opening the APK installer, Android 12+ security is blocking it. The 100% working fix is running the launcher inside <strong>Virtual Master + Shizuku (Android 9 VM)</strong>.'
+                  }
+                  as="p"
+                  style={{ fontSize: '0.85rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+                />
+                <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    className="action-tag-btn"
+                    onClick={() => {
+                      setFaqCategory('offline');
+                      setOpenFaqs((prev) => ({ ...prev, off_android12_crash: true }));
+                      scrollTo('#fixes');
+                    }}
+                    style={{
+                      padding: '0.45rem 1rem',
+                      fontSize: '0.8rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      cursor: 'pointer',
+                      background: 'rgba(239, 68, 68, 0.2)',
+                      color: '#fca5a5',
+                      border: '1px solid rgba(239, 68, 68, 0.45)',
+                    }}
+                  >
+                    <Wrench size={13} />
+                    <span>{t.off_android12_warn_btn || 'See Virtual Master + Shizuku Step-by-Step Guide in Ch. 06 →'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Feature 3-Cards */}
@@ -2067,8 +2221,63 @@ export default function App() {
                   'Uses SideInstaller. Fully on-device on iOS 27. On iOS 18–26 you still need a pairing file generated once on a PC. Keep LocalDevVPN connected for the entire process.'
                 }
                 as="p"
-                style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}
+                style={{ marginBottom: '1.5rem', color: 'var(--text-secondary)' }}
               />
+
+              {/* Apple Server 80045 & 37% Stuck Outage Warning Banner */}
+              <div
+                className="warning-strip-card"
+                style={{
+                  marginBottom: '2rem',
+                  borderColor: 'rgba(239, 68, 68, 0.45)',
+                  background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(20, 20, 30, 0.85) 100%)',
+                }}
+              >
+                <div className="warning-icon-wrapper" style={{ color: '#ef4444' }}>
+                  <AlertTriangle size={24} />
+                </div>
+                <div style={{ width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                    <h4 style={{ color: '#fca5a5', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>
+                      {t.ios_server_err_banner_title || 'ALERT: Temporary Apple Server Outage (Error 80045 / Stuck at 37%)'}
+                    </h4>
+                    <span
+                      style={{
+                        fontSize: '0.7rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: '#ef4444',
+                        background: 'rgba(239, 68, 68, 0.2)',
+                        border: '1px solid rgba(239, 68, 68, 0.4)',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '4px',
+                        fontWeight: 700,
+                      }}
+                    >
+                      Apple Servers
+                    </span>
+                  </div>
+                  <FormattedText
+                    text={
+                      t.ios_server_err_banner_desc ||
+                      'Apple developer authentication servers are experiencing intermittent outages. If SideInstaller hangs at 37% or SideStore throws instant <strong>Error 80045</strong>, use <strong>Method 2 (PC with Sideloadly)</strong>. On PC it installs 100% reliably; the only difference is requiring a manual PC refresh every 6–7 days (compared to 1 second on phone).'
+                    }
+                    as="p"
+                    style={{ fontSize: '0.85rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+                  />
+                  <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                    <button
+                      type="button"
+                      className="cta-button-glass"
+                      onClick={() => setIosTab('pc')}
+                      style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }}
+                    >
+                      <Monitor size={14} />
+                      <span>Switch to Method 2 (PC Sideloadly) →</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
 
               <div className="steps-timeline-stack">
                 {/* Step 01 */}
@@ -2164,6 +2373,17 @@ export default function App() {
                       }
                       as="p"
                     />
+
+                    {/* Developer Mode Timing Clarification */}
+                    <div className="step-callout-note" style={{ marginTop: '0.75rem', borderColor: 'rgba(245, 158, 11, 0.4)', background: 'rgba(245, 158, 11, 0.08)' }}>
+                      <AlertTriangle size={14} style={{ display: 'inline', marginRight: '0.4rem', color: '#fbbf24' }} />
+                      <FormattedText
+                        text={
+                          t.ios_devmode_timing_note ||
+                          '<strong>IMPORTANT:</strong> <em>Developer Mode</em> will NOT appear in iPhone Settings until you install and try to open SideInstaller for the first time! First install and trust the certificate, tap SideInstaller to open it (iOS will show Developer Mode required), and only then will the option show in <em>Settings → Privacy & Security</em>.'
+                        }
+                      />
+                    </div>
 
                     <div className="step-callout-note" style={{ marginTop: '0.75rem', borderColor: 'rgba(59, 130, 246, 0.4)' }}>
                       <FormattedText
@@ -2292,6 +2512,17 @@ export default function App() {
                       >
                         <span>{t.nav_jump_pairing || 'Generate Pairing File on PC →'}</span>
                       </button>
+                    </div>
+
+                    {/* Wrong Password / Invalid Account Tip */}
+                    <div className="step-callout-note warning" style={{ marginTop: '1rem', borderColor: 'rgba(245, 158, 11, 0.4)', background: 'rgba(245, 158, 11, 0.08)' }}>
+                      <Key size={14} style={{ display: 'inline', marginRight: '0.4rem', color: 'var(--accent-amber)' }} />
+                      <FormattedText
+                        text={
+                          t.ios_pwd_reset_tip ||
+                          '<strong>"Invalid Account" or wrong password?</strong> Change password in <em>Settings → Apple ID → Sign-In & Security → Change Password</em>, then in SideInstaller tap the gear icon (top-right) → <em>Add Apple ID</em> and enter your account with the new password.'
+                        }
+                      />
                     </div>
                   </div>
                 </div>
@@ -2610,10 +2841,35 @@ export default function App() {
                         className="cta-button-primary"
                         style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
                       >
-                        <Download size={14} />
-                        <span>Download Game (.ipa)</span>
+                        <HardDrive size={14} />
+                        <span>Download Offline Game (.ipa)</span>
                         <ArrowUpRight size={14} />
                       </a>
+                      {downloads.iosOnlineIpaUrl ? (
+                        <a
+                          href={downloads.iosOnlineIpaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="cta-button-glass"
+                          style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
+                        >
+                          <Wifi size={14} />
+                          <span>Download Online Game (.ipa)</span>
+                          <ArrowUpRight size={14} />
+                        </a>
+                      ) : (
+                        <a
+                          href={downloads.discordServerUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="cta-button-glass"
+                          style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                        >
+                          <Wifi size={14} />
+                          <span>Online IPA: Discord Server</span>
+                          <ArrowUpRight size={14} />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -3202,12 +3458,12 @@ export default function App() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <Wifi size={18} style={{ color: 'var(--accent-blue)' }} />
-                {t.upd_online_h || 'Online Mode (Android Only) — How to Update'}
+                {t.upd_online_h || 'Online Mode (Android & iOS) — How to Update'}
               </h3>
               <div className="platform-compat-badges" style={{ margin: 0 }}>
-                <span className="compat-badge android"><Smartphone size={12} /> Android Only</span>
+                <span className="compat-badge android"><Smartphone size={12} /> Android</span>
+                <span className="compat-badge ios"><Apple size={12} /> iOS (Sideload)</span>
                 <span className="compat-badge emulator"><Monitor size={12} /> PC Emulators</span>
-                <span className="compat-badge no-ios">✕ No iOS Support</span>
               </div>
             </div>
             <div className="steps-timeline-stack">
@@ -3626,6 +3882,20 @@ export default function App() {
                       value={adminForm.iosGameIpaUrl}
                       onChange={(e) => setAdminForm({ ...adminForm, iosGameIpaUrl: e.target.value })}
                       placeholder="https://drive.google.com/..."
+                      className="admin-field-input"
+                    />
+                  </div>
+
+                  <div className="admin-field-group">
+                    <label className="admin-field-label">
+                      <Apple size={14} color="#38bdf8" />
+                      <span>iOS Online .ipa URL (Nou!)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={adminForm.iosOnlineIpaUrl || ''}
+                      onChange={(e) => setAdminForm({ ...adminForm, iosOnlineIpaUrl: e.target.value })}
+                      placeholder="https://drive.google.com/... (lasă gol până îl urci)"
                       className="admin-field-input"
                     />
                   </div>
