@@ -235,7 +235,15 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_myth2_q": "Myth 2: 'Will Apple ban my Apple ID or brick my iPhone?'",
     "ios_myth2_a": "<strong>FALSE.</strong> Apple has never locked or banned user Apple IDs, iCloud accounts, or iPhones for personal sideloading. Sideloading is a built-in feature of the iOS developer ecosystem.",
     "ios_myth3_q": "What are the real Apple ID limits & safety?",
-    "ios_myth3_a": "Free Apple IDs have an official quota of up to 3 active sideloaded apps at a time. The only theoretical penalty from Apple is a temporary 7-day cooldown on generating new free certificates if someone abuses automated bulk signing (signing 10–50+ apps per week — chance <0.1%). Even in that extreme case, only SideStore would need reinstalling after the cooldown; your Apple ID, purchases, and iCloud are never touched. For Naruto Blazing Rebirth (just 1 app alongside SideStore), the risk is virtually <strong>zero (&lt;0.01%)</strong>. Using your main Apple ID is totally safe; a secondary account is purely optional if you already have an unused spare."
+    "ios_myth3_a": "Free Apple IDs have an official quota of up to 3 active sideloaded apps at a time. The only theoretical penalty from Apple is a temporary 7-day cooldown on generating new free certificates if someone abuses automated bulk signing (signing 10–50+ apps per week — chance <0.1%). Even in that extreme case, only SideStore would need reinstalling after the cooldown; your Apple ID, purchases, and iCloud are never touched. For Naruto Blazing Rebirth (just 1 app alongside SideStore), the risk is virtually <strong>zero (&lt;0.01%)</strong>. Using your main Apple ID is totally safe; a secondary account is purely optional if you already have an unused spare.",
+    "off_badge_android": "Android & PC Emulators (APK)",
+    "off_badge_ios_jump": "iOS (iPhone/iPad)? Offline Guide is in Ch. 04 below ↓",
+    "off_ios_redirect_title": "Are you on iPhone / iPad? The iOS Offline Guide is further down!",
+    "off_ios_redirect_desc": "<strong>Do NOT download the APK above if you are on iOS.</strong> The steps in Chapter 03 are strictly for Android phones and PC Emulators. For iPhone and iPad, the game uses an <strong>.ipa</strong> package sideloaded via SideStore. Scroll down to <strong>Chapter 04: iOS Sideloading</strong> for the dedicated step-by-step guide.",
+    "off_ios_redirect_btn": "Jump to Chapter 04: iOS Offline Guide ↓",
+    "ios_compat_badge": "iOS Offline Game (Only Mode Available on iOS)",
+    "ios_flow_guide_title": "How iOS Offline Installation Works (2 Simple Stages)",
+    "ios_flow_guide_desc": "<strong>Stage 1 (Install Sideload Store):</strong> Install SideStore on your iPhone using <strong>Method 1 (No PC)</strong> or <strong>Method 2 (PC Sideloadly)</strong> below.<br /><strong>Stage 2 (Install the Game):</strong> Switch to the <strong>\"Install Game (.ipa)\"</strong> tab above or below to download the Naruto Blazing Rebirth IPA and install it inside SideStore."
   },
   "ro": {
     "nav_online": "Online",
@@ -471,7 +479,15 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_myth2_q": "Mitul 2: „Îmi va bloca Apple contul sau iPhone-ul?”",
     "ios_myth2_a": "<strong>FALS.</strong> Apple nu a blocat și nu a banat NICIODATĂ un cont Apple ID, date iCloud sau un iPhone pentru sideloading personal. Este o funcționalitate integrată nativ în ecosistemul iOS.",
     "ios_myth3_q": "Care sunt riscurile și limitele reale ale contului?",
-    "ios_myth3_a": "Un cont Apple gratuit are o cotă oficială de până la 3 aplicații instalate simultan. Singura restricție teoretică de la Apple este un cooldown temporar de 7 zile pe generarea de certificate gratuite dacă cineva abuzează de sistem semnând zeci (10–50+) de aplicații pe săptămână (șansă sub 0.1%). Chiar și în acel caz extrem, doar SideStore ar trebui reinstalat după expirare; contul tău Apple, achizițiile și iCloud nu sunt niciodată afectate. Pentru Naruto Blazing Rebirth (1 singură aplicație alături de SideStore), riscul este practic <strong>zero (&lt;0.01%)</strong>. Folosirea contului principal este complet sigură; un cont secundar este strict opțional dacă ai deja unul nefolosit."
+    "ios_myth3_a": "Un cont Apple gratuit are o cotă oficială de până la 3 aplicații instalate simultan. Singura restricție teoretică de la Apple este un cooldown temporar de 7 zile pe generarea de certificate gratuite dacă cineva abuzează de sistem semnând zeci (10–50+) de aplicații pe săptămână (șansă sub 0.1%). Chiar și în acel caz extrem, doar SideStore ar trebui reinstalat după expirare; contul tău Apple, achizițiile și iCloud nu sunt niciodată afectate. Pentru Naruto Blazing Rebirth (1 singură aplicație alături de SideStore), riscul este practic <strong>zero (&lt;0.01%)</strong>. Folosirea contului principal este complet sigură; un cont secundar este strict opțional dacă ai deja unul nefolosit.",
+    "off_badge_android": "Android & Emulatoare PC (APK)",
+    "off_badge_ios_jump": "iOS (iPhone/iPad)? Ghidul Offline este la Cap. 04 mai jos ↓",
+    "off_ios_redirect_title": "Ești pe iPhone / iPad? Ghidul de instalare Offline este mai jos!",
+    "off_ios_redirect_desc": "<strong>NU descărca APK-ul de mai sus dacă ești pe iOS.</strong> Pașii din Capitolul 03 sunt strict pentru telefoane Android și emulatoare de PC. Pentru iPhone și iPad, jocul folosește un fișier <strong>.ipa</strong> instalat prin SideStore. Derulează mai jos la <strong>Capitolul 04: iOS Sideloading</strong> pentru ghidul dedicat complet pas cu pas.",
+    "off_ios_redirect_btn": "Mergi la Capitolul 04: Ghid iOS Offline ↓",
+    "ios_compat_badge": "Joc Offline iOS (Singurul mod disponibil pe iOS)",
+    "ios_flow_guide_title": "Cum funcționează instalarea jocului Offline pe iOS (2 Etape Simple)",
+    "ios_flow_guide_desc": "<strong>Etapa 1 (Instalare Sideload Store):</strong> Instalează SideStore pe iPhone folosind <strong>Metoda 1 (Fără PC)</strong> sau <strong>Metoda 2 (Cu PC Sideloadly)</strong> de mai jos.<br /><strong>Etapa 2 (Instalare Joc):</strong> Comută pe tab-ul <strong>„Instalează Jocul (.ipa)”</strong> pentru a descărca fișierul IPA Naruto Blazing Rebirth și a-l instala în SideStore."
   },
   "fr": {
     "nav_online": "En Ligne",
@@ -707,7 +723,15 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_myth2_q": "Mythe 2 : « Apple va-t-elle bannir mon identifiant ou bloquer mon iPhone ? »",
     "ios_myth2_a": "<strong>FAUX.</strong> Apple n'a JAMAIS banni un identifiant Apple, un compte iCloud ou verrouillé un iPhone en raison du sideloading personnel.",
     "ios_myth3_q": "Quelles sont les limites réelles et la sécurité du compte Apple ?",
-    "ios_myth3_a": "Un compte Apple gratuit autorise jusqu'à 3 applications actives simultanées. Le seul scénario théorique chez Apple est un délai d'attente de 7 jours sur la création de certificats gratuits en cas d'abus massif (10 à 50+ apps/semaine — probabilité <0,1%). Même dans ce cas rare, seul SideStore devrait être réinstallé ; votre compte iCloud et vos achats ne sont jamais touchés. Pour Naruto Blazing Rebirth, le risque est virtuellement <strong>nul (&lt;0,01%)</strong>. Votre compte principal est totalement sûr."
+    "ios_myth3_a": "Un compte Apple gratuit autorise jusqu'à 3 applications actives simultanées. Le seul scénario théorique chez Apple est un délai d'attente de 7 jours sur la création de certificats gratuits en cas d'abus massif (10 à 50+ apps/semaine — probabilité <0,1%). Même dans ce cas rare, seul SideStore devrait être réinstallé ; votre compte iCloud et vos achats ne sont jamais touchés. Pour Naruto Blazing Rebirth, le risque est virtuellement <strong>nul (&lt;0,01%)</strong>. Votre compte principal est totalement sûr.",
+    "off_badge_android": "Android & Émulateurs PC (APK)",
+    "off_badge_ios_jump": "iOS (iPhone/iPad) ? Le guide Hors Ligne est au Ch. 04 plus bas ↓",
+    "off_ios_redirect_title": "Vous êtes sur iPhone / iPad ? Le guide d'installation Hors Ligne est plus bas !",
+    "off_ios_redirect_desc": "<strong>Ne téléchargez PAS l'APK ci-dessus si vous êtes sur iOS.</strong> Les étapes du Chapitre 03 sont strictement réservées aux téléphones Android et émulateurs PC. Sur iPhone et iPad, le jeu utilise un fichier <strong>.ipa</strong> installé via SideStore. Faites défiler jusqu'au <strong>Chapitre 04 : Sideload iOS</strong> pour le guide pas à pas dédié.",
+    "off_ios_redirect_btn": "Aller au Chapitre 04 : Guide Hors Ligne iOS ↓",
+    "ios_compat_badge": "Jeu Hors Ligne iOS (Seul mode disponible sur iOS)",
+    "ios_flow_guide_title": "Comment installer la version Hors Ligne sur iOS (2 étapes simples)",
+    "ios_flow_guide_desc": "<strong>Étape 1 (Installer le Store Sideload) :</strong> Installez SideStore sur votre iPhone via la <strong>Méthode 1 (Sans PC)</strong> ou la <strong>Méthode 2 (Avec PC Sideloadly)</strong> ci-dessous.<br /><strong>Étape 2 (Installer le Jeu) :</strong> Cliquez sur l'onglet <strong>« Installer le jeu (.ipa) »</strong> pour télécharger l'IPA Naruto Blazing Rebirth et l'installer dans SideStore."
   },
   "es": {
     "nav_online": "En Línea",
@@ -943,7 +967,15 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_myth2_q": "Mito 2: «¿Apple bloqueará mi Apple ID o mi iPhone?»",
     "ios_myth2_a": "<strong>FALSO.</strong> Apple NUNCA ha bloqueado o suspendido cuentas Apple ID, iCloud ni dispositivos por instalar apps mediante sideloading personal.",
     "ios_myth3_q": "¿Cuáles son los límites reales y la seguridad del Apple ID?",
-    "ios_myth3_a": "Una cuenta gratuita de Apple tiene una cuota oficial de hasta 3 aplicaciones activas simultáneamente. La única penalización teórica es un tiempo de espera de 7 días para generar nuevos certificados si alguien abusa firmando 10–50+ apps por semana (probabilidad <0.1%). Incluso en ese caso extremo, solo SideStore requeriría reinstalarse; tu cuenta Apple, compras e iCloud nunca se tocan. Con Naruto Blazing Rebirth el riesgo es prácticamente <strong>cero (&lt;0.01%)</strong>. Tu Apple ID principal es completamente seguro."
+    "ios_myth3_a": "Una cuenta gratuita de Apple tiene una cuota oficial de hasta 3 aplicaciones activas simultáneamente. La única penalización teórica es un tiempo de espera de 7 días para generar nuevos certificados si alguien abusa firmando 10–50+ apps por semana (probabilidad <0.1%). Incluso en ese caso extremo, solo SideStore requeriría reinstalarse; tu cuenta Apple, compras e iCloud nunca se tocan. Con Naruto Blazing Rebirth el riesgo es prácticamente <strong>cero (&lt;0.01%)</strong>. Tu Apple ID principal es completamente seguro.",
+    "off_badge_android": "Android y Emuladores PC (APK)",
+    "off_badge_ios_jump": "¿iOS (iPhone/iPad)? La guía Sin Conexión está en el Cap. 04 abajo ↓",
+    "off_ios_redirect_title": "¿Estás en iPhone / iPad? ¡La guía de instalación Sin Conexión está más abajo!",
+    "off_ios_redirect_desc": "<strong>NO descargues el APK anterior si estás en iOS.</strong> Los pasos del Capítulo 03 son estrictamente para teléfonos Android y emuladores de PC. Para iPhone y iPad, el juego usa un archivo <strong>.ipa</strong> instalado mediante SideStore. Baja al <strong>Capítulo 04: Sideload iOS</strong> para la guía paso a paso dedicada.",
+    "off_ios_redirect_btn": "Ir al Capítulo 04: Guía iOS Sin Conexión ↓",
+    "ios_compat_badge": "Juego Sin Conexión iOS (Único modo disponible en iOS)",
+    "ios_flow_guide_title": "Cómo funciona la instalación Sin Conexión en iOS (2 etapas sencillas)",
+    "ios_flow_guide_desc": "<strong>Etapa 1 (Instalar la tienda Sideload):</strong> Instala SideStore en tu iPhone usando el <strong>Método 1 (Sin PC)</strong> o el <strong>Método 2 (Con PC Sideloadly)</strong> abajo.<br /><strong>Etapa 2 (Instalar el Juego):</strong> Ve a la pestaña <strong>«Instalar Juego (.ipa)»</strong> para descargar el IPA de Naruto Blazing Rebirth e instalarlo en SideStore."
   },
   "ko": {
     "nav_online": "온라인",
@@ -1179,6 +1211,14 @@ export const translations: Record<Lang, Record<string, string>> = {
     "ios_myth2_q": "오해 2: 'Apple ID가 정지되거나 iPhone이 벽돌이 되나요?'",
     "ios_myth2_a": "<strong>거짓(FALSE).</strong> Apple은 개인 사이드로딩을 이유로 사용자 Apple ID, iCloud 데이터 또는 iPhone을 정지하거나 벽돌로 만든 적이 결코 없습니다.",
     "ios_myth3_q": "실제 Apple ID 제한 및 안전성은 어떻게 되나요?",
-    "ios_myth3_a": "무료 Apple ID는 최대 3개의 사이드로딩 앱을 동시에 활성화할 수 있는 공식 쿼터를 제공합니다. Apple 서버의 유일한 이론적 제한은 주당 수십(10~50+) 개의 앱을 대량 서명할 때 무료 인증서 발급에 7일 쿨다운이 걸리는 것뿐입니다(확률 <0.1%). 이 극단적인 경우에도 iCloud나 구매 내역은 일절 영향받지 않으며 SideStore만 재설치하면 됩니다. 나루토 블레이징 리버스(앱 1개) 사용 시 위험도는 사실상 <strong>0% (&lt;0.01%)</strong>입니다. 본인 주 Apple ID를 사용해도 완벽하게 안전합니다."
+    "ios_myth3_a": "무료 Apple ID는 최대 3개의 사이드로딩 앱을 동시에 활성화할 수 있는 공식 쿼터를 제공합니다. Apple 서버의 유일한 이론적 제한은 주당 수십(10~50+) 개의 앱을 대량 서명할 때 무료 인증서 발급에 7일 쿨다운이 걸리는 것뿐입니다(확률 <0.1%). 이 극단적인 경우에도 iCloud나 구매 내역은 일절 영향받지 않으며 SideStore만 재설치하면 됩니다. 나루토 블레이징 리버스(앱 1개) 사용 시 위험도는 사실상 <strong>0% (&lt;0.01%)</strong>입니다. 본인 주 Apple ID를 사용해도 완벽하게 안전합니다.",
+    "off_badge_android": "안드로이드 & PC 에뮬레이터 (APK)",
+    "off_badge_ios_jump": "iOS (iPhone/iPad)? 오프라인 가이드는 아래 제04장에 있습니다 ↓",
+    "off_ios_redirect_title": "iPhone / iPad를 사용 중이신가요? iOS 오프라인 설치 가이드는 더 아래에 있습니다!",
+    "off_ios_redirect_desc": "<strong>iOS 사용자는 위의 APK 파일을 다운로드하지 마세요.</strong> 제03장의 설치 단계들은 안드로이드 스마트폰 및 PC 에뮬레이터 전용입니다. iPhone 및 iPad의 경우 SideStore를 통해 <strong>.ipa</strong> 패키지를 설치해야 합니다. 전용 설치 가이드는 아래 <strong>제04장: iOS 사이드로딩</strong>을 참조하세요.",
+    "off_ios_redirect_btn": "제04장: iOS 오프라인 가이드로 바로가기 ↓",
+    "ios_compat_badge": "iOS 오프라인 전용 게임 (iOS에서 플레이 가능한 유일한 모드)",
+    "ios_flow_guide_title": "iOS 오프라인 게임 설치 흐름 (간단한 2단계 과정)",
+    "ios_flow_guide_desc": "<strong>1단계 (사이드로드 스토어 설치):</strong> 아래의 <strong>방법 1 (PC 불필요)</strong> 또는 <strong>방법 2 (PC Sideloadly)</strong>를 사용하여 iPhone에 SideStore를 설치합니다.<br /><strong>2단계 (게임 설치):</strong> 위의 <strong>\"게임 설치 (.ipa)\"</strong> 탭으로 이동하여 나루토 블레이징 리버스 IPA를 다운로드하고 SideStore에서 설치합니다."
   }
 };

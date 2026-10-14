@@ -1458,14 +1458,30 @@ export default function App() {
               className="section-subhead"
             />
             <div className="platform-compat-badges">
-              <span className="compat-badge android"><Smartphone size={12} /> Android</span>
-              <span className="compat-badge ios"><Apple size={12} /> iOS (Sideload)</span>
-              <span className="compat-badge emulator"><Monitor size={12} /> PC Emulator</span>
+              <span className="compat-badge android"><Smartphone size={12} /> {t.off_badge_android || 'Android & PC Emulators (APK)'}</span>
+              <button
+                type="button"
+                className="compat-badge ios"
+                onClick={() => scrollTo('#ios')}
+                style={{
+                  cursor: 'pointer',
+                  border: '1px solid rgba(168, 85, 247, 0.45)',
+                  background: 'rgba(168, 85, 247, 0.15)',
+                  color: '#c084fc',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                <Apple size={12} />
+                <span>{t.off_badge_ios_jump || 'iOS (iPhone/iPad)? Offline Guide is in Ch. 04 below ↓'}</span>
+              </button>
             </div>
           </div>
 
           {/* Storage Warning Note */}
-          <div className="warning-strip-card" style={{ marginBottom: '2.5rem' }}>
+          <div className="warning-strip-card" style={{ marginBottom: '1.75rem' }}>
             <div className="warning-icon-wrapper" style={{ color: 'var(--accent-amber)' }}>
               <AlertTriangle size={22} />
             </div>
@@ -1476,6 +1492,71 @@ export default function App() {
               }
               as="p"
             />
+          </div>
+
+          {/* iOS Users Alert / Redirect Banner */}
+          <div
+            className="warning-strip-card"
+            style={{
+              marginBottom: '2.5rem',
+              borderColor: 'rgba(168, 85, 247, 0.45)',
+              background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.14) 0%, rgba(20, 20, 32, 0.9) 100%)',
+            }}
+          >
+            <div className="warning-icon-wrapper" style={{ color: '#c084fc' }}>
+              <Apple size={26} />
+            </div>
+            <div style={{ width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                <h4 style={{ color: '#e9d5ff', fontWeight: 700, fontSize: '0.975rem', margin: 0 }}>
+                  {t.off_ios_redirect_title || 'Are you on iPhone / iPad? The iOS Offline Guide is further down!'}
+                </h4>
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    color: '#c084fc',
+                    background: 'rgba(168, 85, 247, 0.22)',
+                    border: '1px solid rgba(168, 85, 247, 0.4)',
+                    padding: '0.2rem 0.55rem',
+                    borderRadius: '4px',
+                    fontWeight: 700,
+                  }}
+                >
+                  iOS = Chapter 04
+                </span>
+              </div>
+              <FormattedText
+                text={
+                  t.off_ios_redirect_desc ||
+                  '<strong>Do NOT download the APK above if you are on iOS.</strong> The steps in Chapter 03 are strictly for Android phones and PC Emulators. For iPhone and iPad, the game uses an <strong>.ipa</strong> package sideloaded via SideStore. Scroll down to <strong>Chapter 04: iOS Sideloading</strong> for the dedicated step-by-step guide.'
+                }
+                as="p"
+                style={{ fontSize: '0.85rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+              />
+              <div style={{ marginTop: '0.85rem' }}>
+                <button
+                  type="button"
+                  className="cta-button-primary"
+                  onClick={() => scrollTo('#ios')}
+                  style={{
+                    padding: '0.55rem 1.25rem',
+                    fontSize: '0.825rem',
+                    background: 'linear-gradient(135deg, #9333ea, #6366f1)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(147, 51, 234, 0.35)',
+                  }}
+                >
+                  <Apple size={15} />
+                  <span>{t.off_ios_redirect_btn || 'Jump to Chapter 04: iOS Offline Guide ↓'}</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Timeline Steps Stack */}
@@ -1731,8 +1812,24 @@ export default function App() {
               className="section-subhead"
             />
             <div className="platform-compat-badges">
-              <span className="compat-badge ios"><Apple size={12} /> iOS Only</span>
-              <span className="compat-badge no-android">✕ Android / Emulator: use Ch. 02–03</span>
+              <span className="compat-badge ios"><Apple size={12} /> {t.ios_compat_badge || 'iOS Offline Game (Only Mode Available on iOS)'}</span>
+              <button
+                type="button"
+                className="compat-badge no-android"
+                onClick={() => scrollTo('#offline')}
+                style={{
+                  cursor: 'pointer',
+                  borderColor: 'rgba(239, 68, 68, 0.4)',
+                  color: '#f87171',
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                <span>✕ Android / PC Emulator: See Chapter 03 above ↑</span>
+              </button>
             </div>
           </div>
 
@@ -1853,6 +1950,70 @@ export default function App() {
                     style={{ fontSize: '0.8rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 2-Stage Flow Explainer Banner */}
+          <div
+            className="warning-strip-card"
+            style={{
+              marginBottom: '2rem',
+              borderColor: 'rgba(99, 102, 241, 0.4)',
+              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(20, 20, 35, 0.85) 100%)',
+            }}
+          >
+            <div className="warning-icon-wrapper" style={{ color: '#818cf8' }}>
+              <BookOpen size={24} />
+            </div>
+            <div style={{ width: '100%' }}>
+              <h4 style={{ color: '#c7d2fe', fontWeight: 700, marginBottom: '0.4rem', fontSize: '0.975rem' }}>
+                {t.ios_flow_guide_title || 'How iOS Offline Installation Works (2 Simple Stages)'}
+              </h4>
+              <FormattedText
+                text={
+                  t.ios_flow_guide_desc ||
+                  '<strong>Stage 1 (Install Sideload Store):</strong> Install SideStore on your iPhone using <strong>Method 1 (No PC)</strong> or <strong>Method 2 (PC Sideloadly)</strong> below.<br /><strong>Stage 2 (Install the Game):</strong> Switch to the <strong>"Install Game (.ipa)"</strong> tab above or below to download the Naruto Blazing Rebirth IPA and install it inside SideStore.'
+                }
+                as="p"
+                style={{ fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}
+              />
+              <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  className="cta-button-glass"
+                  onClick={() => setIosTab('nopc')}
+                  style={{
+                    padding: '0.4rem 0.9rem',
+                    fontSize: '0.78rem',
+                    background: iosTab === 'nopc' ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)',
+                    border: iosTab === 'nopc' ? '1px solid rgba(255,255,255,0.3)' : undefined,
+                  }}
+                >
+                  <span>1. Method 1 (No PC)</span>
+                </button>
+                <button
+                  type="button"
+                  className="cta-button-glass"
+                  onClick={() => setIosTab('pair')}
+                  style={{
+                    padding: '0.4rem 0.9rem',
+                    fontSize: '0.78rem',
+                    background: iosTab === 'pair' ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)',
+                    border: iosTab === 'pair' ? '1px solid rgba(255,255,255,0.3)' : undefined,
+                  }}
+                >
+                  <span>2. Method 2 (PC)</span>
+                </button>
+                <button
+                  type="button"
+                  className="cta-button-primary"
+                  onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
+                  style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
+                >
+                  <Download size={13} />
+                  <span>3. Install Game (.ipa) Tab</span>
+                </button>
               </div>
             </div>
           </div>
