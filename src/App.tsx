@@ -33,6 +33,8 @@ import {
   Save,
   Lock,
   Cpu,
+  Crown,
+  TableProperties,
 } from 'lucide-react'
 import { translations, type Lang } from './data/translations'
 import heroArt from './assets/blazing_hero_banner.jpg'
@@ -1163,60 +1165,214 @@ export default function App() {
           <div className="differences-header">
             <div className="chapter-meta-tag" style={{marginBottom: '0.5rem'}}>
               <Wifi size={14} />
-              <span>ONLINE vs OFFLINE — FEATURE COMPARISON</span>
+              <span>{t.oo_badge || 'ONLINE vs OFFLINE (VANILLA & ALL DATA)'}</span>
             </div>
             <h2 className="differences-headline">
-              {t.oo_title || 'Which mode is right for you?'}
+              {t.oo_title || 'Which Version is Right for You?'}
             </h2>
             <p className="differences-sub">
-              {t.oo_sub || 'Rebirth offers two completely different game experiences. Here is what sets them apart.'}
+              {t.oo_sub || 'Rebirth offers 3 distinct game experiences: live online community servers, classic solo progression, and the ultimate maxed sandbox. Choose the perfect path for your playstyle.'}
             </p>
           </div>
-          <div className="differences-grid">
-            <div className="diff-card diff-online">
-              <div className="diff-card-header">
-                <Zap size={18} />
-                <span>{t.oo_online_title || 'ONLINE Mode'}</span>
+
+          {/* 3-WAY MODES COMPARISON GRID */}
+          <div className="modes-comparison-grid">
+            {/* 1. ONLINE MODE */}
+            <div className="mode-card mode-online">
+              <div className="mode-card-badge">{t.oo_online_tag || 'Community · Live PvP & Co-Op · Cloud'}</div>
+              <div className="mode-card-header">
+                <div className="mode-card-icon">
+                  <Wifi size={22} />
+                </div>
+                <h3 className="mode-card-title">{t.oo_online_title || 'Online Mode'}</h3>
               </div>
-              <ul className="diff-list">
-                {(t.oo_online_points
-                  ? t.oo_online_points.split('|')
+              <p className="mode-card-summary">
+                {t.oo_online_desc || 'Live multiplayer revival experience linked to Discord with active community events, guild play, and real-time PvP.'}
+              </p>
+              <ul className="mode-features-list">
+                {(t.oo_online_pts
+                  ? t.oo_online_pts.split('|')
                   : [
-                      'Account linked to Discord',
-                      'Banners progress chronologically (PTS → Limited)',
-                      'PVP & CO-OP multiplayer supported',
-                      'Online leaderboards & global ranking',
-                      'Progress saved via Discord cloud',
-                      'Requires active internet connection',
+                      'Discord cloud sync across all your devices',
+                      'Real-time PvP (Ninja World Clash) & live Co-Op',
+                      'Chronological banner progression (starts 2016 meta)',
+                      'Global leaderboards & weekly competitive events',
+                      'Requires constant active internet connection',
                     ]
-                ).map((pt: string, i: number) => (
-                  <li key={i}><Check size={13} /><span>{pt.trim()}</span></li>
+                ).map((pt: string, idx: number) => (
+                  <li key={idx}>
+                    <Check size={14} style={{ color: '#60a5fa', flexShrink: 0, marginTop: '3px' }} />
+                    <span>{pt.trim()}</span>
+                  </li>
                 ))}
               </ul>
-            </div>
-            <div className="diff-divider">
-              <span className="diff-vs-label" style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>VS</span>
-            </div>
-            <div className="diff-card diff-offline">
-              <div className="diff-card-header">
-                <HardDrive size={18} />
-                <span>{t.oo_offline_title || 'OFFLINE Mode'}</span>
+              <div className="mode-card-action">
+                <button
+                  type="button"
+                  className="cta-button-primary"
+                  onClick={() => scrollTo('#online')}
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.65rem 1rem', fontSize: '0.85rem' }}
+                >
+                  <span>{t.oo_btn_online || 'Jump to Online Guide ↓'}</span>
+                  <ArrowRight size={14} />
+                </button>
               </div>
-              <ul className="diff-list">
-                {(t.oo_offline_points
-                  ? t.oo_offline_points.split('|')
+            </div>
+
+            {/* 2. OFFLINE: VANILLA MODE */}
+            <div className="mode-card mode-vanilla">
+              <div className="mode-card-badge">{t.oo_vanilla_tag || 'Level 1 · 1,000 Pearls · All Banners'}</div>
+              <div className="mode-card-header">
+                <div className="mode-card-icon">
+                  <Sparkles size={22} />
+                </div>
+                <h3 className="mode-card-title">{t.oo_vanilla_title || 'Offline: Vanilla Mode'}</h3>
+              </div>
+              <p className="mode-card-summary">
+                {t.oo_vanilla_desc || 'Authentic nostalgic solo journey from Level 1 with full historical banner access and zero internet connection required.'}
+              </p>
+              <ul className="mode-features-list">
+                {(t.oo_vanilla_pts
+                  ? t.oo_vanilla_pts.split('|')
                   : [
-                      'No account or Discord required',
-                      'Choose Vanilla or All Data save mode',
-                      'Starts with 1000+ Pearls in All Data mode',
-                      'Fully playable without internet',
-                      'No PVP or CO-OP (local only)',
-                      'Manual save export/import management',
+                      '100% Offline — zero internet or account required',
+                      'Starts at Level 1 with 1,000 Ninja Pearls',
+                      'All historical banners from game history open Day 1',
+                      'Complete solo PvE (Story, Ninja Road, Phantom Castle)',
+                      'Customizable drop rates via Launcher GAMEPLAY settings',
+                      'Separate local save slot (won\'t touch All Data)',
                     ]
-                ).map((pt: string, i: number) => (
-                  <li key={i}><Check size={13} /><span>{pt.trim()}</span></li>
+                ).map((pt: string, idx: number) => (
+                  <li key={idx}>
+                    <Check size={14} style={{ color: '#fbbf24', flexShrink: 0, marginTop: '3px' }} />
+                    <span>{pt.trim()}</span>
+                  </li>
                 ))}
               </ul>
+              <div className="mode-card-action">
+                <button
+                  type="button"
+                  className="cta-button-glass"
+                  onClick={() => scrollTo('#offline')}
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.65rem 1rem', fontSize: '0.85rem' }}
+                >
+                  <span>{t.oo_btn_offline || 'Jump to Offline Guide ↓'}</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
+
+            {/* 3. OFFLINE: ALL DATA MODE */}
+            <div className="mode-card mode-alldata">
+              <div className="mode-card-badge">{t.oo_alldata_tag || 'All Units Maxed · 1M Pearls · Pure FUN'}</div>
+              <div className="mode-card-header">
+                <div className="mode-card-icon">
+                  <Crown size={22} />
+                </div>
+                <h3 className="mode-card-title">{t.oo_alldata_title || 'Offline: All Data Mode'}</h3>
+              </div>
+              <p className="mode-card-summary">
+                {t.oo_alldata_desc || 'The ultimate ninja sandbox: ALL characters in the game unlocked at MAX level and abilities + 1,000,000 pearls. Designed for testing, theorycrafting, and pure fun without any grinding.'}
+              </p>
+              <ul className="mode-features-list">
+                {(t.oo_alldata_pts
+                  ? t.oo_alldata_pts.split('|')
+                  : [
+                      'ALL characters in the game unlocked at MAX level & abilities!',
+                      '1,000,000 Ninja Pearls for infinite summons & stamina',
+                      'Ultimate Sandbox: Test new units & theorycraft dream teams',
+                      'Battle Playground: Jump straight into difficult boss fights',
+                      'Pure FUN & Nostalgia: Play any ninja without grinding',
+                      'Separate local save slot (switch back & forth freely)',
+                    ]
+                ).map((pt: string, idx: number) => (
+                  <li key={idx}>
+                    <Sparkles size={14} style={{ color: '#f472b6', flexShrink: 0, marginTop: '3px' }} />
+                    <span>{pt.trim()}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mode-card-action">
+                <button
+                  type="button"
+                  className="cta-button-glass"
+                  onClick={() => scrollTo('#offline')}
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.65rem 1rem', fontSize: '0.85rem', borderColor: 'rgba(236,72,153,0.5)', color: '#fbcfe8' }}
+                >
+                  <span>{t.oo_btn_offline || 'Jump to Offline Guide ↓'}</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Detailed Comparison Matrix Table */}
+          <div className="comparison-matrix-wrapper">
+            <div className="comparison-matrix-title">
+              <TableProperties size={20} style={{ color: '#c084fc' }} />
+              <span>{t.oo_matrix_title || 'Detailed Side-by-Side Comparison Matrix'}</span>
+            </div>
+            <div className="comparison-table-scroll">
+              <table className="comparison-table">
+                <thead>
+                  <tr>
+                    <th className="col-feature">{t.oo_col_feature || 'Feature'}</th>
+                    <th className="col-online">{t.oo_online_title || 'Online Mode'}</th>
+                    <th className="col-vanilla">{t.oo_vanilla_title || 'Offline: Vanilla'}</th>
+                    <th className="col-alldata">{t.oo_alldata_title || 'Offline: All Data'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>{t.oo_row_conn || 'Internet Connection'}</strong></td>
+                    <td><span className="table-tag blue">{t.oo_c_on_conn || 'Required (WiFi / Cellular)'}</span></td>
+                    <td><span className="table-tag yes">{t.oo_c_off_conn || '100% Offline (No Internet)'}</span></td>
+                    <td><span className="table-tag yes">{t.oo_c_off_conn || '100% Offline (No Internet)'}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>{t.oo_row_acc || 'Account & Save Storage'}</strong></td>
+                    <td>{t.oo_c_on_acc || 'Discord Cloud Sync'}</td>
+                    <td>{t.oo_c_van_acc || 'Local Save (Slot 1)'}</td>
+                    <td><span className="table-tag hot">{t.oo_c_all_acc || 'Local Save (Slot 2, Separate)'}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>{t.oo_row_multi || 'Multiplayer (PvP & Co-Op)'}</strong></td>
+                    <td><span className="table-tag yes">{t.oo_c_on_multi || 'Live PvP (NWC) & Real-time Co-Op'}</span></td>
+                    <td><span className="table-tag no">{t.oo_c_off_multi || 'Solo PvE Only (No PvP/Co-Op)'}</span></td>
+                    <td><span className="table-tag no">{t.oo_c_off_multi || 'Solo PvE Only (No PvP/Co-Op)'}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>{t.oo_row_pearls || 'Starting Ninja Pearls'}</strong></td>
+                    <td>{t.oo_c_on_pearls || 'Standard Live Rewards'}</td>
+                    <td><span className="table-tag gold">{t.oo_c_van_pearls || '1,000 Starting Pearls'}</span></td>
+                    <td><span className="table-tag hot">{t.oo_c_all_pearls || '1,000,000 Starting Pearls'}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>{t.oo_row_roster || 'Character Roster'}</strong></td>
+                    <td>{t.oo_c_on_roster || 'Start Level 1, Summon & Farm'}</td>
+                    <td>{t.oo_c_van_roster || 'Start Level 1, Historical Summons'}</td>
+                    <td><span className="table-tag hot">{t.oo_c_all_roster || 'ALL Units Max Level & Max Abilities'}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>{t.oo_row_banners || 'Summon Banners'}</strong></td>
+                    <td>{t.oo_c_on_banners || 'Chronological Release (2016 →)'}</td>
+                    <td><span className="table-tag yes">{t.oo_c_off_banners || 'All Historical Banners from Day 1'}</span></td>
+                    <td><span className="table-tag yes">{t.oo_c_off_banners || 'All Historical Banners from Day 1'}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>{t.oo_row_custom || 'Drop Rates & Tweaks'}</strong></td>
+                    <td><span className="table-tag no">{t.oo_c_on_custom || 'Fixed Server Rates'}</span></td>
+                    <td><span className="table-tag yes">{t.oo_c_off_custom || 'Launcher Gameplay Settings'}</span></td>
+                    <td><span className="table-tag yes">{t.oo_c_off_custom || 'Launcher Gameplay Settings'}</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>{t.oo_row_purpose || 'Best Suited For'}</strong></td>
+                    <td><span className="table-tag blue">{t.oo_c_on_purpose || 'Live Multiplayer & Community Competition'}</span></td>
+                    <td><span className="table-tag gold">{t.oo_c_van_purpose || 'Classic Nostalgic Solo Progression'}</span></td>
+                    <td><span className="table-tag hot">{t.oo_c_all_purpose || 'Unit Testing, Dream Teams & Pure FUN!'}</span></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -2302,17 +2458,31 @@ export default function App() {
             </div>
           )}
 
-          {/* Feature 3-Cards */}
+          {/* Feature Cards Grid (Vanilla, All Data, Gameplay, Saves) */}
           <div className="feature-cards-grid">
             <div className="feature-info-card">
-              <div className="feature-icon-box">
+              <div className="feature-icon-box" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
                 <Sparkles size={20} />
               </div>
-              <h4>{t.off_card1_title || 'Vanilla mode'}</h4>
+              <h4>{t.off_card1_title || 'Vanilla Mode (Solo Journey)'}</h4>
               <FormattedText
                 text={
                   t.off_card1_desc ||
-                  'Starts at level 1 with 1000 pearls. All banners available from the start (unlike Online which starts in 2016 and progresses).'
+                  'Starts at level 1 with <strong>1,000 pearls</strong>. All historical banners available from day 1 for an authentic solo progression.'
+                }
+                as="p"
+              />
+            </div>
+
+            <div className="feature-info-card" style={{ borderColor: 'rgba(236, 72, 153, 0.35)', background: 'linear-gradient(170deg, rgba(236, 72, 153, 0.08) 0%, rgba(20, 10, 24, 0.6) 100%)' }}>
+              <div className="feature-icon-box" style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#f472b6' }}>
+                <Crown size={20} />
+              </div>
+              <h4 style={{ color: '#f472b6' }}>{t.off_card_alldata_title || 'All Data Mode (Sandbox & FUN)'}</h4>
+              <FormattedText
+                text={
+                  t.off_card_alldata_desc ||
+                  '<strong>ALL characters in the game unlocked at MAX level & abilities + 1,000,000 pearls!</strong> Perfect for testing new units, theorycrafting dream teams, tackling battles, and having pure fun without any grinding.'
                 }
                 as="p"
               />
@@ -2336,11 +2506,11 @@ export default function App() {
               <div className="feature-icon-box">
                 <HardDrive size={20} />
               </div>
-              <h4>{t.off_card3_title || 'Local save only'}</h4>
+              <h4>{t.off_card3_title || 'Separate Local Saves'}</h4>
               <FormattedText
                 text={
                   t.off_card3_desc ||
-                  'Progress is stored on the device. Uninstalling the game deletes everything. No cloud backup.'
+                  'Vanilla and All Data use independent local save files on your device. You can switch between them anytime without losing your other progress!'
                 }
                 as="p"
               />

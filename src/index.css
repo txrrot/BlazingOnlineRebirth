@@ -1767,6 +1767,237 @@ html.lenis, html.lenis body {
   }
 }
 
+/* ---------- 3-WAY MODES COMPARISON & MATRIX ---------- */
+.modes-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+  align-items: stretch;
+}
+
+@media (max-width: 960px) {
+  .modes-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mode-card {
+  background: var(--surface-1);
+  border-radius: 18px;
+  padding: 1.6rem;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.mode-card:hover {
+  transform: translateY(-3px);
+}
+
+.mode-card.mode-online {
+  border-color: rgba(59, 130, 246, 0.35);
+  background: linear-gradient(170deg, rgba(59, 130, 246, 0.08) 0%, rgba(15, 23, 42, 0.95) 100%);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+}
+.mode-card.mode-online:hover {
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 12px 36px rgba(59, 130, 246, 0.2);
+}
+
+.mode-card.mode-vanilla {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: linear-gradient(170deg, rgba(245, 158, 11, 0.08) 0%, rgba(26, 18, 10, 0.95) 100%);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.1);
+}
+.mode-card.mode-vanilla:hover {
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 12px 36px rgba(245, 158, 11, 0.2);
+}
+
+.mode-card.mode-alldata {
+  border-color: rgba(236, 72, 153, 0.45);
+  background: linear-gradient(170deg, rgba(236, 72, 153, 0.12) 0%, rgba(28, 10, 24, 0.95) 100%);
+  box-shadow: 0 10px 30px rgba(236, 72, 153, 0.15);
+}
+.mode-card.mode-alldata:hover {
+  border-color: rgba(236, 72, 153, 0.75);
+  box-shadow: 0 14px 40px rgba(236, 72, 153, 0.25);
+}
+
+.mode-card-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  width: fit-content;
+  margin-bottom: 0.85rem;
+}
+.mode-online .mode-card-badge {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+.mode-vanilla .mode-card-badge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+.mode-alldata .mode-card-badge {
+  background: rgba(236, 72, 153, 0.25);
+  color: #fbcfe8;
+  border: 1px solid rgba(236, 72, 153, 0.5);
+}
+
+.mode-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+.mode-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mode-online .mode-card-icon { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.mode-vanilla .mode-card-icon { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.mode-alldata .mode-card-icon { background: rgba(236, 72, 153, 0.25); color: #f472b6; }
+
+.mode-card-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.mode-card-summary {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0 0 1.25rem 0;
+  min-height: 2.8rem;
+}
+
+.mode-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex-grow: 1;
+}
+
+.mode-features-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.83rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.mode-features-list li strong {
+  color: var(--text-primary);
+}
+
+.mode-card-action {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Comparison Matrix Table */
+.comparison-matrix-wrapper {
+  margin-top: 2.75rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.comparison-matrix-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.comparison-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+  text-align: left;
+}
+
+.comparison-table th {
+  padding: 0.9rem 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+  white-space: nowrap;
+}
+
+.comparison-table th.col-feature { color: var(--text-primary); }
+.comparison-table th.col-online { color: #60a5fa; }
+.comparison-table th.col-vanilla { color: #fbbf24; }
+.comparison-table th.col-alldata { color: #f472b6; }
+
+.comparison-table td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+.comparison-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.comparison-table td strong {
+  color: var(--text-primary);
+}
+
+.table-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.table-tag.yes { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+.table-tag.no { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.table-tag.hot { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
+.table-tag.gold { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+.table-tag.blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+
 /* ---------- FLOATING DM TXRROT WIDGET ---------- */
 .dm-txrrot-widget {
   position: fixed;
