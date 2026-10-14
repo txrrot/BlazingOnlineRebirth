@@ -1966,7 +1966,7 @@ export default function App() {
               className="section-subhead"
             />
             <div className="platform-compat-badges">
-              <span className="compat-badge ios"><Apple size={12} /> {t.ios_compat_badge || 'iOS Offline Game (Only Mode Available on iOS)'}</span>
+              <span className="compat-badge ios"><Apple size={12} /> {t.ios_compat_badge || 'iOS — Offline Game & Online (IPA Sideload)'}</span>
               <button
                 type="button"
                 className="compat-badge no-android"
@@ -2204,7 +2204,7 @@ export default function App() {
               onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
             >
               <Download size={15} />
-              <span>{t.ios_game_h || 'Install Game (.ipa)'}</span>
+              <span>{t.ios_game_h || 'Install Game (.ipa) — Online & Offline'}</span>
             </button>
           </div>
 
@@ -2810,13 +2810,95 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
+              {/* Online vs Offline selector cards */}
+              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.75rem', flexWrap: 'wrap' }}>
+                {/* Online card */}
+                <div style={{
+                  flex: '1 1 220px',
+                  background: 'linear-gradient(135deg, rgba(56,189,248,0.12) 0%, rgba(99,102,241,0.08) 100%)',
+                  border: '1px solid rgba(56,189,248,0.35)',
+                  borderRadius: '12px',
+                  padding: '1rem 1.25rem',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <Wifi size={16} style={{ color: '#38bdf8' }} />
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#38bdf8' }}>
+                      {t.on_badge_ios ? t.on_badge_ios.replace(' ↓','') : 'Online Mode'}
+                    </span>
+                    <span style={{ fontSize: '0.65rem', background: 'rgba(56,189,248,0.2)', color: '#38bdf8', border: '1px solid rgba(56,189,248,0.4)', borderRadius: '4px', padding: '0.1rem 0.4rem', fontWeight: 700, letterSpacing: '0.04em' }}>RECOMANDAT</span>
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+                    Multiplayer live · Cont Discord · Servere active. Descarcă IPA-ul Online de mai jos.
+                  </p>
+                  <div style={{ marginTop: '0.75rem' }}>
+                    {downloads.iosOnlineIpaUrl ? (
+                      <a
+                        href={downloads.iosOnlineIpaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-glass"
+                        style={{ padding: '0.45rem 1rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', borderColor: 'rgba(56,189,248,0.4)', color: '#38bdf8' }}
+                      >
+                        <Wifi size={13} />
+                        <span>Download Online .ipa</span>
+                        <ArrowUpRight size={13} />
+                      </a>
+                    ) : (
+                      <a
+                        href={downloads.discordServerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-glass"
+                        style={{ padding: '0.45rem 1rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                      >
+                        <Wifi size={13} />
+                        <span>Online IPA → Discord</span>
+                        <ArrowUpRight size={13} />
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                {/* Offline card */}
+                <div style={{
+                  flex: '1 1 220px',
+                  background: 'linear-gradient(135deg, rgba(168,85,247,0.10) 0%, rgba(236,72,153,0.06) 100%)',
+                  border: '1px solid rgba(168,85,247,0.30)',
+                  borderRadius: '12px',
+                  padding: '1rem 1.25rem',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <HardDrive size={16} style={{ color: '#c084fc' }} />
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#c084fc' }}>
+                      Offline Mode
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+                    Joc single-player complet fără internet. Installer de joc separat (launcher → update).
+                  </p>
+                  <div style={{ marginTop: '0.75rem' }}>
+                    <a
+                      href={downloads.iosGameIpaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cta-button-glass"
+                      style={{ padding: '0.45rem 1rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', borderColor: 'rgba(168,85,247,0.4)', color: '#c084fc' }}
+                    >
+                      <HardDrive size={13} />
+                      <span>Download Offline .ipa</span>
+                      <ArrowUpRight size={13} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+
               <FormattedText
                 text={
                   t.ios_game_intro ||
-                  'After SideStore is installed on your phone, install Naruto Blazing Rebirth directly as an IPA package via SideStore. Fast, direct, and completely on-device.'
+                  'After SideStore is installed on your phone, install Naruto Blazing Rebirth directly as an IPA package via SideStore. The steps below apply to both Online and Offline — just choose the right .ipa above.'
                 }
                 as="p"
-                style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}
+                style={{ marginBottom: '1.5rem', color: 'var(--text-secondary)' }}
               />
 
               <div className="steps-timeline-stack">
@@ -2825,26 +2907,15 @@ export default function App() {
                     <div className="step-num-badge">01</div>
                   </div>
                   <div className="step-card-body">
-                    <h3>{t.ios_g1_title || 'Download Game IPA'}</h3>
+                    <h3>{t.ios_g1_title || 'Download the IPA (Online or Offline)'}</h3>
                     <FormattedText
                       text={
                         t.ios_g1_desc ||
-                        'Download the official <strong>Naruto Blazing Rebirth .ipa</strong> using the direct download button below (Google Drive). Save it to the Files app (On My iPhone / iCloud Drive).'
+                        'Choose your mode above and download the corresponding <strong>.ipa</strong> file. Save it to the <strong>Files app</strong> (On My iPhone / iCloud Drive). Both files install the same way via SideStore.'
                       }
                       as="p"
                     />
                     <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                      <a
-                        href={downloads.iosGameIpaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cta-button-primary"
-                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
-                      >
-                        <HardDrive size={14} />
-                        <span>Download Offline Game (.ipa)</span>
-                        <ArrowUpRight size={14} />
-                      </a>
                       {downloads.iosOnlineIpaUrl ? (
                         <a
                           href={downloads.iosOnlineIpaUrl}
@@ -2854,7 +2925,7 @@ export default function App() {
                           style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
                         >
                           <Wifi size={14} />
-                          <span>Download Online Game (.ipa)</span>
+                          <span>Download Online .ipa</span>
                           <ArrowUpRight size={14} />
                         </a>
                       ) : (
@@ -2866,10 +2937,21 @@ export default function App() {
                           style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
                         >
                           <Wifi size={14} />
-                          <span>Online IPA: Discord Server</span>
+                          <span>Online IPA → Discord</span>
                           <ArrowUpRight size={14} />
                         </a>
                       )}
+                      <a
+                        href={downloads.iosGameIpaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-glass"
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(168,85,247,0.4)', color: '#c084fc' }}
+                      >
+                        <HardDrive size={14} />
+                        <span>Download Offline .ipa</span>
+                        <ArrowUpRight size={14} />
+                      </a>
                     </div>
                   </div>
                 </div>
