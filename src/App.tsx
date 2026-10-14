@@ -122,6 +122,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePlatform, setActivePlatform] = useState<'all' | 'android' | 'ios' | 'pc'>('all')
   const [iosTab, setIosTab] = useState<'nopc' | 'pair' | 'pc' | 'game'>('nopc')
+  const [pcOs, setPcOs] = useState<'windows' | 'mac' | 'linux'>('windows')
   const [faqCategory, setFaqCategory] = useState<'all' | 'online' | 'offline' | 'ios' | 'emu'>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [openFaqs, setOpenFaqs] = useState<Record<string, boolean>>({
@@ -2756,11 +2757,7 @@ export default function App() {
               </div>
 
               {/* OS Selector */}
-              {(() => {
-                const [pcOs, setPcOs] = React.useState<'windows' | 'mac' | 'linux'>('windows')
-                return (
-                  <>
-                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
                       {(['windows', 'mac', 'linux'] as const).map((os) => (
                         <button
                           key={os}
@@ -2922,9 +2919,6 @@ export default function App() {
                         </div>
                       </div>
                     </div>
-                  </>
-                )
-              })()}
 
               {/* Navigation Buttons */}
               <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
