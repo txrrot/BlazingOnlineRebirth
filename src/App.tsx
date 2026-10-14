@@ -343,21 +343,41 @@ export default function App() {
   // Lenis smooth scroll trigger + update URL hash for shareability
   const scrollTo = (target: string) => {
     setMobileMenuOpen(false)
-    const el = document.querySelector(target)
-    if (el && lenisRef.current) {
-      lenisRef.current.scrollTo(el as HTMLElement, { offset: -70, duration: 1.2 })
-    } else if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
+    const runScroll = () => {
+      const el = document.querySelector(target)
+      if (el && lenisRef.current) {
+        lenisRef.current.scrollTo(el as HTMLElement, { offset: -70, duration: 1.2 })
+      } else if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+      // Update URL hash without causing a page jump
+      if (target.startsWith('#')) {
+        history.replaceState(null, '', target)
+      }
     }
-    // Update URL hash without causing a page jump
-    if (target.startsWith('#')) {
-      history.replaceState(null, '', target)
+
+    const immediateEl = document.querySelector(target)
+    if (immediateEl) {
+      runScroll()
+    } else {
+      setTimeout(runScroll, 80)
     }
+  }
+
+  // Smooth switch to iOS Game tab and scroll cleanly to Step 1 & download cards
+  const goToIosGameInstall = () => {
+    setIosTab('game')
+    setTimeout(() => {
+      scrollTo('#iosgameinstall')
+    }, 70)
   }
 
   // On mount: if URL has a hash, scroll to that section after lenis is ready
   useEffect(() => {
     const hash = window.location.hash
+    if (hash === '#iosgameinstall') {
+      setIosTab('game')
+    }
     if (hash) {
       // Small delay to let Lenis initialize
       const timer = setTimeout(() => {
@@ -1314,9 +1334,65 @@ export default function App() {
                 <span>{t.on_badge_ios || 'iOS (IPA Sideload Supported) ↓'}</span>
               </button>
             </div>
+
+            {/* iOS User Quick-Jump Banner Up Top */}
+            <div style={{
+              marginTop: '1.25rem',
+              padding: '0.9rem 1.25rem',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.08) 100%)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              flexWrap: 'wrap',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1 1 280px' }}>
+                <div style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '10px',
+                  background: 'rgba(56, 189, 248, 0.15)',
+                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <Apple size={20} style={{ color: '#38bdf8' }} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#38bdf8' }}>
+                    {t.online_ios_banner_title || 'Playing Online on iPhone / iPad (iOS)?'}
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.15rem', lineHeight: 1.4 }}>
+                    {t.online_ios_banner_desc || 'The steps below are exclusively for Android (APK). For iOS Online and Offline installation via Sideload, visit our complete iOS Guide in Chapter 04.'}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="cta-button-primary"
+                onClick={() => scrollTo('#ios')}
+                style={{
+                  padding: '0.5rem 1.2rem',
+                  fontSize: '0.825rem',
+                  background: 'linear-gradient(135deg, #0284c7, #6366f1)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  flexShrink: 0,
+                  boxShadow: '0 4px 14px rgba(2, 132, 199, 0.3)',
+                }}
+              >
+                <Apple size={14} />
+                <span>{t.online_ios_banner_btn || 'Go to iOS Section →'}</span>
+              </button>
+            </div>
           </div>
 
-          {/* Timeline Steps Stack */}
+          {/* Timeline Steps Stack (Android Only) */}
           <div className="steps-timeline-stack">
             {/* Step 01 */}
             <div className="step-card">
@@ -1383,29 +1459,6 @@ export default function App() {
                     <span>Download Online APK (Android)</span>
                     <ArrowUpRight size={14} />
                   </a>
-                  {downloads.iosOnlineIpaUrl ? (
-                    <a
-                      href={downloads.iosOnlineIpaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="cta-button-glass"
-                      style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
-                    >
-                      <Apple size={14} />
-                      <span>Download Online IPA (iOS)</span>
-                      <ArrowUpRight size={14} />
-                    </a>
-                  ) : (
-                    <button
-                      type="button"
-                      className="cta-button-glass"
-                      onClick={() => scrollTo('#ios')}
-                      style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(56, 189, 248, 0.3)', color: '#38bdf8' }}
-                    >
-                      <Apple size={14} />
-                      <span>{t.on_ios_avail_badge || 'iOS Online IPA (Available via Sideload Ch. 04) →'}</span>
-                    </button>
-                  )}
                 </div>
                 <div className="step-callout-note" style={{ marginTop: '0.85rem' }}>
                   <strong>Browser Pro Tip:</strong> If Google Chrome pauses at 99%, use Firefox Mobile or download directly through the Discord client.
@@ -2193,7 +2246,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-primary"
-                  onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
+                  onClick={() => goToIosGameInstall()}
                   style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                 >
                   <Download size={13} />
@@ -2232,7 +2285,7 @@ export default function App() {
             <button
               type="button"
               className={`ios-tab-btn ${iosTab === 'game' ? 'active' : ''}`}
-              onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
+              onClick={() => goToIosGameInstall()}
             >
               <Download size={15} />
               <span>{t.ios_game_h || 'Install Game (.ipa) — Online & Offline'}</span>
@@ -2576,7 +2629,7 @@ export default function App() {
                       <button
                         type="button"
                         className="cta-button-primary"
-                        onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
+                        onClick={() => goToIosGameInstall()}
                         style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                       >
                         <span>Next: Install Naruto Blazing Game IPA →</span>
@@ -2934,7 +2987,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-primary"
-                  onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
+                  onClick={() => goToIosGameInstall()}
                   style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                 >
                   <span>{t.ios_game_h || 'Install Game (.ipa)'} →</span>
@@ -2952,6 +3005,7 @@ export default function App() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
+              style={{ scrollMarginTop: '80px' }}
             >
               {/* Online vs Offline selector cards */}
               <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.75rem', flexWrap: 'wrap' }}>
