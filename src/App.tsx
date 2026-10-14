@@ -3022,10 +3022,12 @@ export default function App() {
                     <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#38bdf8' }}>
                       {t.on_badge_ios ? t.on_badge_ios.replace(' ↓','') : 'Online Mode'}
                     </span>
-                    <span style={{ fontSize: '0.65rem', background: 'rgba(56,189,248,0.2)', color: '#38bdf8', border: '1px solid rgba(56,189,248,0.4)', borderRadius: '4px', padding: '0.1rem 0.4rem', fontWeight: 700, letterSpacing: '0.04em' }}>RECOMANDAT</span>
+                    <span style={{ fontSize: '0.65rem', background: 'rgba(56,189,248,0.2)', color: '#38bdf8', border: '1px solid rgba(56,189,248,0.4)', borderRadius: '4px', padding: '0.1rem 0.4rem', fontWeight: 700, letterSpacing: '0.04em' }}>
+                      {t.badge_recommended || 'RECOMMENDED'}
+                    </span>
                   </div>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
-                    Multiplayer live · Cont Discord · Servere active. Descarcă IPA-ul Online de mai jos.
+                    {t.ios_card_online_desc || 'Live multiplayer · Discord account · Active servers. Download the Online IPA below.'}
                   </p>
                   <div style={{ marginTop: '0.75rem' }}>
                     {downloads.iosOnlineIpaUrl ? (
@@ -3071,7 +3073,7 @@ export default function App() {
                     </span>
                   </div>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
-                    Joc single-player complet fără internet. Installer de joc separat (launcher → update).
+                    {t.ios_card_offline_desc || 'Full single-player game with no internet required. Separate game installer (launcher → update).'}
                   </p>
                   <div style={{ marginTop: '0.75rem' }}>
                     <a
@@ -3684,7 +3686,7 @@ export default function App() {
               className="section-subhead"
             />
             <div className="platform-compat-badges">
-              <span className="compat-badge android"><Smartphone size={12} /> Online: Android Only</span>
+              <span className="compat-badge android"><Smartphone size={12} /> Online: Android &amp; iOS</span>
               <span className="compat-badge android"><HardDrive size={12} /> Offline: Android First</span>
               <span className="compat-badge ios"><Apple size={12} /> Offline: iOS</span>
             </div>
@@ -3710,7 +3712,7 @@ export default function App() {
               style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
             >
               <Wifi size={13} style={{ color: 'var(--accent-blue)' }} />
-              <span>Online (Android Only)</span>
+              <span>Online (Android &amp; iOS)</span>
             </button>
             <button
               type="button"
@@ -3732,7 +3734,7 @@ export default function App() {
             </button>
           </div>
 
-          {/* Online Update Section (Android Only) */}
+          {/* Online Update Section (Android & iOS) */}
           <div id="upd-online" style={{ marginBottom: '3rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
@@ -3745,13 +3747,44 @@ export default function App() {
                 <span className="compat-badge emulator"><Monitor size={12} /> PC Emulators</span>
               </div>
             </div>
+
+            {/* Online In-App Auto-Patch Notice */}
+            <div style={{
+              padding: '1rem 1.25rem',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.08) 100%)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              gap: '0.75rem',
+              alignItems: 'flex-start',
+            }}>
+              <Sparkles size={20} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <p style={{ fontWeight: 700, color: '#38bdf8', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
+                  {t.upd_on_intro_title || 'Routine Updates Happen Automatically In-App (Android & iOS)'}
+                </p>
+                <FormattedText
+                  text={
+                    t.upd_on_intro_tip ||
+                    '<strong>Good to know:</strong> You do <strong>not</strong> need to download a new APK or IPA for every update! Regular patches, new banners, and assets download <strong>automatically inside the game</strong> when launched. You only need to reinstall a new APK/IPA when the developers announce a <strong>major new client build</strong> on Discord.'
+                  }
+                  as="p"
+                  style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}
+                />
+              </div>
+            </div>
+
             <div className="steps-timeline-stack">
               <div className="step-card">
                 <div className="step-card-num"><div className="step-num-badge">01</div></div>
                 <div className="step-card-body">
-                  <h3>{t.upd_on_s1_title || 'Download the new APK'}</h3>
+                  <h3>{t.upd_on_s1_title || 'Routine In-App Updates vs. Major Client Builds'}</h3>
                   <FormattedText
-                    text={t.upd_on_s1_desc || 'When a new version is released, download the latest APK directly using the button below or check announcements on the official Discord server.'}
+                    text={
+                      t.upd_on_s1_desc ||
+                      '<strong>Normal updates:</strong> Just open the game on Wi-Fi — it patches automatically in seconds!<br /><strong>Major updates:</strong> When a new app version is posted on Discord, download the latest <strong>APK (Android)</strong> or <strong>IPA (iOS)</strong> using the buttons below.'
+                    }
                     as="p"
                   />
                   <div style={{ marginTop: '1rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -3763,9 +3796,22 @@ export default function App() {
                       style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
                     >
                       <Download size={14} />
-                      <span>{t.dl_online_apk || 'Download Online APK'}</span>
+                      <span>{t.dl_online_apk || 'Download Online APK (Android)'}</span>
                       <ArrowUpRight size={14} />
                     </a>
+                    {downloads.iosOnlineIpaUrl && (
+                      <a
+                        href={downloads.iosOnlineIpaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-glass"
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
+                      >
+                        <Apple size={14} />
+                        <span>Download Online IPA (iOS)</span>
+                        <ArrowUpRight size={14} />
+                      </a>
+                    )}
                     <a
                       href={downloads.discordServerUrl}
                       target="_blank"
@@ -3782,9 +3828,12 @@ export default function App() {
               <div className="step-card">
                 <div className="step-card-num"><div className="step-num-badge">02</div></div>
                 <div className="step-card-body">
-                  <h3>{t.upd_on_s2_title || 'Install over the existing app'}</h3>
+                  <h3>{t.upd_on_s2_title || 'Install over the existing app (Android & iOS)'}</h3>
                   <FormattedText
-                    text={t.upd_on_s2_desc || 'Install the new APK on top of the existing installation. Do <strong>not</strong> uninstall first — your Discord account link will be preserved.'}
+                    text={
+                      t.upd_on_s2_desc ||
+                      'Install the new build directly on top of the existing app. <strong>Do NOT uninstall first!</strong><br />• <strong>Android:</strong> Open the new APK → Install anyway.<br />• <strong>iOS:</strong> Sideload the new Online IPA via SideStore or Sideloadly.<br />Your progress is linked to your Discord account on the live server and remains 100% safe.'
+                    }
                     as="p"
                   />
                 </div>
@@ -3794,7 +3843,10 @@ export default function App() {
                 <div className="step-card-body">
                   <h3>{t.upd_on_s3_title || 'Launch and download patch data'}</h3>
                   <FormattedText
-                    text={t.upd_on_s3_desc || 'Open the game. It will automatically download any missing patch data. Keep the screen on and use Wi-Fi.'}
+                    text={
+                      t.upd_on_s3_desc ||
+                      'Open the game on Wi-Fi. It will connect to the server and finalize any missing assets. If a Connection Error occurs on first launch, use a free VPN (Netherlands/USA) for the initial handshake.'
+                    }
                     as="p"
                   />
                   <div className="step-callout-note" style={{ marginTop: '0.75rem' }}>
@@ -3805,6 +3857,10 @@ export default function App() {
                         '<strong>Stuck on loading or Connection Error?</strong> Two 100% fixes: <strong>1)</strong> Set DNS to Primary <code>8.8.8.8</code> and Secondary <code>8.8.4.4</code>. <strong>2)</strong> Or use a free VPN connected to <em>Netherlands, USA, or Japan</em> (only needed the first time to enter).'
                       }
                     />
+                  </div>
+                  <div style={{ marginTop: '0.75rem', padding: '0.7rem 1rem', background: 'rgba(56,189,248,0.08)', border: '1px solid rgba(56,189,248,0.25)', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                    <Apple size={13} style={{ display: 'inline', marginRight: '0.4rem', color: '#38bdf8' }} />
+                    <strong style={{ color: '#38bdf8' }}>iOS Reminder:</strong> Remember to connect <strong>LocalDevVPN</strong> and tap the countdown in SideStore once a week to keep the certificate fresh!
                   </div>
                 </div>
               </div>
