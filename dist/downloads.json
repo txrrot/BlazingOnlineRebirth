@@ -7,6 +7,9 @@
   "iosGameIpaUrl": "https://drive.google.com/file/d/1Oe3BhUHu7pY02rh5Ti-mbVwwP3UIswv6/view?usp=drivesdk",
   "iosOnlineIpaUrl": "",
   "iosSideStoreIpaUrl": "https://drive.google.com/file/d/14AbuUR1d8WdwdvJkuLTROsYySsOteYdz/view?usp=drivesdk",
+  "sideloadlyWinUrl": "https://sideloadly.io/#download",
+  "sideloadlyMacUrl": "https://sideloadly.io/#download",
+  "sideloadlyLinuxUrl": "https://sideloadly.io/#download",
   "officialSiteUrl": "https://blazingonline.wiki",
   "discordServerUrl": "https://discord.gg/blazingrebirth"
-}
+}

@@ -57,6 +57,9 @@ export interface DownloadsConfig {
   iosGameIpaUrl: string
   iosOnlineIpaUrl: string
   iosSideStoreIpaUrl: string
+  sideloadlyWinUrl: string
+  sideloadlyMacUrl: string
+  sideloadlyLinuxUrl: string
   officialSiteUrl: string
   discordServerUrl: string
 }
@@ -70,6 +73,9 @@ const DEFAULT_DOWNLOADS: DownloadsConfig = {
   iosGameIpaUrl: 'https://drive.google.com/file/d/14AbuUR1d8WdwdvJkuLTROsYySsOteYdz/view?usp=sharing',
   iosOnlineIpaUrl: '',
   iosSideStoreIpaUrl: 'https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa',
+  sideloadlyWinUrl: 'https://sideloadly.io/#download',
+  sideloadlyMacUrl: 'https://sideloadly.io/#download',
+  sideloadlyLinuxUrl: 'https://sideloadly.io/#download',
   officialSiteUrl: 'https://blazingonline.wiki',
   discordServerUrl: 'https://discord.gg/blazingrebirth',
 }
@@ -1992,13 +1998,37 @@ export default function App() {
             <div className="warning-icon-wrapper" style={{ color: 'var(--accent-violet)' }}>
               <ShieldAlert size={22} />
             </div>
-            <FormattedText
-              text={
-                t.ios_warning ||
-                '<strong>Important:</strong> Use only official sources. The site <em>sideinstaller.com</em> is <strong>fake / malware</strong>. Official: sideinstaller.net and frizzlem.github.io/SideInstaller'
-              }
-              as="p"
-            />
+            <div>
+              <FormattedText
+                text={
+                  t.ios_warning ||
+                  '<strong>Important:</strong> Use only official sources. The site <em>sideinstaller.com</em> is <strong>fake / malware</strong>. Official sources:'
+                }
+                as="p"
+              />
+              <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <a
+                  href="https://sideinstaller.net"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cta-button-glass"
+                  style={{ padding: '0.3rem 0.8rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  <ExternalLink size={12} />
+                  <span>sideinstaller.net</span>
+                </a>
+                <a
+                  href="https://frizzlem.github.io/SideInstaller"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cta-button-glass"
+                  style={{ padding: '0.3rem 0.8rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  <ExternalLink size={12} />
+                  <span>frizzlem.github.io/SideInstaller</span>
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Critical iOS Version Warning Banner */}
@@ -2162,7 +2192,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-primary"
-                  onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
+                  onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
                   style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                 >
                   <Download size={13} />
@@ -2201,7 +2231,7 @@ export default function App() {
             <button
               type="button"
               className={`ios-tab-btn ${iosTab === 'game' ? 'active' : ''}`}
-              onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
+              onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
             >
               <Download size={15} />
               <span>{t.ios_game_h || 'Install Game (.ipa) — Online & Offline'}</span>
@@ -2545,7 +2575,7 @@ export default function App() {
                       <button
                         type="button"
                         className="cta-button-primary"
-                        onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
+                        onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
                         style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                       >
                         <span>Next: Install Naruto Blazing Game IPA →</span>
@@ -2697,89 +2727,206 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <FormattedText
-                text={
-                  t.ios_pc_intro ||
-                  'Works on most iOS versions. You only need the computer for the first install. After that everything is on-device.'
-                }
-                as="p"
-                style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}
-              />
+              {/* Intro */}
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+                Works on <strong>any iOS version</strong>. Perfect when Apple servers are down (Error 80045) — Sideloadly bypasses SideInstaller completely. PC needed only for first install and every 6–7 day refresh.
+              </p>
 
-              <div className="steps-timeline-stack">
-                <div className="step-card">
-                  <div className="step-card-num">
-                    <div className="step-num-badge">01</div>
-                  </div>
-                  <div className="step-card-body">
-                    <h3>{t.ios_pc1_title || 'Install LocalDevVPN + Sideloadly'}</h3>
-                    <FormattedText
-                      text={
-                        t.ios_pc1_desc ||
-                        'On iPhone: install LocalDevVPN from App Store and connect it. On computer: download Sideloadly from official sources.'
-                      }
-                      as="p"
-                    />
-                    <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                      <a
-                        href="https://sideloadly.io/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cta-button-primary"
-                        style={{ padding: '0.5rem 1.1rem', fontSize: '0.8rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center' }}
-                      >
-                        <Download size={13} />
-                        <span>{t.ios_pc_sideloadly_btn || 'Download Sideloadly'}</span>
-                        <ExternalLink size={13} />
-                      </a>
-                      <a
-                        href="https://sidestore.io/#getting-started"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cta-button-glass"
-                        style={{ padding: '0.5rem 1.1rem', fontSize: '0.8rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center' }}
-                      >
-                        <span>{t.ios_sidestore_docs || 'SideStore Documentation'}</span>
-                        <ExternalLink size={13} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="step-card">
-                  <div className="step-card-num">
-                    <div className="step-num-badge">02</div>
-                  </div>
-                  <div className="step-card-body">
-                    <h3>{t.ios_pc2_title || 'Connect & install'}</h3>
-                    <FormattedText
-                      text={
-                        t.ios_pc2_desc ||
-                        'Connect iPhone via USB → trust the computer. Open Sideloadly → sign in with Apple ID → select your device → choose SideStore IPA. Install.'
-                      }
-                      as="p"
-                    />
-                  </div>
-                </div>
-
-                <div className="step-card">
-                  <div className="step-card-num">
-                    <div className="step-num-badge">03</div>
-                  </div>
-                  <div className="step-card-body">
-                    <h3>{t.ios_pc3_title || 'Trust + Developer Mode + Refresh'}</h3>
-                    <FormattedText
-                      text={
-                        t.ios_pc3_desc ||
-                        'Same as Method 1: Trust the profile, enable Developer Mode, open SideStore, sign in, do a manual refresh with LocalDevVPN connected.'
-                      }
-                      as="p"
-                    />
-                  </div>
+              {/* SideStore Reminder Banner */}
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(168,85,247,0.08) 100%)',
+                border: '1px solid rgba(99,102,241,0.35)',
+                borderRadius: '10px',
+                padding: '0.9rem 1.1rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                gap: '0.75rem',
+                alignItems: 'flex-start',
+              }}>
+                <Smartphone size={18} style={{ color: '#818cf8', flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <p style={{ fontWeight: 700, color: '#818cf8', marginBottom: '0.25rem', fontSize: '0.88rem' }}>
+                    💡 Reminder: Install SideStore when servers recover
+                  </p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+                    Once Apple servers are back up, install <strong>SideStore</strong> on your iPhone using <strong>Method 1 (No-PC)</strong> or re-sideload it via Sideloadly. With SideStore you can refresh the 7-day certificate with <strong>1 tap in 1 second</strong> — no PC needed every week!
+                    <br /><em>⚠️ Offline users: If you reinstall the game through SideStore, you may lose your save data. <strong>Export your save slot first!</strong></em>
+                  </p>
                 </div>
               </div>
 
-              {/* Navigation Back / Forward Buttons */}
+              {/* OS Selector */}
+              {(() => {
+                const [pcOs, setPcOs] = React.useState<'windows' | 'mac' | 'linux'>('windows')
+                return (
+                  <>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                      {(['windows', 'mac', 'linux'] as const).map((os) => (
+                        <button
+                          key={os}
+                          type="button"
+                          onClick={() => setPcOs(os)}
+                          style={{
+                            padding: '0.4rem 1rem',
+                            fontSize: '0.8rem',
+                            borderRadius: '8px',
+                            border: pcOs === os ? '1px solid rgba(99,102,241,0.6)' : '1px solid rgba(255,255,255,0.12)',
+                            background: pcOs === os ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.05)',
+                            color: pcOs === os ? '#a5b4fc' : 'var(--text-secondary)',
+                            cursor: 'pointer',
+                            fontWeight: pcOs === os ? 700 : 400,
+                            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                          }}
+                        >
+                          {os === 'windows' && <Monitor size={13} />}
+                          {os === 'mac' && <Apple size={13} />}
+                          {os === 'linux' && <Cpu size={13} />}
+                          {os.charAt(0).toUpperCase() + os.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Download Sideloadly */}
+                    <div className="steps-timeline-stack">
+                      <div className="step-card">
+                        <div className="step-card-num"><div className="step-num-badge">01</div></div>
+                        <div className="step-card-body">
+                          <h3>Download &amp; Install Sideloadly</h3>
+                          {pcOs === 'windows' && (
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                              Download <strong>Sideloadly for Windows</strong> (.exe installer). Requires <strong>iTunes</strong> from Apple (not the Microsoft Store version) + <strong>iCloud for Windows</strong>. Install all three, then launch Sideloadly.
+                            </p>
+                          )}
+                          {pcOs === 'mac' && (
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                              Download <strong>Sideloadly for macOS</strong> (.dmg). Drag to Applications. macOS already has the required Apple frameworks built in — no extras needed.
+                            </p>
+                          )}
+                          {pcOs === 'linux' && (
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                              Download <strong>Sideloadly for Linux</strong> (.deb / AppImage). Requires <strong>usbmuxd</strong> and <strong>libimobiledevice</strong>. Install them via: <code style={{ background: 'rgba(255,255,255,0.08)', padding: '0.1rem 0.4rem', borderRadius: '4px', fontSize: '0.8rem' }}>sudo apt install usbmuxd libimobiledevice-utils</code>
+                            </p>
+                          )}
+                          <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                            <a
+                              href={pcOs === 'windows' ? (downloads.sideloadlyWinUrl || 'https://sideloadly.io/#download') : pcOs === 'mac' ? (downloads.sideloadlyMacUrl || 'https://sideloadly.io/#download') : (downloads.sideloadlyLinuxUrl || 'https://sideloadly.io/#download')}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="cta-button-primary"
+                              style={{ padding: '0.5rem 1.1rem', fontSize: '0.8rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center' }}
+                            >
+                              <Download size={13} />
+                              <span>Download Sideloadly ({pcOs.charAt(0).toUpperCase() + pcOs.slice(1)})</span>
+                              <ExternalLink size={13} />
+                            </a>
+                            {pcOs === 'windows' && (
+                              <a href="https://www.apple.com/itunes/download/win64" target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.5rem 1rem', fontSize: '0.78rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center' }}>
+                                <Download size={12} /><span>iTunes (Apple, not MS Store)</span>
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="step-card">
+                        <div className="step-card-num"><div className="step-num-badge">02</div></div>
+                        <div className="step-card-body">
+                          <h3>Download the IPA file(s)</h3>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                            Download the IPA(s) you want to install on your PC. You can install <strong>SideStore</strong> (for future on-device management), the <strong>Game IPA</strong> (Online or Offline), or both.
+                          </p>
+                          <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                            <a href={downloads.iosSideStoreIpaUrl} target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.45rem 1rem', fontSize: '0.78rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center' }}>
+                              <Download size={12} /><span>SideStore .ipa</span>
+                            </a>
+                            {downloads.iosOnlineIpaUrl ? (
+                              <a href={downloads.iosOnlineIpaUrl} target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.45rem 1rem', fontSize: '0.78rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center', borderColor: 'rgba(56,189,248,0.4)', color: '#38bdf8' }}>
+                                <Wifi size={12} /><span>Online Game .ipa</span>
+                              </a>
+                            ) : (
+                              <a href={downloads.discordServerUrl} target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.45rem 1rem', fontSize: '0.78rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center' }}>
+                                <Wifi size={12} /><span>Online IPA → Discord</span>
+                              </a>
+                            )}
+                            <a href={downloads.iosGameIpaUrl} target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.45rem 1rem', fontSize: '0.78rem', display: 'inline-flex', gap: '0.4rem', alignItems: 'center', borderColor: 'rgba(168,85,247,0.4)', color: '#c084fc' }}>
+                              <HardDrive size={12} /><span>Offline Game .ipa</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="step-card">
+                        <div className="step-card-num"><div className="step-num-badge">03</div></div>
+                        <div className="step-card-body">
+                          <h3>Connect iPhone via USB</h3>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                            {pcOs === 'windows' && <>Plug iPhone into PC with USB cable. <strong>Unlock your iPhone</strong> and tap <strong>"Trust This Computer"</strong> if prompted. Open iTunes once to confirm it detects your device.</>}
+                            {pcOs === 'mac' && <>Plug iPhone into Mac with USB cable. <strong>Unlock your iPhone</strong> and tap <strong>"Trust This Computer"</strong> if prompted. Open Finder → your iPhone should appear in the sidebar.</>}
+                            {pcOs === 'linux' && <>Plug iPhone into PC with USB. Run <code style={{ background: 'rgba(255,255,255,0.08)', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>ideviceinfo</code> to confirm detection. Trust the computer on iPhone when prompted.</>}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="step-card">
+                        <div className="step-card-num"><div className="step-num-badge">04</div></div>
+                        <div className="step-card-body">
+                          <h3>Sideload with Sideloadly</h3>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                            1. Open <strong>Sideloadly</strong>.<br />
+                            2. Your iPhone should appear automatically in the device list at the top.<br />
+                            3. <strong>Sign in with your Apple ID</strong> (bottom-left field). Use a free Apple ID — no developer account needed.<br />
+                            4. Drag and drop the <strong>.ipa file</strong> into the IPA field (or click the IPA icon to browse).<br />
+                            5. Click <strong>Start</strong>. Sideloadly will sign and install the app on your iPhone.<br />
+                            6. If prompted for a <strong>2FA code</strong>, enter it (check your iPhone for the notification).
+                          </p>
+                          {pcOs === 'windows' && (
+                            <div className="step-callout-note" style={{ marginTop: '0.75rem' }}>
+                              <AlertTriangle size={13} style={{ display: 'inline', marginRight: '0.35rem', color: '#fbbf24' }} />
+                              <strong>Windows note:</strong> If Sideloadly cannot detect your iPhone, make sure iTunes is the Apple version (not from Microsoft Store) and restart both Sideloadly and iTunes.
+                            </div>
+                          )}
+                          {pcOs === 'linux' && (
+                            <div className="step-callout-note" style={{ marginTop: '0.75rem' }}>
+                              <AlertTriangle size={13} style={{ display: 'inline', marginRight: '0.35rem', color: '#fbbf24' }} />
+                              <strong>Linux note:</strong> Run Sideloadly as root or add your user to the <code>plugdev</code> group. Ensure <code>usbmuxd</code> is running: <code>sudo systemctl start usbmuxd</code>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="step-card">
+                        <div className="step-card-num"><div className="step-num-badge">05</div></div>
+                        <div className="step-card-body">
+                          <h3>Trust the Profile on iPhone</h3>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                            After installation, go to <strong>Settings → General → VPN &amp; Device Management</strong> → tap your Apple ID email under "Developer App" → tap <strong>Trust</strong> → confirm. Now open the app from your Home Screen!
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="step-card">
+                        <div className="step-card-num"><div className="step-num-badge">06</div></div>
+                        <div className="step-card-body">
+                          <h3>7-Day Refresh (PC Required)</h3>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6 }}>
+                            Free Apple developer certificates last <strong>7 days</strong>. To refresh: reconnect iPhone to PC → open Sideloadly → sign in → drag the same .ipa → click Start again (it reinstalls over itself, no data loss for Online). 
+                          </p>
+                          <div className="step-callout-note warning" style={{ marginTop: '0.75rem', borderColor: 'rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)' }}>
+                            <AlertTriangle size={13} style={{ display: 'inline', marginRight: '0.35rem', color: '#f87171' }} />
+                            <strong>Offline players:</strong> Re-sideloading may overwrite or reset your Offline game save data. <strong>Export your save slot before refreshing!</strong> Open the Offline launcher → find the save export option before reconnecting to PC.
+                          </div>
+                          <div style={{ marginTop: '0.75rem', padding: '0.7rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                            <Smartphone size={13} style={{ display: 'inline', marginRight: '0.4rem', color: '#818cf8' }} />
+                            <strong style={{ color: '#a5b4fc' }}>Tip:</strong> Install <strong>SideStore</strong> on your iPhone when Apple servers recover — then you can refresh with 1 tap in 1 second, no PC needed weekly!
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )
+              })()}
+
+              {/* Navigation Buttons */}
               <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <button
                   type="button"
@@ -2793,7 +2940,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-primary"
-                  onClick={() => { setIosTab('game'); scrollTo('#ios'); }}
+                  onClick={() => { setIosTab('game'); scrollTo('#iosgameinstall'); }}
                   style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                 >
                   <span>{t.ios_game_h || 'Install Game (.ipa)'} →</span>
@@ -2803,9 +2950,11 @@ export default function App() {
             </motion.div>
           )}
 
+
           {/* TAB CONTENT: Game IPA */}
           {iosTab === 'game' && (
             <motion.div
+              id="iosgameinstall"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
@@ -3982,7 +4131,7 @@ export default function App() {
                     />
                   </div>
 
-                  <div className="admin-field-group">
+                   <div className="admin-field-group">
                     <label className="admin-field-label">
                       <Apple size={14} color="#38bdf8" />
                       <span>SideStore .ipa URL</span>
@@ -3995,6 +4144,56 @@ export default function App() {
                       className="admin-field-input"
                     />
                   </div>
+
+                  {/* Sideloadly Downloads */}
+                  <div style={{ padding: '0.6rem 0.75rem', background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: '8px', marginBottom: '0.25rem' }}>
+                    <p style={{ fontSize: '0.75rem', color: '#818cf8', fontWeight: 700, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <Monitor size={12} /> Sideloadly Download URLs (per OS)
+                    </p>
+
+                    <div className="admin-field-group" style={{ marginBottom: '0.5rem' }}>
+                      <label className="admin-field-label">
+                        <Monitor size={13} color="#818cf8" />
+                        <span>Sideloadly — Windows URL</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={adminForm.sideloadlyWinUrl || ''}
+                        onChange={(e) => setAdminForm({ ...adminForm, sideloadlyWinUrl: e.target.value })}
+                        placeholder="https://sideloadly.io/SideloadlySetup.exe"
+                        className="admin-field-input"
+                      />
+                    </div>
+
+                    <div className="admin-field-group" style={{ marginBottom: '0.5rem' }}>
+                      <label className="admin-field-label">
+                        <Apple size={13} color="#818cf8" />
+                        <span>Sideloadly — macOS URL</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={adminForm.sideloadlyMacUrl || ''}
+                        onChange={(e) => setAdminForm({ ...adminForm, sideloadlyMacUrl: e.target.value })}
+                        placeholder="https://sideloadly.io/Sideloadly.dmg"
+                        className="admin-field-input"
+                      />
+                    </div>
+
+                    <div className="admin-field-group">
+                      <label className="admin-field-label">
+                        <Cpu size={13} color="#818cf8" />
+                        <span>Sideloadly — Linux URL</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={adminForm.sideloadlyLinuxUrl || ''}
+                        onChange={(e) => setAdminForm({ ...adminForm, sideloadlyLinuxUrl: e.target.value })}
+                        placeholder="https://sideloadly.io/Sideloadly.deb"
+                        className="admin-field-input"
+                      />
+                    </div>
+                  </div>
+
 
                   <div className="admin-field-group">
                     <label className="admin-field-label">
