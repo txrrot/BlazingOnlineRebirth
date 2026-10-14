@@ -463,13 +463,13 @@ export default function App() {
       id: 'on_stuck',
       cat: 'online',
       tag: 'Loading / Conn Error',
-      q: t.faq_on_stuck_q || 'Stuck on Loading Screen or Connection Error (2 Guaranteed Solutions)',
+      q: t.faq_on_stuck_q || 'Stuck on Loading Screen or Connection Error (100% Proven VPN Fix)',
       a:
         t.faq_on_stuck_a ||
-        'If one solution does not work, the other works 100%:<br /><br /><strong>Solution 1 (Change DNS):</strong> Set Primary DNS to <code>8.8.8.8</code> and Secondary DNS to <code>8.8.4.4</code> in your Wi-Fi network settings (Google Public DNS).<br /><br /><strong>Solution 2 (Free VPN — First Time Fix):</strong> Download a free VPN (e.g. ProtonVPN, Windscribe, TunnelBear) and connect to <strong>Netherlands</strong>, <strong>USA</strong>, or <strong>Japan</strong>.<br /><em>Crucial Note:</em> You only need the VPN the <strong>first time</strong> to get past this error! Once you enter the game with the VPN, you should be able to enter without VPN next times.',
+        'A connection error or loading hang is caused by mobile carrier / ISP routing blocks to the private server.<br /><br /><strong>100% Guaranteed Fix with Free VPN (First Time Only):</strong><br />1. Download a free VPN such as <strong>Proton VPN</strong> (Play Store / App Store).<br />2. Connect to a server in <strong>Netherlands</strong>, <strong>USA</strong>, or <strong>Japan</strong>.<br />3. Launch the game with the VPN connected until you reach the main menu / lobby.<br />4. Exit the game, <strong>disconnect the VPN</strong>, and reopen the game.<br /><br /><em>Crucial Note:</em> You only need the VPN the <strong>first time</strong> to complete the initial handshake! Once you enter the game with the VPN, you will be able to launch without VPN in all future sessions!',
       tip:
         t.faq_on_stuck_tip ||
-        'If DNS change does not resolve it on your provider, connecting to Netherlands, USA, or Japan VPN bypasses the block 100%. After reaching the game menu, you can play without VPN on future launches.',
+        'Connecting to a Netherlands, USA, or Japan VPN bypasses ISP blocks 100%. After reaching the game menu the first time, you can play without VPN on future launches.',
     },
     {
       id: 'on2',
@@ -1505,7 +1505,7 @@ export default function App() {
                   <FormattedText
                     text={
                       t.upd_on_stuck_tip ||
-                      '<strong>Stuck on loading or Connection Error?</strong> Two 100% fixes: <strong>1)</strong> Set DNS to Primary <code>8.8.8.8</code> and Secondary <code>8.8.4.4</code>. <strong>2)</strong> Or use a free VPN connected to <em>Netherlands, USA, or Japan</em>. Once you enter the game with the VPN the first time, you will be able to launch without VPN in all future sessions!'
+                      '<strong>Stuck on loading or Connection Error?</strong> 100% Guaranteed Fix: Use a free VPN (like <strong>Proton VPN</strong>) connected to <em>Netherlands, USA, or Japan</em>. You only need the VPN <strong>the first time</strong> for the initial handshake — once inside the menu, disconnect the VPN and you will be able to launch without VPN in all future sessions!'
                     }
                   />
                 </div>
@@ -3854,7 +3854,7 @@ export default function App() {
                     <FormattedText
                       text={
                         t.upd_on_stuck_tip ||
-                        '<strong>Stuck on loading or Connection Error?</strong> Two 100% fixes: <strong>1)</strong> Set DNS to Primary <code>8.8.8.8</code> and Secondary <code>8.8.4.4</code>. <strong>2)</strong> Or use a free VPN connected to <em>Netherlands, USA, or Japan</em> (only needed the first time to enter).'
+                        '<strong>Stuck on loading or Connection Error?</strong> 100% Guaranteed Fix: Use a free VPN (like <strong>Proton VPN</strong>) connected to <em>Netherlands, USA, or Japan</em>. You only need the VPN <strong>the first time</strong> for the initial handshake — once inside the menu, disconnect the VPN and you will be able to launch without VPN in all future sessions!'
                       }
                     />
                   </div>
