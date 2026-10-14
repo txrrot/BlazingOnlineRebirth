@@ -1905,7 +1905,7 @@ export default function App() {
                     onClick={() => {
                       setFaqCategory('offline');
                       setOpenFaqs((prev) => ({ ...prev, off_android12_crash: true }));
-                      scrollTo('#fixes');
+                      setTimeout(() => scrollTo('#faq-off_android12_crash'), 100);
                     }}
                     style={{
                       padding: '0.45rem 1rem',
@@ -3526,7 +3526,7 @@ export default function App() {
             {filteredFaqs.map((faq) => {
               const isOpen = !!openFaqs[faq.id]
               return (
-                <div key={faq.id} className={`faq-item-card ${isOpen ? 'open' : ''}`}>
+                <div key={faq.id} id={`faq-${faq.id}`} className={`faq-item-card ${isOpen ? 'open' : ''}`}>
                   <button
                     type="button"
                     className="faq-item-header"
