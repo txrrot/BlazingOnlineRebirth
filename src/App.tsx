@@ -139,6 +139,7 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [activeChapter, setActiveChapter] = useState('online')
   const [isScrolled, setIsScrolled] = useState(false)
+  const [showVMGuide, setShowVMGuide] = useState(true)
 
   // Dynamic Downloads State
   const [downloads, setDownloads] = useState<DownloadsConfig>(DEFAULT_DOWNLOADS)
@@ -1606,6 +1607,27 @@ export default function App() {
               <span className="compat-badge android"><Smartphone size={12} /> {t.off_badge_android || 'Android & PC Emulators (APK)'}</span>
               <button
                 type="button"
+                className="compat-badge android"
+                onClick={() => {
+                  setShowVMGuide(true);
+                  scrollTo('#offline-android12');
+                }}
+                style={{
+                  cursor: 'pointer',
+                  border: '1px solid rgba(239, 68, 68, 0.45)',
+                  background: 'rgba(239, 68, 68, 0.15)',
+                  color: '#fca5a5',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                <Cpu size={12} />
+                <span>{t.off_badge_android12 || 'Android 12+ Guide (Virtual Master) ↓'}</span>
+              </button>
+              <button
+                type="button"
                 className="compat-badge ios"
                 onClick={() => scrollTo('#ios')}
                 style={{
@@ -1637,6 +1659,74 @@ export default function App() {
               }
               as="p"
             />
+          </div>
+
+          {/* Android 12+ Users Alert / Redirect Banner */}
+          <div
+            className="warning-strip-card"
+            style={{
+              marginBottom: '1.75rem',
+              borderColor: 'rgba(239, 68, 68, 0.45)',
+              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(20, 20, 32, 0.9) 100%)',
+            }}
+          >
+            <div className="warning-icon-wrapper" style={{ color: '#f87171' }}>
+              <Cpu size={26} />
+            </div>
+            <div style={{ width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                <h4 style={{ color: '#fca5a5', fontWeight: 700, fontSize: '0.975rem', margin: 0 }}>
+                  {t.off_android12_top_title || 'Running Android 12, 13, 14, or 15? Full Setup Guide Available'}
+                </h4>
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    color: '#f87171',
+                    background: 'rgba(239, 68, 68, 0.22)',
+                    border: '1px solid rgba(239, 68, 68, 0.4)',
+                    padding: '0.2rem 0.55rem',
+                    borderRadius: '4px',
+                    fontWeight: 700,
+                  }}
+                >
+                  Android 12+ Guide
+                </span>
+              </div>
+              <FormattedText
+                text={
+                  t.off_android12_top_desc ||
+                  'On Android 12+, new system security blocks the launcher from updating and installing the offline game directly. We created a <strong>complete, dedicated guide</strong> below using <strong>Virtual Master + Shizuku</strong>. You can install the launcher on your phone, import it directly into the VM, and play without any crashes.'
+                }
+                as="p"
+                style={{ fontSize: '0.85rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+              />
+              <div style={{ marginTop: '0.85rem' }}>
+                <button
+                  type="button"
+                  className="cta-button-primary"
+                  onClick={() => {
+                    setShowVMGuide(true);
+                    scrollTo('#offline-android12');
+                  }}
+                  style={{
+                    padding: '0.55rem 1.25rem',
+                    fontSize: '0.825rem',
+                    background: 'linear-gradient(135deg, #ef4444, #f97316)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(239, 68, 68, 0.35)',
+                  }}
+                >
+                  <Cpu size={15} />
+                  <span>{t.off_android12_top_btn || 'Jump to Android 12+ Virtual Master Guide ↓'}</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* iOS Users Alert / Redirect Banner */}
@@ -1903,9 +1993,8 @@ export default function App() {
                     type="button"
                     className="action-tag-btn"
                     onClick={() => {
-                      setFaqCategory('offline');
-                      setOpenFaqs((prev) => ({ ...prev, off_android12_crash: true }));
-                      setTimeout(() => scrollTo('#faq-off_android12_crash'), 100);
+                      setShowVMGuide(true);
+                      scrollTo('#offline-android12');
                     }}
                     style={{
                       padding: '0.45rem 1rem',
@@ -1920,12 +2009,271 @@ export default function App() {
                     }}
                   >
                     <Wrench size={13} />
-                    <span>{t.off_android12_warn_btn || 'See Virtual Master + Shizuku Step-by-Step Guide in Ch. 06 →'}</span>
+                    <span>{t.off_android12_warn_btn || 'See Dedicated Android 12+ Virtual Master Guide ↓'}</span>
                   </button>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* ── DEDICATED SECTION: VIRTUAL MASTER + SHIZUKU GUIDE (Android 12+ Fix) ── */}
+          {showVMGuide && (
+            <div
+              id="offline-android12"
+              style={{
+                marginTop: '2.5rem',
+                marginBottom: '2.5rem',
+                border: '1px solid rgba(239,68,68,0.4)',
+                borderRadius: '16px',
+                background: 'linear-gradient(135deg, rgba(20,10,10,0.97) 0%, rgba(30,12,12,0.95) 100%)',
+                boxShadow: '0 8px 32px rgba(239, 68, 68, 0.15)',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Guide Header */}
+              <div style={{
+                background: 'linear-gradient(90deg, rgba(239,68,68,0.25) 0%, rgba(251,146,60,0.15) 100%)',
+                borderBottom: '1px solid rgba(239,68,68,0.3)',
+                padding: '1.25rem 1.6rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.85rem',
+              }}>
+                <div style={{ background: 'rgba(239,68,68,0.25)', border: '1px solid rgba(239,68,68,0.5)', borderRadius: '10px', padding: '0.55rem', display: 'flex' }}>
+                  <Cpu size={22} style={{ color: '#fca5a5' }} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                    <h3 style={{ color: '#fca5a5', fontWeight: 800, fontSize: '1.15rem', margin: 0 }}>
+                      Android 12+ Full Setup Guide: Virtual Master + Shizuku
+                    </h3>
+                    <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.07em', background: 'rgba(239,68,68,0.25)', border: '1px solid rgba(239,68,68,0.45)', color: '#fca5a5', padding: '0.15rem 0.55rem', borderRadius: '4px', fontWeight: 700 }}>100% PROVEN FIX</span>
+                  </div>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', margin: '0.25rem 0 0' }}>
+                    Android 12, 13, 14, 15: Run the launcher inside a clean Android 9 environment to bypass installer crashes and play offline seamlessly.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ padding: '1.5rem' }}>
+
+                {/* PHASE 1: SHIZUKU */}
+                <div style={{ marginBottom: '1.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                    <span style={{ background: 'rgba(251,146,60,0.2)', border: '1px solid rgba(251,146,60,0.4)', color: '#fb923c', fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.06em', padding: '0.2rem 0.6rem', borderRadius: '20px', textTransform: 'uppercase' }}>PHASE 1 of 4</span>
+                    <span style={{ color: '#fb923c', fontWeight: 700, fontSize: '0.95rem' }}>Install &amp; Activate Shizuku</span>
+                  </div>
+                  <div className="steps-timeline-stack" style={{ gap: '0.7rem' }}>
+                    {/* VM Step 1 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(251,146,60,0.25)', color: '#fb923c', border: '1px solid rgba(251,146,60,0.4)' }}>1</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Download &amp; Install Shizuku from Google Play</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0.6rem' }}>
+                          Open <strong>Google Play Store</strong> → search <strong>Shizuku</strong> → Install. It's free and completely safe, developed by RikkaApps.
+                        </p>
+                        <a href="https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api" target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <ArrowUpRight size={13} />
+                          <span>Shizuku on Google Play</span>
+                        </a>
+                      </div>
+                    </div>
+                    {/* VM Step 2 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(251,146,60,0.25)', color: '#fb923c', border: '1px solid rgba(251,146,60,0.4)' }}>2</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Enable Wireless Debugging (Developer Options)</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
+                          <strong>Settings → About Phone</strong> → tap <em>Build Number</em> 7 times until <em>"You are now a developer!"</em> appears.<br />
+                          Then go to: <strong>Settings → Developer Options → Wireless Debugging → Enable</strong> (keep this screen ready).
+                        </p>
+                      </div>
+                    </div>
+                    {/* VM Step 3 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(251,146,60,0.25)', color: '#fb923c', border: '1px solid rgba(251,146,60,0.4)' }}>3</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Pair &amp; Start Shizuku via Wireless Debugging</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
+                          In Wireless Debugging → tap <em>Pair device with pairing code</em>.<br />
+                          Enter the 6-digit code in Shizuku's pairing notification.<br />
+                          Open <strong>Shizuku app</strong> → tap <strong>"Start"</strong> → it will show <strong style={{ color: '#4ade80' }}>"Shizuku is running"</strong> with a green indicator. ✅<br />
+                          <em>Note: Shizuku is only needed during the initial VM creation below. Once the VM exists, you never need Shizuku running to play!</em>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PHASE 2: VIRTUAL MASTER */}
+                <div style={{ marginBottom: '1.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                    <span style={{ background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.4)', color: '#818cf8', fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.06em', padding: '0.2rem 0.6rem', borderRadius: '20px', textTransform: 'uppercase' }}>PHASE 2 of 4</span>
+                    <span style={{ color: '#818cf8', fontWeight: 700, fontSize: '0.95rem' }}>Install Virtual Master &amp; Create Android 9 VM</span>
+                  </div>
+                  <div className="steps-timeline-stack" style={{ gap: '0.7rem' }}>
+                    {/* VM Step 4 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(99,102,241,0.25)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.4)' }}>4</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Download &amp; Install Virtual Master from Google Play</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0.6rem' }}>
+                          Search <strong>Virtual Master</strong> on Google Play Store and install it. It's a high-performance VM that runs legacy Android operating systems.
+                        </p>
+                        <a href="https://play.google.com/store/apps/details?id=com.vmos.vmmaster" target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <ArrowUpRight size={13} />
+                          <span>Virtual Master on Google Play</span>
+                        </a>
+                      </div>
+                    </div>
+                    {/* VM Step 5 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(99,102,241,0.25)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.4)' }}>5</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Open Virtual Master → Authorize Shizuku → Create Android 9 (Pie) VM</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
+                          Open Virtual Master → it prompts for <strong>Shizuku permission</strong> → tap <strong>Authorize</strong>.<br />
+                          Then tap <strong style={{ color: '#818cf8' }}>New Virtual Machine</strong> → select <strong style={{ color: '#4ade80' }}>Android 9 (Pie)</strong> as the system (CRITICAL: Do NOT select Android 11 or 12/13!). Confirm the download and creation (takes 1–2 minutes).
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PHASE 3: INSTALL & IMPORT LAUNCHER */}
+                <div style={{ marginBottom: '1.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                    <span style={{ background: 'rgba(168,85,247,0.2)', border: '1px solid rgba(168,85,247,0.4)', color: '#c084fc', fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.06em', padding: '0.2rem 0.6rem', borderRadius: '20px', textTransform: 'uppercase' }}>PHASE 3 of 4</span>
+                    <span style={{ color: '#c084fc', fontWeight: 700, fontSize: '0.95rem' }}>Install Launcher on Phone &amp; Import into VM</span>
+                  </div>
+                  <div className="steps-timeline-stack" style={{ gap: '0.7rem' }}>
+                    {/* VM Step 6 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(168,85,247,0.25)', color: '#c084fc', border: '1px solid rgba(168,85,247,0.4)' }}>6</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Install Sage Launcher ARM on your physical phone (or download APK)</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0.6rem' }}>
+                          Download the <strong>Sage Launcher ARM APK</strong>. You can install it directly on your normal phone right now! Even though the in-app updater crashes on Android 12+, the basic launcher application installs without any issues on your host phone. Having it installed on your phone lets you import it into the VM in Step 7 in just 1 tap.
+                        </p>
+                        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                          <a href={downloads.offlineLauncherArmUrl} target="_blank" rel="noopener noreferrer" className="cta-button-glass" style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                            <Smartphone size={13} />
+                            <span>Download Sage Launcher ARM APK</span>
+                            <ArrowUpRight size={13} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    {/* VM Step 7 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(168,85,247,0.25)', color: '#c084fc', border: '1px solid rgba(168,85,247,0.4)' }}>7</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Boot Android 9 VM &amp; Import Sage Launcher from your Phone</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
+                          Tap your Android 9 VM in Virtual Master to start it. Once inside the VM:<br />
+                          • <strong style={{ color: '#4ade80' }}>Method 1 (Instant Phone Import - Recommended):</strong> Tap the <strong>floating sidebar / drag icon</strong> at the edge of the VM screen → tap <strong>"Import"</strong> (or <strong>"Add Apps"</strong>) → switch to the <strong>"Phone Apps"</strong> tab → find <strong>Sage Launcher</strong> from the list of apps installed on your phone → tap <strong>"Import"</strong>. Virtual Master will instantly clone and install the launcher directly into your Android 9 VM in seconds!<br />
+                          • <strong>Method 2 (Import APK File):</strong> From the VM floating toolbar, tap <strong>"Import Files"</strong> / <strong>"Import APK"</strong> → select the downloaded <code>Sage Launcher ARM.apk</code> from your device's <code>Download</code> folder.<br />
+                          • <strong>Method 3 (VM Browser):</strong> Open the browser inside the VM → navigate to this website → download and install the ARM APK directly.<br />
+                          <em>(If Google Play Protect prompts with an unknown developer warning inside the VM, tap <strong>More info → Install anyway</strong>).</em>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PHASE 4: UPDATE & RUN GAME */}
+                <div style={{ marginBottom: '1.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                    <span style={{ background: 'rgba(34,197,94,0.2)', border: '1px solid rgba(34,197,94,0.4)', color: '#4ade80', fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.06em', padding: '0.2rem 0.6rem', borderRadius: '20px', textTransform: 'uppercase' }}>PHASE 4 of 4</span>
+                    <span style={{ color: '#4ade80', fontWeight: 700, fontSize: '0.95rem' }}>Update Launcher &amp; Install the Game inside the VM</span>
+                  </div>
+                  <div className="steps-timeline-stack" style={{ gap: '0.7rem' }}>
+                    {/* VM Step 8 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(34,197,94,0.25)', color: '#4ade80', border: '1px solid rgba(34,197,94,0.4)' }}>8</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Open Sage Launcher inside the VM → tap "Later" on update popup</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
+                          The launcher opens. An update popup appears immediately — tap <strong>Later</strong> (the version inside the VM must be switched to Beta channel first).
+                        </p>
+                      </div>
+                    </div>
+                    {/* VM Step 9 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(34,197,94,0.25)', color: '#4ade80', border: '1px solid rgba(34,197,94,0.4)' }}>9</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Switch to Beta channel → Check for Updates → Update Now</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
+                          Left menu (hamburger) → <strong>Updates</strong> → change channel from <em>Stable</em> to <strong>Beta</strong> → press <strong>Check for updates</strong> → press <strong>Update now</strong>.<br />
+                          The download finishes and <strong style={{ color: '#4ade80' }}>the system installer dialog opens properly without crashing!</strong> Press <strong>Install</strong> → wait for the updated launcher.
+                        </p>
+                      </div>
+                    </div>
+                    {/* VM Step 10 */}
+                    <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(34,197,94,0.25)', color: '#4ade80', border: '1px solid rgba(34,197,94,0.4)' }}>10</div></div>
+                      <div className="step-card-body">
+                        <h3 style={{ fontSize: '0.9rem' }}>Reopen Launcher inside VM → press Fix → install game data &amp; Play!</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
+                          After the launcher update, reopen it. Press <strong>Fix</strong> to download game data. The install prompt appears — press <strong>Install anyway</strong> if Play Protect shows up (may appear 1–2 times).<br />
+                          When the green <strong>Play</strong> button appears → tap it. 🎮 <strong style={{ color: '#4ade80' }}>You're in!</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* DEBUGGING SECTION */}
+                <div style={{
+                  background: 'rgba(251,146,60,0.07)',
+                  border: '1px solid rgba(251,146,60,0.25)',
+                  borderRadius: '10px',
+                  padding: '1.1rem 1.25rem',
+                  marginTop: '0.5rem',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
+                    <AlertTriangle size={15} style={{ color: '#fb923c' }} />
+                    <strong style={{ color: '#fb923c', fontSize: '0.88rem' }}>Debugging &amp; Troubleshooting — If something goes wrong</strong>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#fde68a' }}>🔸 Virtual Master says "Shizuku not found" or won't authorize:</strong><br />
+                      Make sure Shizuku is <strong>actively running</strong> (the notification shows "Shizuku is running") before opening Virtual Master. Restart Shizuku via Developer Options → Wireless Debugging if needed.
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#fde68a' }}>🔸 The launcher inside the VM still crashes on update:</strong><br />
+                      Confirm you selected <strong>Android 9 (Pie)</strong> and NOT Android 11 or 12/13 for the VM. Delete the VM and recreate it choosing Android 9 specifically.
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#fde68a' }}>🔸 "Import" or "Add Apps" not visible in Virtual Master:</strong><br />
+                      While the VM is running, look for the <strong>floating drag handle / circle</strong> at the edge of the screen → tap it → choose <strong>Import</strong> or <strong>Add Apps</strong> → select the <strong>Phone Apps</strong> tab to pick Sage Launcher directly.
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#fde68a' }}>🔸 VM boots but internet doesn't work inside:</strong><br />
+                      Close and re-enter the VM, or tap the floating toolbar → Power icon → <strong>Restart VM</strong>. Virtual Master shares your host phone's Wi-Fi / mobile data automatically.
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#fde68a' }}>🔸 Do I have to repeat Shizuku after restarting my phone?</strong><br />
+                      <strong>NO!</strong> Shizuku is only required during the one-time initial creation of the Android 9 VM. Once the VM is created, you never need Shizuku running again. Just open Virtual Master → launch the VM → play!
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#fde68a' }}>🔸 Play Protect blocks installation inside the VM:</strong><br />
+                      Inside the VM, if Play Protect shows a warning dialog, always tap <strong>More details</strong> (or More info) → <strong>Install anyway</strong>.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Success note */}
+                <div style={{ marginTop: '1.1rem', background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '9px', padding: '0.85rem 1.1rem', display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
+                  <CheckCircle2 size={16} style={{ color: '#4ade80', marginTop: '0.1rem', flexShrink: 0 }} />
+                  <p style={{ color: '#bbf7d0', fontSize: '0.84rem', lineHeight: 1.6, margin: 0 }}>
+                    <strong>Once the game runs inside the VM, you're all set.</strong> Open Virtual Master → boot the Android 9 instance → launch Sage Launcher from inside the VM every time you want to play. All game progress and data persist safely inside the VM between sessions!
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          )}
 
           {/* Feature 3-Cards */}
           <div className="feature-cards-grid">
@@ -3552,6 +3900,30 @@ export default function App() {
                           {faq.tip && (
                             <div className="faq-tip-box">
                               <strong>Helper Tip:</strong> {faq.tip}
+                            </div>
+                          )}
+                          {faq.id === 'off_android12_crash' && (
+                            <div style={{ marginTop: '0.85rem' }}>
+                              <button
+                                type="button"
+                                className="cta-button-primary"
+                                onClick={() => {
+                                  setShowVMGuide(true);
+                                  scrollTo('#offline-android12');
+                                }}
+                                style={{
+                                  padding: '0.45rem 1rem',
+                                  fontSize: '0.8rem',
+                                  background: 'linear-gradient(135deg, #ef4444, #f97316)',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.4rem',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                <Cpu size={14} />
+                                <span>{t.off_android12_top_btn || 'Jump to Android 12+ Virtual Master Guide in Ch. 03 ↑'}</span>
+                              </button>
                             </div>
                           )}
                         </div>
