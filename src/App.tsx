@@ -2082,10 +2082,33 @@ export default function App() {
                     <div className="step-card" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
                       <div className="step-card-num"><div className="step-num-badge" style={{ background: 'rgba(251,146,60,0.25)', color: '#fb923c', border: '1px solid rgba(251,146,60,0.4)' }}>2</div></div>
                       <div className="step-card-body">
-                        <h3 style={{ fontSize: '0.9rem' }}>Enable Wireless Debugging (Developer Options)</h3>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0' }}>
-                          <strong>Settings → About Phone</strong> → tap <em>Build Number</em> 7 times until <em>"You are now a developer!"</em> appears.<br />
-                          Then go to: <strong>Settings → Developer Options → Wireless Debugging → Enable</strong> (keep this screen ready).
+                        <h3 style={{ fontSize: '0.9rem' }}>Unlock Developer Options &amp; Enable Wireless Debugging</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0.3rem 0 0.5rem' }}>
+                          Developer Options are hidden by default on all Android phones. Unlocking them takes 10 seconds:
+                        </p>
+                        
+                        <div style={{
+                          background: 'rgba(0,0,0,0.28)',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(251,146,60,0.25)',
+                          padding: '0.75rem 0.9rem',
+                          marginBottom: '0.65rem',
+                          fontSize: '0.82rem',
+                          lineHeight: 1.6,
+                          color: 'var(--text-secondary)'
+                        }}>
+                          <strong style={{ color: '#fde68a', display: 'block', marginBottom: '0.3rem' }}>How to unlock Developer Options (by phone brand):</strong>
+                          • <strong>Samsung:</strong> Settings → <em>About phone</em> → <em>Software information</em> → tap <strong>"Build number" 7 times</strong> rapidly (enter your PIN if asked).<br />
+                          • <strong>Xiaomi / Redmi / POCO:</strong> Settings → <em>About phone</em> → tap <strong>"OS version"</strong> (or <em>"MIUI version"</em>) <strong>7 times</strong>.<br />
+                          • <strong>Pixel / Motorola / OnePlus / Others:</strong> Settings → <em>About phone</em> → scroll down to <strong>"Build number"</strong> → tap <strong>7 times</strong>.<br />
+                          <span style={{ color: '#4ade80', fontWeight: 600 }}>✓ A toast notification will appear: <em>"You are now a developer!"</em> (Ești dezvoltator!)</span>
+                        </div>
+
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.6, margin: '0' }}>
+                          <strong>Next, turn ON Wireless Debugging:</strong><br />
+                          1. Connect your phone to <strong>Wi-Fi</strong> (Wireless Debugging requires active Wi-Fi or phone hotspot).<br />
+                          2. Open <strong>Settings → Developer Options</strong> (located at the very bottom of Settings, or under <em>System</em> / <em>Additional settings</em> on Xiaomi).<br />
+                          3. Scroll down to <strong>Wireless Debugging</strong> (Depanare wireless) → toggle it <strong>ON</strong> → tap <em>"Allow" / "Always allow on this network"</em> (leave this screen open).
                         </p>
                       </div>
                     </div>
@@ -2236,6 +2259,10 @@ export default function App() {
                     <strong style={{ color: '#fb923c', fontSize: '0.88rem' }}>Debugging &amp; Troubleshooting — If something goes wrong</strong>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      <strong style={{ color: '#fde68a' }}>🔸 Can't find "Developer Options" or "Wireless Debugging"?</strong><br />
+                      Developer Options must be unlocked first by tapping <strong>Build number 7 times</strong> (see Step 2 above). Once unlocked, on Samsung / Pixel it is at the very bottom of Settings (or under <em>System</em>). On Xiaomi / POCO, look under <em>Settings → Additional settings → Developer options</em>. If Wireless Debugging is disabled / greyed out, make sure your phone is connected to <strong>Wi-Fi</strong>.
+                    </div>
                     <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '7px', padding: '0.7rem 0.9rem', fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                       <strong style={{ color: '#fde68a' }}>🔸 Virtual Master says "Shizuku not found" or won't authorize:</strong><br />
                       Make sure Shizuku is <strong>actively running</strong> (the notification shows "Shizuku is running") before opening Virtual Master. Restart Shizuku via Developer Options → Wireless Debugging if needed.
