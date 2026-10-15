@@ -36,6 +36,14 @@ import {
   Crown,
   TableProperties,
 } from 'lucide-react'
+import {
+  GuideModeToggle,
+  VideoGuide,
+  StepVideoModal,
+  type GuideMode,
+  type OpenVideoRequest,
+} from './components/StepVideo'
+import { hasVideoGuide } from './data/stepVideos'
 import { translations, type Lang } from './data/translations'
 import heroArt from './assets/blazing_hero_banner.jpg'
 import txrrotAvatar from './assets/txrrotdm.webp'
@@ -124,6 +132,22 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePlatform, setActivePlatform] = useState<'all' | 'android' | 'ios' | 'pc'>('all')
   const [iosTab, setIosTab] = useState<'nopc' | 'esign' | 'pair' | 'pc' | 'game'>('nopc')
+  const [videoModal, setVideoModal] = useState<OpenVideoRequest | null>(null)
+  const [guideMode, setGuideMode] = useState<GuideMode>(() => {
+    try {
+      return localStorage.getItem('blazing-guide-mode') === 'video' ? 'video' : 'text'
+    } catch {
+      return 'text'
+    }
+  })
+  const changeGuideMode = (mode: GuideMode) => {
+    setGuideMode(mode)
+    try {
+      localStorage.setItem('blazing-guide-mode', mode)
+    } catch {
+      /* storage indisponibil (ex: mod privat) — ignorăm */
+    }
+  }
   const [pcOs, setPcOs] = useState<'windows' | 'mac' | 'linux'>('windows')
   const [faqCategory, setFaqCategory] = useState<'all' | 'online' | 'offline' | 'ios' | 'emu'>('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -446,6 +470,18 @@ export default function App() {
     }
   }, [])
 
+  // Blochează scroll-ul paginii cât timp e deschis modalul video
+  useEffect(() => {
+    if (!videoModal) return
+    lenisRef.current?.stop()
+    const prevOverflow = document.documentElement.style.overflow
+    document.documentElement.style.overflow = 'hidden'
+    return () => {
+      document.documentElement.style.overflow = prevOverflow
+      lenisRef.current?.start()
+    }
+  }, [videoModal])
+
   // Close dropdown on outside click
   useEffect(() => {
     const handleOutsideClick = () => setLangOpen(false)
@@ -662,6 +698,54 @@ export default function App() {
       return matchCat && matchQuery
     })
   }, [faqCategory, searchQuery, allFaqs])
+
+  // Reutilizate în modul TEXT (pasul 05/06) și în modul VIDEO
+  const esignIpaButtons = (
+    <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <a
+                        href={downloads.iosOnlineIpaUrl || 'https://discord.gg/blazingrebirth'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-primary"
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', textDecoration: 'none' }}
+                      >
+                        <Download size={14} />
+                        <span>Download Online Mode IPA (Google Drive)</span>
+                      </a>
+                      <a
+                        href={downloads.iosGameIpaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-glass"
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', textDecoration: 'none' }}
+                      >
+                        <Download size={14} />
+                        <span>Download Offline Mode IPA (Google Drive)</span>
+                      </a>
+                    </div>
+  )
+
+  const esignDnsNotice = (
+    <div
+                      style={{
+                        marginTop: '1rem',
+                        padding: '0.9rem',
+                        borderRadius: '10px',
+                        background: 'rgba(245, 158, 11, 0.1)',
+                        border: '1px solid rgba(245, 158, 11, 0.35)',
+                        color: '#fde68a',
+                        fontSize: '0.825rem',
+                        lineHeight: 1.55,
+                      }}
+                    >
+                      <FormattedText
+                        text={
+                          t.ios_es_dns_notice ||
+                          '⚠️ <strong>Connection Tip:</strong> If the Online game shows a Connection Error or the official site won\'t load, make sure you do NOT have LocalDevVPN turned on! Also, if Khoindvn DNS ever blocks external domains, you can temporarily switch DNS to Automatic in <em>Settings → General → VPN & Device Management</em>.'
+                        }
+                      />
+                    </div>
+  )
 
   return (
     <div className="site-wrapper">
@@ -3363,6 +3447,9 @@ export default function App() {
                 </div>
               </div>
 
+              <GuideModeToggle mode={guideMode} onChange={changeGuideMode} lang={lang} />
+
+              {guideMode === 'text' || !hasVideoGuide('esign') ? (
               <div className="steps-timeline-stack">
                 {/* Step 01 */}
                 <div className="step-card">
@@ -3446,28 +3533,7 @@ export default function App() {
                       }
                       as="p"
                     />
-                    <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                      <a
-                        href={downloads.iosOnlineIpaUrl || 'https://discord.gg/blazingrebirth'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cta-button-primary"
-                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', textDecoration: 'none' }}
-                      >
-                        <Download size={14} />
-                        <span>Download Online Mode IPA (Google Drive)</span>
-                      </a>
-                      <a
-                        href={downloads.iosGameIpaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cta-button-glass"
-                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', textDecoration: 'none' }}
-                      >
-                        <Download size={14} />
-                        <span>Download Offline Mode IPA (Google Drive)</span>
-                      </a>
-                    </div>
+                    {esignIpaButtons}
                   </div>
                 </div>
 
@@ -3486,29 +3552,19 @@ export default function App() {
                       as="p"
                     />
 
-                    {/* Notice */}
-                    <div
-                      style={{
-                        marginTop: '1rem',
-                        padding: '0.9rem',
-                        borderRadius: '10px',
-                        background: 'rgba(245, 158, 11, 0.1)',
-                        border: '1px solid rgba(245, 158, 11, 0.35)',
-                        color: '#fde68a',
-                        fontSize: '0.825rem',
-                        lineHeight: 1.55,
-                      }}
-                    >
-                      <FormattedText
-                        text={
-                          t.ios_es_dns_notice ||
-                          '⚠️ <strong>Connection Tip:</strong> If the Online game shows a Connection Error or the official site won\'t load, make sure you do NOT have LocalDevVPN turned on! Also, if Khoindvn DNS ever blocks external domains, you can temporarily switch DNS to Automatic in <em>Settings → General → VPN & Device Management</em>.'
-                        }
-                      />
-                    </div>
+                    {esignDnsNotice}
                   </div>
                 </div>
               </div>
+              ) : (
+                <VideoGuide
+                  guideId="esign"
+                  lang={lang}
+                  onOpen={setVideoModal}
+                  extras={{ 'esign-3': esignIpaButtons }}
+                  footer={esignDnsNotice}
+                />
+              )}
             </motion.div>
           )}
 
@@ -4971,6 +5027,18 @@ export default function App() {
           <ArrowUpRight size={14} />
         </div>
       </a>
+
+      {/* STEP VIDEO MODAL */}
+      <AnimatePresence>
+        {videoModal && (
+          <StepVideoModal
+            key={videoModal.id}
+            request={videoModal}
+            lang={lang}
+            onClose={() => setVideoModal(null)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* ADMIN TERMINAL MODAL */}
       <AnimatePresence>
