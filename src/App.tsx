@@ -123,7 +123,7 @@ export default function App() {
   const [langOpen, setLangOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePlatform, setActivePlatform] = useState<'all' | 'android' | 'ios' | 'pc'>('all')
-  const [iosTab, setIosTab] = useState<'nopc' | 'pair' | 'pc' | 'game'>('nopc')
+  const [iosTab, setIosTab] = useState<'nopc' | 'esign' | 'pair' | 'pc' | 'game'>('nopc')
   const [pcOs, setPcOs] = useState<'windows' | 'mac' | 'linux'>('windows')
   const [faqCategory, setFaqCategory] = useState<'all' | 'online' | 'offline' | 'ios' | 'emu'>('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -131,6 +131,7 @@ export default function App() {
     on1: true,
     on_stuck: true,
     on_vpn_first_time: true,
+    ios_online_conn_fix: true,
     off1: true,
     off_stuck: true,
     off_android12_crash: true,
@@ -469,7 +470,7 @@ export default function App() {
       q: t.faq_on_stuck_q || 'Stuck on Loading Screen or Connection Error (100% Proven VPN Fix)',
       a:
         t.faq_on_stuck_a ||
-        'A connection error or loading hang is caused by mobile carrier / ISP routing blocks to the private server.<br /><br /><strong>100% Guaranteed Fix with Free VPN (First Time Only):</strong><br />1. Download a free VPN such as <strong>Proton VPN</strong> (Play Store / App Store).<br />2. Connect to a server in <strong>Netherlands</strong>, <strong>USA</strong>, or <strong>Japan</strong>.<br />3. Launch the game with the VPN connected until you reach the main menu / lobby.<br />4. Exit the game, <strong>disconnect the VPN</strong>, and reopen the game.<br /><br /><em>Crucial Note:</em> You only need the VPN the <strong>first time</strong> to complete the initial handshake! Once you enter the game with the VPN, you will be able to launch without VPN in all future sessions!',
+        'A connection error or loading hang is caused by mobile carrier / ISP routing blocks to the private server.<br /><br /><strong>100% Guaranteed Fix with Free VPN (First Time Only):</strong><br />1. Download a free VPN such as <strong>Proton VPN</strong> (Play Store / App Store).<br />2. Connect to a server in <strong>Netherlands</strong>, <strong>USA</strong>, or <strong>Japan</strong>.<br />3. Launch the game with the VPN connected until you reach the main menu / lobby.<br />4. Exit the game, <strong>disconnect the VPN</strong>, and reopen the game.<br /><br /><em>Crucial Note:</em> You only need the VPN the <strong>first time</strong> to complete the initial handshake! Once you enter the game with the VPN, you will be able to launch without VPN in all future sessions!<br /><br />🍎 <strong>Are you on iPhone / iPad?</strong> If you get a Connection Error on iOS or the official site won\'t load in Safari, the cause is 100% <strong>LocalDevVPN left running</strong> or the <strong>SideInstaller DNS profile</strong>! See our dedicated iOS Connection Error fix below.',
       tip:
         t.faq_on_stuck_tip ||
         'Connecting to a Netherlands, USA, or Japan VPN bypasses ISP blocks 100%. After reaching the game menu the first time, you can play without VPN on future launches.',
@@ -623,6 +624,19 @@ export default function App() {
       tip: t.faq_on_vpn_first_tip || 'Only the initial handshake requires the VPN; future launches run on your normal internet.',
     },
     {
+      id: 'ios_online_conn_fix',
+      cat: 'online',
+      cats: ['online', 'ios'],
+      tag: 'iOS Connection Error',
+      q: t.faq_ios_online_conn_q || 'iOS Online: "Connection Error" on game launch or official site blocked (100% Guaranteed Fix)',
+      a:
+        t.faq_ios_online_conn_a ||
+        'If you are getting a <strong>Connection Error</strong> in the Online game on iPhone/iPad or the official website refuses to load in Safari, the cause is 100% verified: trying to install SideStore or SideInstaller leaves background network tools active that cut off your connection to the game server and web!<br /><br /><strong>Why it cuts your connection:</strong><br />• <strong>LocalDevVPN is active:</strong> The local loopback VPN from SideStore is running in the background and hijacking network packets.<br />• <strong>SideInstaller DNS Profile:</strong> The anti-revoke DNS profile installed during setup is redirecting or blocking domain resolution.<br />• <strong>SideInstaller Enterprise App:</strong> The temporary enterprise profile remains on the device.<br /><br /><strong>The 100% Proven 3-Step Fix:</strong><br />1. <strong>Turn OFF LocalDevVPN:</strong> Open iPhone <em>Settings → VPN & Device Management</em> (or <em>Settings → VPN</em>) and toggle <strong>LocalDevVPN to OFF (Not Connected)</strong>! <em>(Reminder: LocalDevVPN is ONLY needed for 1 second when refreshing apps inside SideStore once a week, NEVER while actively playing the game!)</em><br />2. <strong>Delete SideInstaller DNS Profile (or set to Automatic):</strong> Go to <em>Settings → General → VPN & Device Management</em>. Look under <em>DNS</em>, tap the <strong>SideInstaller profile</strong>, and tap <strong>Remove Profile</strong> (or toggle DNS to <strong>Automatic</strong>).<br />3. <strong>Delete SideInstaller App from Home Screen:</strong> Touch and hold the <strong>SideInstaller</strong> app icon on your Home Screen → tap <em>Remove App → Delete App</em>. This removes the Enterprise profile which is completely obsolete once the game is installed.<br /><br /><strong>Result:</strong> Open Naruto Blazing Online now — it will connect 100% instantly, and access to the official website is fully restored!',
+      tip:
+        t.faq_ios_online_conn_tip ||
+        'LocalDevVPN must ONLY be connected when you tap the 7-day refresh timer in SideStore. While actually playing the game, LocalDevVPN MUST BE TURNED OFF!',
+    },
+    {
       id: 'emu1',
       cat: 'emu',
       tag: 'Emulator Pie64',
@@ -635,7 +649,10 @@ export default function App() {
   // Filtered FAQ list by category and search
   const filteredFaqs = useMemo(() => {
     return allFaqs.filter((faq) => {
-      const matchCat = faqCategory === 'all' || faq.cat === faqCategory
+      const matchCat =
+        faqCategory === 'all' ||
+        faq.cat === faqCategory ||
+        ((faq as any).cats && (faq as any).cats.includes(faqCategory))
       const query = searchQuery.toLowerCase().trim()
       const matchQuery =
         !query ||
@@ -2773,7 +2790,22 @@ export default function App() {
                     border: iosTab === 'nopc' ? '1px solid rgba(255,255,255,0.3)' : undefined,
                   }}
                 >
-                  <span>1. Method 1 (No PC)</span>
+                  <span>1. Method 1 (SideStore)</span>
+                </button>
+                <button
+                  type="button"
+                  className="cta-button-glass"
+                  onClick={() => setIosTab('esign')}
+                  style={{
+                    padding: '0.4rem 0.9rem',
+                    fontSize: '0.78rem',
+                    background: iosTab === 'esign' ? 'rgba(16,185,129,0.25)' : 'rgba(16,185,129,0.08)',
+                    border: '1px solid rgba(16,185,129,0.4)',
+                    color: '#34d399',
+                  }}
+                >
+                  <Sparkles size={12} />
+                  <span>2. Method 2 (ESign — No PC)</span>
                 </button>
                 <button
                   type="button"
@@ -2786,7 +2818,20 @@ export default function App() {
                     border: iosTab === 'pair' ? '1px solid rgba(255,255,255,0.3)' : undefined,
                   }}
                 >
-                  <span>2. Method 2 (PC)</span>
+                  <span>3. Pairing File</span>
+                </button>
+                <button
+                  type="button"
+                  className="cta-button-glass"
+                  onClick={() => setIosTab('pc')}
+                  style={{
+                    padding: '0.4rem 0.9rem',
+                    fontSize: '0.78rem',
+                    background: iosTab === 'pc' ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)',
+                    border: iosTab === 'pc' ? '1px solid rgba(255,255,255,0.3)' : undefined,
+                  }}
+                >
+                  <span>4. Method 3 (PC)</span>
                 </button>
                 <button
                   type="button"
@@ -2795,7 +2840,7 @@ export default function App() {
                   style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                 >
                   <Download size={13} />
-                  <span>3. Install Game (.ipa) Tab</span>
+                  <span>5. Install Game (.ipa) Tab</span>
                 </button>
               </div>
             </div>
@@ -2809,7 +2854,27 @@ export default function App() {
               onClick={() => setIosTab('nopc')}
             >
               <Smartphone size={15} />
-              <span>{t.ios_nopc_h || 'Method 1 — No PC (iOS 27)'}</span>
+              <span>{t.ios_nopc_h || 'Method 1 — SideStore (No PC)'}</span>
+            </button>
+            <button
+              type="button"
+              className={`ios-tab-btn ${iosTab === 'esign' ? 'active' : ''}`}
+              onClick={() => setIosTab('esign')}
+              style={{
+                borderColor: iosTab === 'esign' ? '#10b981' : undefined,
+              }}
+            >
+              <Sparkles size={15} style={{ color: '#10b981' }} />
+              <span>{t.ios_esign_tab_title || 'Method 2 — ESign (No PC / 100% Working)'}</span>
+              <span className="ios-tab-badge-esign">100% Working</span>
+            </button>
+            <button
+              type="button"
+              className={`ios-tab-btn ${iosTab === 'pc' ? 'active' : ''}`}
+              onClick={() => setIosTab('pc')}
+            >
+              <Monitor size={15} />
+              <span>{t.ios_pc_h || 'Method 3 — With PC (Sideloadly)'}</span>
             </button>
             <button
               type="button"
@@ -2818,14 +2883,6 @@ export default function App() {
             >
               <Key size={15} />
               <span>{t.ios_pair_h || 'Pairing File (iOS 18–26)'}</span>
-            </button>
-            <button
-              type="button"
-              className={`ios-tab-btn ${iosTab === 'pc' ? 'active' : ''}`}
-              onClick={() => setIosTab('pc')}
-            >
-              <Monitor size={15} />
-              <span>{t.ios_pc_h || 'Method 2 — With PC (iloader)'}</span>
             </button>
             <button
               type="button"
@@ -2897,12 +2954,29 @@ export default function App() {
                   <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
                     <button
                       type="button"
+                      className="cta-button-primary"
+                      onClick={() => setIosTab('esign')}
+                      style={{
+                        padding: '0.45rem 1rem',
+                        fontSize: '0.8rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        cursor: 'pointer',
+                        background: 'linear-gradient(135deg, #10b981, #059669)',
+                      }}
+                    >
+                      <Sparkles size={14} />
+                      <span>{t.ios_btn_switch_esign || 'Use ESign Method (No PC / 100% Working) →'}</span>
+                    </button>
+                    <button
+                      type="button"
                       className="cta-button-glass"
                       onClick={() => setIosTab('pc')}
                       style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }}
                     >
                       <Monitor size={14} />
-                      <span>Switch to Method 2 (PC Sideloadly) →</span>
+                      <span>{t.ios_btn_switch_pc || 'Switch to PC Method (Sideloadly) →'}</span>
                     </button>
                   </div>
                 </div>
@@ -3166,11 +3240,57 @@ export default function App() {
                     <FormattedText
                       text={
                         t.ios_s6_desc ||
-                        '1. Open <strong>Settings → General → VPN & Device Management</strong> → tap your personal Apple ID developer profile → tap <strong>Trust</strong>.<br />2. Remove the temporary SideInstaller DNS profile.<br />3. Keep LocalDevVPN installed — you need it connected when refreshing SideStore weekly.'
+                        '1. Open <strong>Settings → General → VPN & Device Management</strong> → tap your personal Apple ID developer profile → tap <strong>Trust</strong>.'
                       }
                       as="p"
                     />
-                    <div style={{ marginTop: '1rem' }}>
+
+                    {/* Unskippable High-Visibility Alert Box */}
+                    <div className="clean-dns-alert-box">
+                      <div className="clean-dns-alert-title">
+                        <AlertTriangle size={20} style={{ color: '#ffffff' }} />
+                        <span>{t.ios_s6_clean_alert_title || 'CRITICAL: NETWORK & DNS CLEANUP (DO NOT SKIP — FIXES CONNECTION ERROR)'}</span>
+                      </div>
+                      <div className="clean-dns-alert-content">
+                        <ul className="clean-dns-steps-list">
+                          <li>
+                            <span className="clean-dns-num-badge">1</span>
+                            <div>
+                              <FormattedText
+                                text={
+                                  t.ios_s6_clean_dns ||
+                                  '<strong>Remove SideInstaller DNS Profile (or set DNS to Automatic):</strong> Go to <em>Settings → General → VPN & Device Management → DNS</em> → delete the profile or set to <strong>Automatic</strong>. If left installed, it blocks the Online game and official website!'
+                                }
+                              />
+                            </div>
+                          </li>
+                          <li>
+                            <span className="clean-dns-num-badge">2</span>
+                            <div>
+                              <FormattedText
+                                text={
+                                  t.ios_s6_clean_vpn ||
+                                  '<strong>Turn OFF LocalDevVPN:</strong> Open <em>Settings → VPN</em> and ensure <strong>LocalDevVPN is turned OFF (Not Connected)</strong>! Leaving it ON cuts off connection to game servers and external websites.'
+                                }
+                              />
+                            </div>
+                          </li>
+                          <li>
+                            <span className="clean-dns-num-badge">3</span>
+                            <div>
+                              <FormattedText
+                                text={
+                                  t.ios_s6_clean_app ||
+                                  '<strong>Delete SideInstaller App from Home Screen:</strong> Long-press the <strong>SideInstaller</strong> icon → Delete App. Once SideStore is installed, SideInstaller and its Enterprise profile are no longer needed.'
+                                }
+                              />
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div style={{ marginTop: '1.25rem' }}>
                       <button
                         type="button"
                         className="cta-button-primary"
@@ -3180,6 +3300,211 @@ export default function App() {
                         <span>Next: Install Naruto Blazing Game IPA →</span>
                         <ArrowRight size={14} />
                       </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* TAB CONTENT: Method 2 (ESign — No PC Alternative) */}
+          {iosTab === 'esign' && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div
+                className="warning-strip-card"
+                style={{
+                  marginBottom: '1.75rem',
+                  borderColor: 'rgba(16, 185, 129, 0.45)',
+                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(10, 25, 20, 0.85) 100%)',
+                }}
+              >
+                <div className="warning-icon-wrapper" style={{ color: '#10b981' }}>
+                  <Sparkles size={24} />
+                </div>
+                <div style={{ width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                    <h4 style={{ color: '#6ee7b7', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>
+                      {t.ios_esign_tab_title || 'Method 2 — ESign (No PC / 100% Working)'}
+                    </h4>
+                    <span className="ios-tab-badge-esign">Direct on iPhone</span>
+                  </div>
+                  <FormattedText
+                    text={
+                      t.ios_esign_intro ||
+                      '100% On-Device sideloading using ESign and anti-revoke DNS. Recommended when SideInstaller experiences Apple server Error 80045 or won\'t install.'
+                    }
+                    as="p"
+                    style={{ fontSize: '0.85rem', lineHeight: 1.55, color: 'var(--text-secondary)' }}
+                  />
+                  <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                    <a
+                      href="https://khoindvn.io.vn"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cta-button-primary"
+                      style={{
+                        padding: '0.45rem 1rem',
+                        fontSize: '0.8rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        textDecoration: 'none',
+                        background: 'linear-gradient(135deg, #10b981, #059669)',
+                      }}
+                    >
+                      <ExternalLink size={14} />
+                      <span>{t.ios_btn_open_portal || 'Open Khoindvn ESign Portal →'}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="steps-timeline-stack">
+                {/* Step 01 */}
+                <div className="step-card">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">01</div>
+                  </div>
+                  <div className="step-card-body">
+                    <h3>{t.ios_es1_title || 'Install Khoindvn Anti-Revoke DNS'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_es1_desc ||
+                        '1. Open Safari on your iPhone/iPad and visit <strong>https://khoindvn.io.vn</strong> (or khoindvn.bio.link).<br />2. Tap on <strong>DNS Anti-Revoke</strong> and choose <strong>Allow</strong> to download the configuration profile.<br />3. Open iPhone <strong>Settings → Profile Downloaded</strong> (or <em>Settings → General → VPN & Device Management</em>).<br />4. Tap <strong>Install</strong> in the top-right corner, enter your passcode, and confirm installation.'
+                      }
+                      as="p"
+                    />
+                  </div>
+                </div>
+
+                {/* Step 02 */}
+                <div className="step-card">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">02</div>
+                  </div>
+                  <div className="step-card-body">
+                    <h3>{t.ios_es2_title || 'Install the ESign Application'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_es2_desc ||
+                        '1. Return to <strong>khoindvn.io.vn</strong> in Safari.<br />2. Scroll to the <strong>ESign</strong> section and tap on a working install link (e.g., ESign with active Enterprise certificate).<br />3. Tap <strong>Install</strong> when the iOS system prompt appears on your Home Screen.<br />4. Wait a few seconds for the ESign app icon to appear on your Home Screen.'
+                      }
+                      as="p"
+                    />
+                  </div>
+                </div>
+
+                {/* Step 03 */}
+                <div className="step-card">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">03</div>
+                  </div>
+                  <div className="step-card-body">
+                    <h3>{t.ios_es3_title || 'Trust Enterprise Developer Certificate'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_es3_desc ||
+                        '1. Open iPhone <strong>Settings → General → VPN & Device Management</strong>.<br />2. Look under the <strong>ENTERPRISE APP</strong> section and tap the certificate corresponding to ESign.<br />3. Tap <strong>Trust [Enterprise Name]</strong> and confirm Trust.<br /><em>Note:</em> If Developer Mode is required on iOS 16+, enable it in <em>Settings → Privacy & Security → Developer Mode</em>.'
+                      }
+                      as="p"
+                    />
+                  </div>
+                </div>
+
+                {/* Step 04 */}
+                <div className="step-card">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">04</div>
+                  </div>
+                  <div className="step-card-body">
+                    <h3>{t.ios_es4_title || 'Open ESign & Verify Certificate'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_es4_desc ||
+                        '1. Open the <strong>ESign</strong> app on your iPhone.<br />2. Go to the <strong>Manage</strong> (or Settings) tab at the bottom right.<br />3. Tap <strong>Certificate Management</strong>.<br />4. Ensure that the active certificate displays as <strong>Valid / Active</strong>. (Khoindvn certificates are pre-configured or downloadable from the same portal if an import is prompted).'
+                      }
+                      as="p"
+                    />
+                  </div>
+                </div>
+
+                {/* Step 05 */}
+                <div className="step-card">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">05</div>
+                  </div>
+                  <div className="step-card-body">
+                    <h3>{t.ios_es5_title || 'Download & Import Naruto Blazing IPA'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_es5_desc ||
+                        '1. Download either the <strong>Online Mode IPA</strong> or <strong>Offline Mode IPA</strong> from the Download buttons below.<br />2. In Safari, tap the Downloads icon (down arrow) and open the downloaded <code>.ipa</code> file in <strong>Files</strong>.<br />3. Share/Open the file into <strong>ESign</strong> (or open ESign → tap <strong>File / Import</strong> at top right and pick the <code>.ipa</code>).'
+                      }
+                      as="p"
+                    />
+                    <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <a
+                        href={downloads.iosOnlineIpaUrl || 'https://discord.gg/blazingrebirth'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-primary"
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', textDecoration: 'none' }}
+                      >
+                        <Download size={14} />
+                        <span>Download Online Mode IPA (Google Drive)</span>
+                      </a>
+                      <a
+                        href={downloads.iosGameIpaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cta-button-glass"
+                        style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem', textDecoration: 'none' }}
+                      >
+                        <Download size={14} />
+                        <span>Download Offline Mode IPA (Google Drive)</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 06 */}
+                <div className="step-card">
+                  <div className="step-card-num">
+                    <div className="step-num-badge">06</div>
+                  </div>
+                  <div className="step-card-body">
+                    <h3>{t.ios_es6_title || 'Signature & Direct Installation'}</h3>
+                    <FormattedText
+                      text={
+                        t.ios_es6_desc ||
+                        '1. In ESign, navigate to the <strong>Apps</strong> tab.<br />2. Tap on <strong>Naruto Blazing Rebirth</strong>.<br />3. Tap <strong>Signature (Sign)</strong>.<br />4. Keep default options and tap <strong>Signature</strong> at the bottom, then wait 10–20 seconds for signing.<br />5. When prompted, tap <strong>Install</strong>!<br />6. Return to your Home Screen — Naruto Blazing will install and you can open it directly!'
+                      }
+                      as="p"
+                    />
+
+                    {/* Notice */}
+                    <div
+                      style={{
+                        marginTop: '1rem',
+                        padding: '0.9rem',
+                        borderRadius: '10px',
+                        background: 'rgba(245, 158, 11, 0.1)',
+                        border: '1px solid rgba(245, 158, 11, 0.35)',
+                        color: '#fde68a',
+                        fontSize: '0.825rem',
+                        lineHeight: 1.55,
+                      }}
+                    >
+                      <FormattedText
+                        text={
+                          t.ios_es_dns_notice ||
+                          '⚠️ <strong>Connection Tip:</strong> If the Online game shows a Connection Error or the official site won\'t load, make sure you do NOT have LocalDevVPN turned on! Also, if Khoindvn DNS ever blocks external domains, you can temporarily switch DNS to Automatic in <em>Settings → General → VPN & Device Management</em>.'
+                        }
+                      />
                     </div>
                   </div>
                 </div>

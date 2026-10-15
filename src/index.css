@@ -2309,3 +2309,81 @@ html.lenis, html.lenis body {
   opacity: 0.6;
 }
 
+/* ---------- UNSKIPPABLE HIGH-VISIBILITY ALERT BOX (STEP 6 CLEANUP) ---------- */
+.clean-dns-alert-box {
+  margin-top: 1.25rem;
+  padding: 1.35rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.12) 100%);
+  border: 2px solid rgba(239, 68, 68, 0.7);
+  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.25), inset 0 0 16px rgba(239, 68, 68, 0.1);
+}
+
+.clean-dns-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.85rem;
+}
+
+.clean-dns-alert-content {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #ffffff;
+}
+
+.clean-dns-steps-list {
+  margin: 0.75rem 0 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.clean-dns-steps-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: #ffffff;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.clean-dns-num-badge {
+  background: #ef4444;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.clean-dns-steps-list li strong {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.ios-tab-badge-esign {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
