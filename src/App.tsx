@@ -35,7 +35,9 @@ import {
   Cpu,
   Crown,
   TableProperties,
+  Link2,
 } from 'lucide-react'
+import { SectionBgVideo } from './components/SectionBgVideo'
 import {
   GuideModeToggle,
   VideoGuide,
@@ -151,17 +153,7 @@ export default function App() {
   const [pcOs, setPcOs] = useState<'windows' | 'mac' | 'linux'>('windows')
   const [faqCategory, setFaqCategory] = useState<'all' | 'online' | 'offline' | 'ios' | 'emu'>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [openFaqs, setOpenFaqs] = useState<Record<string, boolean>>({
-    on1: true,
-    on_stuck: true,
-    on_vpn_first_time: true,
-    ios_online_conn_fix: true,
-    off1: true,
-    off_stuck: true,
-    off_android12_crash: true,
-    ios1: true,
-    ios_err80045: true,
-  })
+  const [openFaqs, setOpenFaqs] = useState<Record<string, boolean>>({})
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [activeChapter, setActiveChapter] = useState('online')
@@ -369,12 +361,12 @@ export default function App() {
   }
 
   // Lenis smooth scroll trigger + update URL hash for shareability
-  const scrollTo = (target: string) => {
+  const scrollTo = (target: string, customOffset = -70) => {
     setMobileMenuOpen(false)
     const runScroll = () => {
       const el = document.querySelector(target)
       if (el && lenisRef.current) {
-        lenisRef.current.scrollTo(el as HTMLElement, { offset: -70, duration: 1.2 })
+        lenisRef.current.scrollTo(el as HTMLElement, { offset: customOffset, duration: 1.2 })
       } else if (el) {
         el.scrollIntoView({ behavior: 'smooth' })
       }
@@ -392,33 +384,42 @@ export default function App() {
     }
   }
 
+  // Switch iOS Tab and sync URL hash
+  const switchIosTab = (tab: 'nopc' | 'esign' | 'pair' | 'pc' | 'game', andScroll = false) => {
+    setIosTab(tab)
+    const hashMap: Record<string, string> = {
+      nopc: '#ios-m1sidestore',
+      esign: '#ios-m2esign',
+      pc: '#ios-m3pc',
+      pair: '#ios-pairing',
+      game: '#ios-game',
+    }
+    const targetHash = hashMap[tab] || '#ios'
+    history.replaceState(null, '', targetHash)
+    if (andScroll) {
+      scrollTo('#ios-methods-target', -80)
+    }
+  }
+
+  // Copy full direct URL to clipboard with friendly toast
+  const copyDirectLink = (hash: string, label?: string) => {
+    const fullUrl = `${window.location.origin}${window.location.pathname}${hash}`
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      showToast(label ? `Link copiat: ${label} (${hash})` : `Link copiat: ${hash}`)
+    }).catch(() => {
+      showToast(`Link: ${fullUrl}`)
+    })
+  }
+
   // Smooth switch to iOS Game tab and scroll cleanly to Step 1 & download cards
   const goToIosGameInstall = () => {
-    setIosTab('game')
+    switchIosTab('game')
     setTimeout(() => {
-      scrollTo('#iosgameinstall')
+      scrollTo('#iosgameinstall', -80)
     }, 70)
   }
 
-  // On mount: if URL has a hash, scroll to that section after lenis is ready
-  useEffect(() => {
-    const hash = window.location.hash
-    if (hash === '#iosgameinstall') {
-      setIosTab('game')
-    }
-    if (hash) {
-      // Small delay to let Lenis initialize
-      const timer = setTimeout(() => {
-        const el = document.querySelector(hash)
-        if (el && lenisRef.current) {
-          lenisRef.current.scrollTo(el as HTMLElement, { offset: -70, duration: 1.2 })
-        } else if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-        }
-      }, 600)
-      return () => clearTimeout(timer)
-    }
-  }, [])
+
 
   // Initialize Lenis with buttery 60/120fps parameters
   useEffect(() => {
@@ -444,18 +445,64 @@ export default function App() {
       const scrollPos = window.scrollY
       setIsScrolled(scrollPos > 40)
 
-      // Active Chapter Detector + update URL hash for shareability
-      for (const ch of CHAPTERS) {
-        const el = document.getElementById(ch.id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 250 && rect.bottom >= 250) {
-            setActiveChapter(ch.id)
-            // Update URL hash silently (no scroll jump, no history stack pollution)
-            if (window.location.hash !== `#${ch.id}`) {
-              history.replaceState(null, '', `#${ch.id}`)
+      // When scrolled near the top of the page (Hero Section), clear any leftover section hash
+      if (scrollPos < 180) {
+        setActiveChapter('')
+        if (window.location.hash && window.location.hash !== '#admin') {
+          history.replaceState(null, '', window.location.pathname + window.location.search)
+        }
+        return
+      }
+
+      const currentHash = window.location.hash.toLowerCase()
+      const isIosSubHash = ['#ios-m1sidestore', '#ios-m2esign', '#ios-m3pc', '#ios-pairing', '#ios-game', '#iosgameinstall'].includes(currentHash)
+      const isVmSubHash = ['#offline-android12', '#android12', '#android-vm'].includes(currentHash)
+      const isFixesSubHash = currentHash.startsWith('#faq-') || currentHash.startsWith('#fixes-') || currentHash.startsWith('#troubleshooting-') || currentHash.startsWith('#troubleshoot-')
+
+      // Check if viewing Comparisons section or user has scrolled above it into Hero/Overview
+      const compEl = document.getElementById('comparisons')
+      let insideComparisons = false
+      if (compEl) {
+        const cRect = compEl.getBoundingClientRect()
+        if (cRect.top <= 250 && cRect.bottom >= 120) {
+          insideComparisons = true
+          setActiveChapter('')
+          if (window.location.hash !== '#comparisons') {
+            history.replaceState(null, '', '#comparisons')
+          }
+        } else if (cRect.top > 250) {
+          // Comparisons is below viewport line -> user is above in Hero / Warnings / Rebirth vs Revival
+          setActiveChapter('')
+          if (window.location.hash && window.location.hash !== '#admin') {
+            history.replaceState(null, '', window.location.pathname + window.location.search)
+          }
+          return
+        }
+      }
+
+      if (!insideComparisons) {
+        // Active Chapter Detector + update URL hash for shareability
+        for (const ch of CHAPTERS) {
+          const el = document.getElementById(ch.id)
+          if (el) {
+            const rect = el.getBoundingClientRect()
+            if (rect.top <= 250 && rect.bottom >= 250) {
+              setActiveChapter(ch.id)
+              // Don't wipe explicit sub-hashes if user is currently inside that chapter
+              if (ch.id === 'ios' && isIosSubHash) {
+                break
+              }
+              if (ch.id === 'offline' && isVmSubHash) {
+                break
+              }
+              if (ch.id === 'fixes' && isFixesSubHash) {
+                break
+              }
+              if (window.location.hash !== `#${ch.id}`) {
+                history.replaceState(null, '', `#${ch.id}`)
+              }
+              break
             }
-            break
           }
         }
       }
@@ -690,14 +737,219 @@ export default function App() {
         faq.cat === faqCategory ||
         ((faq as any).cats && (faq as any).cats.includes(faqCategory))
       const query = searchQuery.toLowerCase().trim()
-      const matchQuery =
-        !query ||
-        faq.q.toLowerCase().includes(query) ||
-        faq.a.toLowerCase().includes(query) ||
-        faq.tag.toLowerCase().includes(query)
-      return matchCat && matchQuery
+      if (!query) return matchCat
+      const fullText = `${faq.q} ${faq.a} ${faq.tag}`.toLowerCase()
+      const matchExact = fullText.includes(query)
+      const words = query.split(/\s+/).filter(Boolean)
+      const matchAllWords = words.length > 1 && words.every((w) => fullText.includes(w))
+      return matchCat && (matchExact || matchAllWords)
     })
   }, [faqCategory, searchQuery, allFaqs])
+
+  // Helper to construct shareable fixes hash from category and search query
+  const getFixesHash = (cat: 'all' | 'online' | 'offline' | 'ios' | 'emu', query: string) => {
+    const cleanQ = query
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+    const catAlias = cat === 'emu' ? 'emulator' : cat
+    if (cat === 'all' && !cleanQ) return '#fixes'
+    if (cat === 'all' && cleanQ) return `#fixes-${cleanQ}`
+    if (cat !== 'all' && !cleanQ) return `#fixes-${catAlias}`
+    return `#fixes-${catAlias}-${cleanQ}`
+  }
+
+  // Auto-sync address bar hash when searching/filtering in Fixes
+  useEffect(() => {
+    const curHash = window.location.hash.toLowerCase()
+    if (!curHash.startsWith('#fixes') && !curHash.startsWith('#troubleshoot') && !curHash.startsWith('#faq')) {
+      return
+    }
+    const timer = setTimeout(() => {
+      const newHash = getFixesHash(faqCategory, searchQuery)
+      if (window.location.hash.toLowerCase() !== newHash.toLowerCase()) {
+        history.replaceState(null, '', newHash)
+      }
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [faqCategory, searchQuery])
+
+  // Central Route Hash Handler for explicit hashtag sharing
+  const handleRouteHash = (rawHash?: string) => {
+    const hash = (rawHash ?? window.location.hash).trim().toLowerCase()
+    if (!hash || hash === '#' || hash === '#/') return
+
+    const clean = hash.replace(/^#\/?/, '')
+
+    // 1. iOS Methods & Tabs
+    if (clean === 'ios-m2esign' || clean === 'ios-esign' || clean === 'm2esign' || clean === 'esign') {
+      setActivePlatform('all')
+      setIosTab('esign')
+      history.replaceState(null, '', '#ios-m2esign')
+      setTimeout(() => scrollTo('#ios-methods-target', -80), 220)
+      return
+    }
+    if (clean === 'ios-m1sidestore' || clean === 'ios-sidestore' || clean === 'm1sidestore' || clean === 'sidestore') {
+      setActivePlatform('all')
+      setIosTab('nopc')
+      history.replaceState(null, '', '#ios-m1sidestore')
+      setTimeout(() => scrollTo('#ios-methods-target', -80), 220)
+      return
+    }
+    if (clean === 'ios-m3pc' || clean === 'ios-pc' || clean === 'm3pc' || clean === 'sideloadly') {
+      setActivePlatform('all')
+      setIosTab('pc')
+      history.replaceState(null, '', '#ios-m3pc')
+      setTimeout(() => scrollTo('#ios-methods-target', -80), 220)
+      return
+    }
+    if (clean === 'ios-pairing' || clean === 'ios-pair' || clean === 'pairing') {
+      setActivePlatform('all')
+      setIosTab('pair')
+      history.replaceState(null, '', '#ios-pairing')
+      setTimeout(() => scrollTo('#ios-methods-target', -80), 220)
+      return
+    }
+    if (clean === 'iosgameinstall' || clean === 'ios-game' || clean === 'ios-gameinstall') {
+      setActivePlatform('all')
+      setIosTab('game')
+      history.replaceState(null, '', '#iosgameinstall')
+      setTimeout(() => scrollTo('#iosgameinstall', -80), 220)
+      return
+    }
+
+    // 2. Comparisons Section
+    if (clean === 'comparisons' || clean === 'comparison' || clean === 'versions' || clean === 'matrix') {
+      history.replaceState(null, '', '#comparisons')
+      setTimeout(() => scrollTo('#comparisons', -80), 220)
+      return
+    }
+
+    // 3. Android 12+ Virtual Master Guide (Offset -180 so title is never cut off!)
+    if (clean === 'offline-android12' || clean === 'android12' || clean === 'android-vm' || clean === 'virtualmaster') {
+      setShowVMGuide(true)
+      history.replaceState(null, '', '#offline-android12')
+      setTimeout(() => scrollTo('#offline-android12', -180), 220)
+      return
+    }
+
+    // 4. Specific FAQ item by ID (e.g. #faq-on1 or #faq-ios_online_conn_fix)
+    if (clean.startsWith('faq-')) {
+      const faqId = clean.replace('faq-', '')
+      const foundFaq = allFaqs.find(f => f.id.toLowerCase() === faqId.toLowerCase())
+      if (foundFaq) {
+        setOpenFaqs((prev) => ({ ...prev, [foundFaq.id]: true }))
+        setTimeout(() => scrollTo(`#faq-${foundFaq.id}`, -110), 220)
+        return
+      }
+    }
+
+    // 5. Troubleshooter deep link with category filter and search query!
+    // Formats supported:
+    // - #fixes-ios-connection-error   -> cat: ios, query: "connection error"
+    // - #fixes-online-vpn            -> cat: online, query: "vpn"
+    // - #fixes-emulator-pie64        -> cat: emu, query: "pie64"
+    // - #fixes-offline-android12     -> cat: offline, query: "android12"
+    // - #fixes-ios                   -> cat: ios, query: ""
+    // - #fixes-connection-error      -> cat: all, query: "connection error"
+    if (clean.startsWith('fixes') || clean.startsWith('troubleshooting') || clean.startsWith('troubleshoot') || clean === 'faq') {
+      const match = clean.match(/^(?:fixes|troubleshooting|troubleshoot|faq)[-_/](.+)$/)
+      if (match) {
+        const rawParam = decodeURIComponent(match[1]).trim()
+        // Support -, +, _, and %20 as space separators
+        const tokens = rawParam.split(/[-_+/\s]+/).filter(Boolean)
+        const first = (tokens[0] || '').toLowerCase()
+
+        const categoryAliases: Record<string, 'all' | 'online' | 'offline' | 'ios' | 'emu'> = {
+          all: 'all',
+          online: 'online',
+          offline: 'offline',
+          ios: 'ios',
+          iphone: 'ios',
+          ipad: 'ios',
+          emu: 'emu',
+          emulator: 'emu',
+          emulators: 'emu',
+          pc: 'emu',
+          bluestacks: 'emu',
+        }
+
+        let cat: 'all' | 'online' | 'offline' | 'ios' | 'emu' = 'all'
+        let queryWords: string[] = []
+
+        if (categoryAliases[first]) {
+          cat = categoryAliases[first]
+          queryWords = tokens.slice(1)
+        } else {
+          cat = 'all'
+          queryWords = tokens
+        }
+
+        const queryStr = queryWords.join(' ')
+        setFaqCategory(cat)
+        setSearchQuery(queryStr)
+
+        if (queryStr) {
+          const targetQuery = queryStr.toLowerCase()
+          const words = targetQuery.split(/\s+/).filter(Boolean)
+          const newOpen: Record<string, boolean> = {}
+          let matchCount = 0
+
+          allFaqs.forEach((f) => {
+            const matchCat =
+              cat === 'all' ||
+              f.cat === cat ||
+              ((f as any).cats && (f as any).cats.includes(cat))
+            const fullText = `${f.q} ${f.a} ${f.tag}`.toLowerCase()
+            const matchExact = fullText.includes(targetQuery)
+            const matchAllWords = words.length > 1 && words.every((w) => fullText.includes(w))
+
+            if (matchCat && (matchExact || matchAllWords)) {
+              if (matchCount < 4) {
+                newOpen[f.id] = true
+                matchCount++
+              }
+            }
+          })
+
+          if (matchCount > 0) {
+            setOpenFaqs((prev) => ({ ...prev, ...newOpen }))
+          }
+        }
+
+        setTimeout(() => scrollTo('#fixes', -100), 220)
+        return
+      }
+
+      // Default #fixes
+      setTimeout(() => scrollTo('#fixes', -100), 220)
+      return
+    }
+
+    // 6. General Chapters & Section IDs
+    const el = document.getElementById(clean)
+    if (el) {
+      setTimeout(() => scrollTo(`#${clean}`, -70), 220)
+    }
+  }
+
+  // Handle URL hash on mount and on hashchange
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleRouteHash()
+    }, 450)
+
+    const onHashChange = () => {
+      handleRouteHash()
+    }
+    window.addEventListener('hashchange', onHashChange)
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('hashchange', onHashChange)
+    }
+  }, [])
 
   // Reutilizate în modul TEXT (pasul 05/06) și în modul VIDEO
   const esignIpaButtons = (
@@ -946,6 +1198,7 @@ export default function App() {
 
       {/* HERO SECTION */}
       <section id="hero" className="hero-section">
+        <SectionBgVideo src="/videos/bg/hero-bg.webm" opacity={0.24} />
         <div className="hero-ambient-layer">
           <div className="hero-glow-spot" />
           <div className="hero-grid-mesh" />
@@ -1261,12 +1514,22 @@ export default function App() {
       {/* =========================================================================
           ONLINE vs OFFLINE FEATURE COMPARISON
           ========================================================================= */}
-      <div className="online-offline-comparison-wrapper">
+      <div id="comparisons" className="online-offline-comparison-wrapper">
+        <SectionBgVideo src="/videos/bg/comparison-bg.webm" opacity={0.2} blendMode="screen" />
         <div className="differences-inner">
           <div className="differences-header">
-            <div className="chapter-meta-tag" style={{marginBottom: '0.5rem'}}>
+            <div className="chapter-meta-tag" style={{marginBottom: '0.65rem', display: 'inline-flex', alignItems: 'center', gap: '0.65rem'}}>
               <Wifi size={14} />
               <span>{t.oo_badge || 'ONLINE vs OFFLINE (VANILLA & ALL DATA)'}</span>
+              <button
+                type="button"
+                onClick={() => copyDirectLink('#comparisons', 'Comparisons')}
+                className="direct-link-copy-btn"
+                title="Copy direct link to Comparisons (/#comparisons)"
+              >
+                <Link2 size={11} />
+                <span>#comparisons</span>
+              </button>
             </div>
             <h2 className="differences-headline">
               {t.oo_title || 'Which Version is Right for You?'}
@@ -1483,6 +1746,7 @@ export default function App() {
           CHAPTER 01: IMPORTANT NOTES (Stealth Kurogane Archival Atmosphere)
           ========================================================================= */}
       <section id="notes" className="story-section section-notes">
+        <SectionBgVideo src="/videos/bg/notes-bg.webm" opacity={0.16} />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
@@ -1554,6 +1818,7 @@ export default function App() {
           CHAPTER 02: ONLINE MODE (Neon Chakra Blue Luminescence Atmosphere)
           ========================================================================= */}
       <section id="online" className="story-section section-online">
+        <SectionBgVideo src="/videos/bg/online-bg.webm" opacity={0.25} blendMode="screen" />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
@@ -1844,6 +2109,7 @@ export default function App() {
           CHAPTER 02: OFFLINE MODE (Solar Sage / Kyuubi Flame Amber Atmosphere)
           ========================================================================= */}
       <section id="offline" className="story-section section-offline">
+        <SectionBgVideo src="/videos/bg/offline-bg.webm" opacity={0.25} blendMode="screen" />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
@@ -1867,7 +2133,7 @@ export default function App() {
                 className="compat-badge android"
                 onClick={() => {
                   setShowVMGuide(true);
-                  scrollTo('#offline-android12');
+                  scrollTo('#offline-android12', -180);
                 }}
                 style={{
                   cursor: 'pointer',
@@ -1965,7 +2231,7 @@ export default function App() {
                   className="cta-button-primary"
                   onClick={() => {
                     setShowVMGuide(true);
-                    scrollTo('#offline-android12');
+                    scrollTo('#offline-android12', -180);
                   }}
                   style={{
                     padding: '0.55rem 1.25rem',
@@ -2251,7 +2517,7 @@ export default function App() {
                     className="action-tag-btn"
                     onClick={() => {
                       setShowVMGuide(true);
-                      scrollTo('#offline-android12');
+                      scrollTo('#offline-android12', -180);
                     }}
                     style={{
                       padding: '0.45rem 1rem',
@@ -2285,6 +2551,7 @@ export default function App() {
                 background: 'linear-gradient(135deg, rgba(20,10,10,0.97) 0%, rgba(30,12,12,0.95) 100%)',
                 boxShadow: '0 8px 32px rgba(239, 68, 68, 0.15)',
                 overflow: 'hidden',
+                scrollMarginTop: '180px',
               }}
             >
               {/* Guide Header */}
@@ -2305,6 +2572,15 @@ export default function App() {
                       Android 12+ Full Setup Guide: Virtual Master + Shizuku
                     </h3>
                     <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.07em', background: 'rgba(239,68,68,0.25)', border: '1px solid rgba(239,68,68,0.45)', color: '#fca5a5', padding: '0.15rem 0.55rem', borderRadius: '4px', fontWeight: 700 }}>100% PROVEN FIX</span>
+                    <button
+                      type="button"
+                      onClick={() => copyDirectLink('#offline-android12', 'Android 12+ VM Guide')}
+                      className="direct-link-copy-btn"
+                      title="Copy direct link (/#offline-android12)"
+                    >
+                      <Link2 size={11} />
+                      <span>#offline-android12</span>
+                    </button>
                   </div>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', margin: '0.25rem 0 0' }}>
                     Android 12, 13, 14, 15: Run the launcher inside a clean Android 9 environment to bypass installer crashes and play offline seamlessly.
@@ -2655,6 +2931,7 @@ export default function App() {
           CHAPTER 03: IOS SIDELOADING (Cupertino Silver & Lavender Violet Atmosphere)
           ========================================================================= */}
       <section id="ios" className="story-section section-ios">
+        <SectionBgVideo src="/videos/bg/ios-bg.webm" opacity={0.24} blendMode="screen" />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
@@ -2751,7 +3028,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('nopc')}
+                  onClick={() => switchIosTab('nopc', true)}
                   style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', background: iosTab === 'nopc' ? 'rgba(255,255,255,0.15)' : undefined }}
                 >
                   <span>iOS 27 (No-PC)</span>
@@ -2759,7 +3036,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('pair')}
+                  onClick={() => switchIosTab('pair', true)}
                   style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', background: iosTab === 'pair' ? 'rgba(255,255,255,0.15)' : undefined }}
                 >
                   <span>iOS 18–26 Pairing File</span>
@@ -2768,10 +3045,10 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('pc')}
+                  onClick={() => switchIosTab('pc', true)}
                   style={{ padding: '0.4rem 0.9rem', fontSize: '0.78rem', background: iosTab === 'pc' ? 'rgba(255,255,255,0.15)' : undefined }}
                 >
-                  <span>Method 2: PC Sideloadly</span>
+                  <span>Method 3: PC Sideloadly</span>
                   <ArrowRight size={12} />
                 </button>
               </div>
@@ -2866,7 +3143,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('nopc')}
+                  onClick={() => switchIosTab('nopc', true)}
                   style={{
                     padding: '0.4rem 0.9rem',
                     fontSize: '0.78rem',
@@ -2879,7 +3156,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('esign')}
+                  onClick={() => switchIosTab('esign', true)}
                   style={{
                     padding: '0.4rem 0.9rem',
                     fontSize: '0.78rem',
@@ -2894,7 +3171,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('pair')}
+                  onClick={() => switchIosTab('pair', true)}
                   style={{
                     padding: '0.4rem 0.9rem',
                     fontSize: '0.78rem',
@@ -2907,7 +3184,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('pc')}
+                  onClick={() => switchIosTab('pc', true)}
                   style={{
                     padding: '0.4rem 0.9rem',
                     fontSize: '0.78rem',
@@ -2915,7 +3192,7 @@ export default function App() {
                     border: iosTab === 'pc' ? '1px solid rgba(255,255,255,0.3)' : undefined,
                   }}
                 >
-                  <span>4. Method 3 (PC)</span>
+                  <span>3. Method 3 (PC)</span>
                 </button>
                 <button
                   type="button"
@@ -2931,11 +3208,11 @@ export default function App() {
           </div>
 
           {/* Interactive Method Tabs */}
-          <div className="ios-tab-selector">
+          <div className="ios-tab-selector" id="ios-methods-target">
             <button
               type="button"
               className={`ios-tab-btn ${iosTab === 'nopc' ? 'active' : ''}`}
-              onClick={() => setIosTab('nopc')}
+              onClick={() => switchIosTab('nopc')}
             >
               <Smartphone size={15} />
               <span>{t.ios_nopc_h || 'Method 1 — SideStore (No PC)'}</span>
@@ -2943,7 +3220,7 @@ export default function App() {
             <button
               type="button"
               className={`ios-tab-btn ${iosTab === 'esign' ? 'active' : ''}`}
-              onClick={() => setIosTab('esign')}
+              onClick={() => switchIosTab('esign')}
               style={{
                 borderColor: iosTab === 'esign' ? '#10b981' : undefined,
               }}
@@ -2955,7 +3232,7 @@ export default function App() {
             <button
               type="button"
               className={`ios-tab-btn ${iosTab === 'pc' ? 'active' : ''}`}
-              onClick={() => setIosTab('pc')}
+              onClick={() => switchIosTab('pc')}
             >
               <Monitor size={15} />
               <span>{t.ios_pc_h || 'Method 3 — With PC (Sideloadly)'}</span>
@@ -2963,7 +3240,7 @@ export default function App() {
             <button
               type="button"
               className={`ios-tab-btn ${iosTab === 'pair' ? 'active' : ''}`}
-              onClick={() => setIosTab('pair')}
+              onClick={() => switchIosTab('pair')}
             >
               <Key size={15} />
               <span>{t.ios_pair_h || 'Pairing File (iOS 18–26)'}</span>
@@ -2981,18 +3258,30 @@ export default function App() {
           {/* TAB CONTENT: Method 1 (No PC) */}
           {iosTab === 'nopc' && (
             <motion.div
+              id="ios-m1sidestore"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <FormattedText
-                text={
-                  t.ios_nopc_intro ||
-                  'Uses SideInstaller. Fully on-device on iOS 27. On iOS 18–26 you still need a pairing file generated once on a PC. Keep LocalDevVPN connected for the entire process.'
-                }
-                as="p"
-                style={{ marginBottom: '1.5rem', color: 'var(--text-secondary)' }}
-              />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                <FormattedText
+                  text={
+                    t.ios_nopc_intro ||
+                    'Uses SideInstaller. Fully on-device on iOS 27. On iOS 18–26 you still need a pairing file generated once on a PC. Keep LocalDevVPN connected for the entire process.'
+                  }
+                  as="p"
+                  style={{ color: 'var(--text-secondary)', margin: 0, flex: '1 1 280px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => copyDirectLink('#ios-m1sidestore', 'Method 1 (SideStore)')}
+                  className="direct-link-copy-btn"
+                  title="Copy direct link to Method 1 SideStore (/#ios-m1sidestore)"
+                >
+                  <Link2 size={11} />
+                  <span>#ios-m1sidestore</span>
+                </button>
+              </div>
 
               {/* Apple Server 80045 & 37% Stuck Outage Warning Banner */}
               <div
@@ -3394,16 +3683,41 @@ export default function App() {
           {/* TAB CONTENT: Method 2 (ESign — No PC Alternative) */}
           {iosTab === 'esign' && (
             <motion.div
+              id="ios-m2esign"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
+              {/* Credit banner for ESign method discoverers */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                padding: '0.55rem 1rem',
+                marginBottom: '1rem',
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.09)',
+                fontSize: '0.78rem',
+                color: 'var(--text-secondary)',
+              }}>
+                <Crown size={13} style={{ color: '#f59e0b', flexShrink: 0 }} />
+                <span>
+                  Method discovered &amp; tested by{' '}
+                  <strong style={{ color: 'var(--text-pure)' }}>@wintermuba</strong>
+                  {' '}&amp;{' '}
+                  <strong style={{ color: 'var(--text-pure)' }}>@im.shznkai</strong>
+                  {' '}— thanks for sharing it with the community! 🙏
+                </span>
+              </div>
+
               <div
                 className="warning-strip-card"
                 style={{
                   marginBottom: '1.75rem',
                   borderColor: 'rgba(16, 185, 129, 0.45)',
                   background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(10, 25, 20, 0.85) 100%)',
+
                 }}
               >
                 <div className="warning-icon-wrapper" style={{ color: '#10b981' }}>
@@ -3411,9 +3725,20 @@ export default function App() {
                 </div>
                 <div style={{ width: '100%' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                    <h4 style={{ color: '#6ee7b7', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>
-                      {t.ios_esign_tab_title || 'Method 2 — ESign (No PC / 100% Working)'}
-                    </h4>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                      <h4 style={{ color: '#6ee7b7', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>
+                        {t.ios_esign_tab_title || 'Method 2 — ESign (No PC / 100% Working)'}
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={() => copyDirectLink('#ios-m2esign', 'Method 2 (ESign)')}
+                        className="direct-link-copy-btn esign"
+                        title="Copy direct link to Method 2 ESign (/#ios-m2esign)"
+                      >
+                        <Link2 size={11} />
+                        <span>#ios-m2esign</span>
+                      </button>
+                    </div>
                     <span className="ios-tab-badge-esign">Direct on iPhone</span>
                   </div>
                   <FormattedText
@@ -3571,18 +3896,30 @@ export default function App() {
           {/* TAB CONTENT: Pairing File */}
           {iosTab === 'pair' && (
             <motion.div
+              id="ios-pairing"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <FormattedText
-                text={
-                  t.ios_pair_intro ||
-                  'Required only on <strong>iOS 18–26</strong> if you use SideInstaller without a full PC install. On <strong>iOS 27</strong> skip this. You only need a computer once; after that everything is on-device with LocalDevVPN.'
-                }
-                as="p"
-                style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}
-              />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                <FormattedText
+                  text={
+                    t.ios_pair_intro ||
+                    'Required only on <strong>iOS 18–26</strong> if you use SideInstaller without a full PC install. On <strong>iOS 27</strong> skip this. You only need a computer once; after that everything is on-device with LocalDevVPN.'
+                  }
+                  as="p"
+                  style={{ color: 'var(--text-secondary)', margin: 0, flex: '1 1 280px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => copyDirectLink('#ios-pairing', 'Pairing File')}
+                  className="direct-link-copy-btn"
+                  title="Copy direct link to Pairing File Guide (/#ios-pairing)"
+                >
+                  <Link2 size={11} />
+                  <span>#ios-pairing</span>
+                </button>
+              </div>
 
               <div className="steps-timeline-stack">
                 <div className="step-card">
@@ -3690,7 +4027,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('pc')}
+                  onClick={() => switchIosTab('pc', true)}
                   style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                 >
                   <span>{t.nav_jump_pc || 'Jump to PC Method (Sideloadly) →'}</span>
@@ -3700,17 +4037,29 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* TAB CONTENT: Method 2 (PC iloader) */}
+          {/* TAB CONTENT: Method 3 (PC Sideloadly) */}
           {iosTab === 'pc' && (
             <motion.div
+              id="ios-m3pc"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
               {/* Intro */}
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
-                Works on <strong>any iOS version</strong>. Perfect when Apple servers are down (Error 80045) — Sideloadly bypasses SideInstaller completely. PC needed only for first install and every 6–7 day refresh.
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                <p style={{ color: 'var(--text-secondary)', margin: 0, flex: '1 1 280px' }}>
+                  Works on <strong>any iOS version</strong>. Perfect when Apple servers are down (Error 80045) — Sideloadly bypasses SideInstaller completely. PC needed only for first install and every 6–7 day refresh.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => copyDirectLink('#ios-m3pc', 'Method 3 (PC)')}
+                  className="direct-link-copy-btn"
+                  title="Copy direct link to Method 3 PC (/#ios-m3pc)"
+                >
+                  <Link2 size={11} />
+                  <span>#ios-m3pc</span>
+                </button>
+              </div>
 
               {/* SideStore Reminder Banner */}
               <div style={{
@@ -3904,7 +4253,7 @@ export default function App() {
                 <button
                   type="button"
                   className="cta-button-glass"
-                  onClick={() => setIosTab('nopc')}
+                  onClick={() => switchIosTab('nopc', true)}
                   style={{ padding: '0.55rem 1.25rem', fontSize: '0.825rem' }}
                 >
                   <ArrowRight size={14} style={{ transform: 'rotate(180deg)' }} />
@@ -3933,6 +4282,18 @@ export default function App() {
               transition={{ duration: 0.3 }}
               style={{ scrollMarginTop: '80px' }}
             >
+              {/* Direct link button bar */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                <button
+                  type="button"
+                  onClick={() => copyDirectLink('#ios-game', 'Install Game (.ipa)')}
+                  className="direct-link-copy-btn"
+                  title="Copy direct link to Game IPA section (/#ios-game)"
+                >
+                  <Link2 size={11} />
+                  <span>#ios-game</span>
+                </button>
+              </div>
               {/* Online vs Offline selector cards */}
               <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.75rem', flexWrap: 'wrap' }}>
                 {/* Online card */}
@@ -4192,12 +4553,22 @@ export default function App() {
           CHAPTER 05: PC EMULATOR GUIDE — BlueStacks / LDPlayer / MuMu
           ========================================================================= */}
       <section id="emulator" className="story-section section-emulator">
+        <SectionBgVideo src="/videos/bg/emulator-bg.webm" opacity={0.22} blendMode="screen" />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
-            <div className="chapter-meta-tag">
+            <div className="chapter-meta-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem' }}>
               <Monitor size={14} />
               <span>CHAPTER 05 // DIGITAL ARENA</span>
+              <button
+                type="button"
+                onClick={() => copyDirectLink('#emulator', 'PC Emulator Guide')}
+                className="direct-link-copy-btn"
+                title="Copy direct link to PC Emulator Guide (/#emulator)"
+              >
+                <Link2 size={11} />
+                <span>#emulator</span>
+              </button>
             </div>
             <h2 className="section-headline">PC Emulator Guide</h2>
             <FormattedText
@@ -4397,12 +4768,22 @@ export default function App() {
           CHAPTER 06: FIXES & TROUBLESHOOTING (Tactical Terminal Crimson Atmosphere)
           ========================================================================= */}
       <section id="fixes" className="story-section section-fixes">
+        <SectionBgVideo src="/videos/bg/fixes-bg.webm" opacity={0.24} blendMode="normal" />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
-            <div className="chapter-meta-tag">
+            <div className="chapter-meta-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem' }}>
               <Wrench size={14} />
               <span>CHAPTER 06 // SHINOBI CODEX</span>
+              <button
+                type="button"
+                onClick={() => copyDirectLink('#fixes', 'Fixes & Troubleshooting')}
+                className="direct-link-copy-btn"
+                title="Copy direct link to Fixes & Troubleshooting (/#fixes)"
+              >
+                <Link2 size={11} />
+                <span>#fixes</span>
+              </button>
             </div>
             <h2 className="section-headline">{t.fix_title || 'Fixes & Troubleshooting'}</h2>
             <FormattedText
@@ -4425,7 +4806,51 @@ export default function App() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="faq-search-input"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                className="faq-search-clear-btn"
+                onClick={() => setSearchQuery('')}
+                title="Clear search"
+              >
+                <X size={15} />
+              </button>
+            )}
           </div>
+
+          {/* Active Filter & Share Bar */}
+          {(faqCategory !== 'all' || searchQuery.trim().length > 0) && (
+            <div className="fixes-share-bar">
+              <span className="fixes-share-label">Direct share:</span>
+              <button
+                type="button"
+                className="fixes-share-pill-btn"
+                onClick={() => {
+                  const targetHash = getFixesHash(faqCategory, searchQuery)
+                  copyDirectLink(targetHash, `Fix: ${targetHash}`)
+                }}
+                title="Click to copy direct shareable link for this filter & search"
+              >
+                <Link2 size={12} />
+                <span>Copy Link: {getFixesHash(faqCategory, searchQuery)}</span>
+              </button>
+              <button
+                type="button"
+                className="fixes-reset-pill-btn"
+                onClick={() => {
+                  setFaqCategory('all')
+                  setSearchQuery('')
+                  if (window.location.hash.startsWith('#fixes')) {
+                    history.replaceState(null, '', '#fixes')
+                  }
+                }}
+                title="Reset filters and search"
+              >
+                <X size={11} />
+                <span>Reset</span>
+              </button>
+            </div>
+          )}
 
           {/* Category Filter Chips */}
           <div className="faq-filter-chips">
@@ -4462,7 +4887,23 @@ export default function App() {
                       <span className="faq-tag-pill">{faq.tag}</span>
                       <span>{faq.q}</span>
                     </div>
-                    <ChevronDown size={18} className="faq-chevron" />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          copyDirectLink(`#faq-${faq.id}`, `FAQ: ${faq.q}`)
+                        }}
+                        className="direct-link-copy-btn"
+                        style={{ fontSize: '0.68rem', padding: '0.15rem 0.45rem', opacity: 0.7 }}
+                        title={`Copy direct link (/#faq-${faq.id})`}
+                      >
+                        <Link2 size={11} />
+                        <span>#{faq.id}</span>
+                      </span>
+                      <ChevronDown size={18} className="faq-chevron" />
+                    </div>
                   </button>
 
                   <AnimatePresence>
@@ -4487,7 +4928,7 @@ export default function App() {
                                 className="cta-button-primary"
                                 onClick={() => {
                                   setShowVMGuide(true);
-                                  scrollTo('#offline-android12');
+                                  scrollTo('#offline-android12', -180);
                                 }}
                                 style={{
                                   padding: '0.45rem 1rem',
@@ -4517,17 +4958,27 @@ export default function App() {
 
 
       {/* =========================================================================
-          CHAPTER 07: OFFICIAL VERIFIED LINKS (Emerald Trust Atmosphere)
+          CHAPTER 07: OFFICIAL VERIFIED LINKS + GAME GUIDE (Emerald Trust Atmosphere)
           ========================================================================= */}
       <section id="links" className="story-section section-links">
+        <SectionBgVideo src="/videos/bg/links-bg.webm" opacity={0.22} blendMode="screen" />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
-            <div className="chapter-meta-tag">
+            <div className="chapter-meta-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem' }}>
               <ShieldCheck size={14} />
               <span>CHAPTER 07 // VERIFIED CHANNELS</span>
+              <button
+                type="button"
+                onClick={() => copyDirectLink('#links', 'Official Links & Game Guide')}
+                className="direct-link-copy-btn"
+                title="Copy direct link to Official Links (/#links)"
+              >
+                <Link2 size={11} />
+                <span>#links</span>
+              </button>
             </div>
-            <h2 className="section-headline">{t.links_title || 'Official links'}</h2>
+            <h2 className="section-headline">{t.links_title || 'Official Links & Game Guide'}</h2>
             <FormattedText
               text={t.links_sub || 'Verified sources only'}
               as="p"
@@ -4535,83 +4986,299 @@ export default function App() {
             />
           </div>
 
-          <div className="verified-links-grid">
-            {/* Link 1: Official Site */}
-            <div className="link-access-card">
-              <div className="link-card-meta">
-                <h4>{t.link_site || 'Official site'}</h4>
-                <p>blazingonline.wiki</p>
+          {/* ── GAME GUIDE SPOTLIGHT CARD ─────────────────────────── */}
+          <div className="gameguide-spotlight-card">
+            <div className="gameguide-spotlight-header">
+              <div className="gameguide-badge-pill">
+                <BookOpen size={13} />
+                <span>{t.gameguide_badge || 'GAME GUIDE // OFFICIAL ENCYCLOPEDIA & COMPANION'}</span>
               </div>
-              <div className="link-actions-cluster">
-                <a
-                  href={downloads.officialSiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="open-link-pill"
-                >
-                  <span>Visit</span>
-                  <ArrowUpRight size={14} />
-                </a>
+              <div className="gameguide-title">{t.gameguide_title || 'Official Game Guide & Database'}</div>
+              <div className="gameguide-subtitle">{t.gameguide_desc || 'The official website contains all necessary game information:'}</div>
+            </div>
+
+            <div className="gameguide-features-grid">
+              <div className="gameguide-feat-card">
+                <div className="gameguide-feat-icon">🎯</div>
+                <div className="gameguide-feat-title">{t.gameguide_feat_banners_title || 'Current & Upcoming Banners'}</div>
+                <div className="gameguide-feat-desc">{t.gameguide_feat_banners_desc || 'Exact summon schedule for active and upcoming festival banners.'}</div>
+              </div>
+              <div className="gameguide-feat-card">
+                <div className="gameguide-feat-icon">⚔️</div>
+                <div className="gameguide-feat-title">{t.gameguide_feat_chars_title || 'Ninja Character Encyclopedia'}</div>
+                <div className="gameguide-feat-desc">{t.gameguide_feat_chars_desc || 'Smart filter: switch between current game units or the full character database.'}</div>
+              </div>
+              <div className="gameguide-feat-card">
+                <div className="gameguide-feat-icon">🗺️</div>
+                <div className="gameguide-feat-title">{t.gameguide_feat_missions_title || 'Missions & Farming Guide'}</div>
+                <div className="gameguide-feat-desc">{t.gameguide_feat_missions_desc || 'Complete mission catalog and exact drop locations for Ryo, Ramen, Scrolls & more.'}</div>
               </div>
             </div>
 
-            {/* Link 2: Download APK */}
-            <div className="link-access-card">
-              <div className="link-card-meta">
-                <h4>{t.link_apk || 'Download APK (Online)'}</h4>
-                <p>{t.link_apk_sub || 'Latest Game APK'}</p>
+            <div className="gameguide-cta-row">
+              <div className="gameguide-official-url-tag">
+                <Globe size={13} />
+                <span>blazingonline.wiki</span>
               </div>
-              <div className="link-actions-cluster">
-                <a
-                  href={downloads.onlineApkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="open-link-pill"
-                >
-                  <span>Download</span>
-                  <Download size={14} />
-                </a>
-              </div>
+              <a
+                href={downloads.officialSiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gameguide-primary-btn"
+              >
+                <BookOpen size={16} />
+                <span>{t.gameguide_btn || 'Open Game Guide (blazingonline.wiki)'}</span>
+                <ArrowUpRight size={16} />
+              </a>
             </div>
+          </div>
 
-            {/* Link 3: Discord Server */}
-            <div className="link-access-card">
-              <div className="link-card-meta">
-                <h4>Discord Server</h4>
-                <p>{t.link_discord_sub || 'Official server for co-op & announcements'}</p>
-              </div>
-              <div className="link-actions-cluster">
-                <a
-                  href={downloads.discordServerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="open-link-pill"
-                >
-                  <span>Join</span>
-                  <ExternalLink size={14} />
-                </a>
-              </div>
+          {/* ── LINK CATEGORY: GAME & COMMUNITY ───────────────────── */}
+          <div className="links-category-section">
+            <div className="links-category-header">
+              <Globe size={15} />
+              <span>{t.links_cat_game || 'Game & Community'}</span>
             </div>
-
-            {/* Link 4: SideInstaller */}
-            <div className="link-access-card">
-              <div className="link-card-meta">
-                <h4>{t.link_sideinstaller || 'SideInstaller (official)'}</h4>
-                <p>frizzlem.github.io/SideInstaller</p>
+            <div className="verified-links-grid">
+              {/* Official Site */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_site || 'Official Site & Game Guide'}</h4>
+                  <p>blazingonline.wiki</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.officialSiteUrl} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Visit</span><ArrowUpRight size={14} />
+                  </a>
+                </div>
               </div>
-              <div className="link-actions-cluster">
-                <a
-                  href="https://frizzlem.github.io/SideInstaller/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="open-link-pill"
-                >
-                  <span>Install</span>
-                  <Apple size={14} />
-                </a>
+              {/* Discord */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>Discord Server</h4>
+                  <p>{t.link_discord_sub || 'Official server for co-op & announcements'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.discordServerUrl} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Join</span><ExternalLink size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* Download APK */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_apk || 'Download APK (Online)'}</h4>
+                  <p>{t.link_apk_sub || 'Android & PC emulator game package'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.onlineApkUrl} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* iOS Online IPA */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_ios_ipa || 'iOS Game IPA (Online)'}</h4>
+                  <p>{t.link_ios_ipa_sub || 'Official IPA package for iPhone & iPad'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.iosGameIpaUrl} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* Offline ARM */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_offline_arm || 'Sage Launcher ARM (Android Phone)'}</h4>
+                  <p>{t.link_offline_arm_sub || 'Offline mode (Vanilla + All Data 1M pearls)'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.offlineLauncherArmUrl} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* Offline x86 */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_offline_x86 || 'Sage Launcher x86 (PC Emulator)'}</h4>
+                  <p>{t.link_offline_x86_sub || 'Offline mode for PC BlueStacks / LDPlayer'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.offlineLauncherX86Url} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* ── LINK CATEGORY: iOS SIDELOADING & TOOLS ────────────── */}
+          <div className="links-category-section">
+            <div className="links-category-header">
+              <Apple size={15} />
+              <span>{t.links_cat_ios || 'iOS Sideloading & Tools'}</span>
+            </div>
+
+            {/* Scam warning */}
+            <div className="warning-strip-card" style={{ marginBottom: '1rem' }}>
+              <div className="warning-icon-wrapper" style={{ color: 'var(--accent-rose)' }}>
+                <ShieldAlert size={20} />
+              </div>
+              <FormattedText
+                text={t.link_scam_warning || '<strong>Security:</strong> The domain <span class="scam-domain-blocked">sideinstaller.com</span> is a SCAM/FAKE site. The real SideInstaller is at <a class="inline-link" href="https://frizzlem.github.io/SideInstaller/" target="_blank" rel="noopener noreferrer">frizzlem.github.io/SideInstaller</a>.'}
+                as="p"
+              />
+            </div>
+
+            <div className="verified-links-grid">
+              {/* SideInstaller official */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_sideinstaller || 'SideInstaller (official)'}</h4>
+                  <p>frizzlem.github.io/SideInstaller</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://frizzlem.github.io/SideInstaller/" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Open</span><Apple size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* Khoindvn ESign Portal */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_khoindvn || 'Khoindvn Portal (ESign & DNS)'}</h4>
+                  <p>{t.link_khoindvn_sub || 'Free no-PC iOS sideloading method'} · khoindvn.io.vn</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://khoindvn.io.vn" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Open</span><ArrowUpRight size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* Khoindvn BioLink backup */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_khoindvn_backup || 'Khoindvn BioLink Backup'}</h4>
+                  <p>{t.link_khoindvn_backup_sub || 'Alternative portal mirror'} · bio.link/khoindvn</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://bio.link/khoindvn" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Open</span><ArrowUpRight size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* SideStore IPA */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_sidestore_ipa || 'SideStore IPA (Nightly Build)'}</h4>
+                  <p>{t.link_sidestore_ipa_sub || 'Official GitHub releases package'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.iosSideStoreIpaUrl} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* SideStore Pairing Docs */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_sidestore_docs || 'SideStore Pairing File Guide'}</h4>
+                  <p>{t.link_sidestore_docs_sub || 'Official documentation for pairing files'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://docs.sidestore.io/docs/getting-started/pairing-file" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Docs</span><ExternalLink size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* iDevicePair */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_idevicepair || 'iDevicePair (PC USB Tool)'}</h4>
+                  <p>{t.link_idevicepair_sub || 'Pairing file generator for Windows, Mac & Linux'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://github.com/iSH-App/iDevicePair/releases" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>GitHub</span><ExternalLink size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* Sideloadly */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_sideloadly || 'Sideloadly (PC / Mac)'}</h4>
+                  <p>{t.link_sideloadly_sub || 'Reliable PC USB sideload installer'} · sideloadly.io</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href={downloads.sideloadlyWinUrl} target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* iTunes */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_itunes || 'Apple iTunes 64-bit (Windows)'}</h4>
+                  <p>{t.link_itunes_sub || 'Official Apple USB drivers for Windows'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://www.apple.com/itunes/download/win64" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── LINK CATEGORY: ANDROID 12+ & PC EMULATION ─────────── */}
+          <div className="links-category-section">
+            <div className="links-category-header">
+              <Monitor size={15} />
+              <span>{t.links_cat_android_pc || 'Android 12+ & PC Emulation'}</span>
+            </div>
+            <div className="verified-links-grid">
+              {/* Shizuku */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_shizuku || 'Shizuku (Google Play)'}</h4>
+                  <p>{t.link_shizuku_sub || 'Wireless debugging bridge for Android 12+'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Play Store</span><ArrowUpRight size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* Virtual Master */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_vm || 'Virtual Master (Google Play)'}</h4>
+                  <p>{t.link_vm_sub || 'Android 9 VM to run offline Naruto Blazing'}</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://play.google.com/store/apps/details?id=com.vmos.vmospro" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Play Store</span><ArrowUpRight size={14} />
+                  </a>
+                </div>
+              </div>
+              {/* BlueStacks */}
+              <div className="link-access-card">
+                <div className="link-card-meta">
+                  <h4>{t.link_bluestacks || 'BlueStacks 5 (PC)'}</h4>
+                  <p>{t.link_bluestacks_sub || 'Recommended PC emulator (Pie64 instance)'} · bluestacks.com</p>
+                </div>
+                <div className="link-actions-cluster">
+                  <a href="https://www.bluestacks.com/" target="_blank" rel="noopener noreferrer" className="open-link-pill">
+                    <span>Download</span><Download size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
