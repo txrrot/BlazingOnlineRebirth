@@ -39,7 +39,6 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [isNearViewport, setIsNearViewport] = useState(false)
-  const [parallaxOffset, setParallaxOffset] = useState(0)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -55,6 +54,31 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
     (grayscale
       ? 'grayscale(100%) contrast(1.15) brightness(0.72)'
       : 'brightness(0.75)')
+
+  const syncPosition = () => {
+    const container = containerRef.current
+    const video = videoRef.current
+    if (!container || !video) return
+
+    const rect = container.getBoundingClientRect()
+    const windowH = window.innerHeight
+    // Video is 35vh taller than viewport, giving 35vh of travel room
+    const extraTravel = windowH * 0.35
+
+    let progress = 0
+    if (rect.height > windowH) {
+      // Content scrolls through section from rect.top = 0 to rect.bottom = windowH
+      const maxScroll = rect.height - windowH
+      progress = Math.max(0, Math.min(1, -rect.top / maxScroll))
+    } else {
+      // Section is shorter than 100vh
+      const totalDist = rect.height + windowH
+      progress = Math.max(0, Math.min(1, (windowH - rect.top) / totalDist))
+    }
+
+    const translateY = -progress * extraTravel
+    video.style.transform = `translate3d(-50%, ${translateY.toFixed(1)}px, 0)`
+  }
 
   // 1. Intersection Observer: only play when within 450px of viewport
   useEffect(() => {
@@ -85,30 +109,22 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
     return () => observer.disconnect()
   }, [])
 
-  // 2. Parallax scroll calculation: gentle subtle shift while section is visible
+  // 2. Parallax scroll: elements move fast, video pans proportionally from top to max bottom
   useEffect(() => {
     if (!isNearViewport) return
 
     let rafId: number
     const onScroll = () => {
-      rafId = requestAnimationFrame(() => {
-        const container = containerRef.current
-        if (!container) return
-        const rect = container.getBoundingClientRect()
-        const total = rect.height + window.innerHeight
-        const current = window.innerHeight - rect.top
-        const progress = Math.max(0, Math.min(1, current / total))
-        // Subtle shift from -35px to +35px
-        const offset = (progress - 0.5) * 70
-        setParallaxOffset(offset)
-      })
+      rafId = requestAnimationFrame(syncPosition)
     }
 
-    onScroll()
+    syncPosition()
     window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
     return () => {
       cancelAnimationFrame(rafId)
       window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
     }
   }, [isNearViewport])
 
@@ -119,6 +135,7 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
     if (videoRef.current && isNearViewport) {
       videoRef.current.load()
       videoRef.current.play().catch(() => {})
+      syncPosition()
     }
   }, [resolvedSrc, isNearViewport])
 
@@ -139,7 +156,7 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
       }}
       aria-hidden="true"
     >
-      {/* Viewport-pinned Sticky Frame: video NEVER exceeds 100vh or gets over-stretched */}
+      {/* Viewport-pinned Sticky Window: video NEVER distorts and stays 100vh frame */}
       <div
         style={{
           position: 'sticky',
@@ -157,9 +174,13 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
           playsInline
           preload="auto"
           src={resolvedSrc}
-          onLoadedData={() => setIsLoaded(true)}
+          onLoadedData={() => {
+            setIsLoaded(true)
+            syncPosition()
+          }}
           onCanPlay={() => {
             setIsLoaded(true)
+            syncPosition()
             if (isNearViewport) {
               videoRef.current?.play().catch(() => {})
             }
@@ -167,13 +188,14 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
           onError={() => setHasError(true)}
           style={{
             position: 'absolute',
-            top: '50%',
+            top: 0,
             left: '50%',
             minWidth: '100%',
-            minHeight: '115%',
+            minHeight: 'calc(100vh + 35vh)',
             width: '100%',
-            height: '115%',
-            transform: `translate(-50%, calc(-50% + ${parallaxOffset}px))`,
+            height: 'calc(100vh + 35vh)',
+            transform: 'translate3d(-50%, 0px, 0)',
+            willChange: 'transform',
             objectFit: 'cover',
             opacity: isLoaded ? opacity : 0,
             transition: 'opacity 0.6s ease-in-out',
@@ -184,7 +206,7 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
           <source src={resolvedSrc} type="video/webm" />
         </video>
 
-        {/* Protective deep contrast overlay */}
+        {/* Protective deep contrast overlay with edge dissolves */}
         <div
           className="section-video-overlay"
           style={{
@@ -192,7 +214,7 @@ export const SectionBgVideo: React.FC<SectionBgVideoProps> = ({
             inset: 0,
             background:
               overlayGradient ||
-              'radial-gradient(ellipse at 50% 50%, rgba(6, 8, 14, 0.45) 0%, rgba(5, 6, 10, 0.92) 100%)',
+              'linear-gradient(180deg, rgba(6, 8, 14, 0.95) 0%, transparent 120px, transparent calc(100% - 120px), rgba(6, 8, 14, 0.95) 100%), radial-gradient(ellipse at 50% 50%, rgba(6, 8, 14, 0.45) 0%, rgba(5, 6, 10, 0.92) 100%)',
             pointerEvents: 'none',
           }}
         />

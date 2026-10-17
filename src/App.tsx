@@ -1449,7 +1449,9 @@ export default function App() {
       {/* =========================================================================
           REBIRTH vs REVIVAL + ONLINE vs OFFLINE COMPARISON
           ========================================================================= */}
-      <div className="differences-section-wrapper">
+      <section id="comparisons" className="story-section differences-master-wrapper" style={{ padding: '4rem 1.5rem' }}>
+        <SectionBgVideo src="/videos/bg/comparison-bg.webm" opacity={0.22} blendMode="screen" />
+        <div className="differences-section-wrapper" style={{ border: 'none', background: 'transparent', padding: '0 0 3.5rem' }}>
         <div className="differences-inner">
           <div className="differences-header">
             <div className="chapter-meta-tag" style={{marginBottom: '0.5rem'}}>
@@ -1511,11 +1513,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* =========================================================================
-          ONLINE vs OFFLINE FEATURE COMPARISON
-          ========================================================================= */}
-      <div id="comparisons" className="online-offline-comparison-wrapper">
-        <SectionBgVideo src="/videos/bg/comparison-bg.webm" opacity={0.2} blendMode="screen" />
+      {/* ONLINE vs OFFLINE FEATURE COMPARISON */}
+      <div className="online-offline-comparison-wrapper" style={{ border: 'none', background: 'transparent', padding: '1rem 0 0' }}>
         <div className="differences-inner">
           <div className="differences-header">
             <div className="chapter-meta-tag" style={{marginBottom: '0.65rem', display: 'inline-flex', alignItems: 'center', gap: '0.65rem'}}>
@@ -1741,6 +1740,7 @@ export default function App() {
           </div>
         </div>
       </div>
+    </section>
 
       {/* =========================================================================
           CHAPTER 01: IMPORTANT NOTES (Stealth Kurogane Archival Atmosphere)
@@ -5286,6 +5286,7 @@ export default function App() {
           CHAPTER 07: HOW TO UPDATE (Emerald Glow Atmosphere)
           ========================================================================= */}
       <section id="updates" className="story-section section-updates">
+        <SectionBgVideo src="/videos/bg/hero-bg.webm" opacity={0.2} blendMode="screen" />
         <div className="section-atmosphere-glow" />
         <div className="story-section-container">
           <div className="section-header-block">
